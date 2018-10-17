@@ -1,0 +1,322 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .progress {
+        position: relative;
+        width: 400px;
+        border: 1px solid #ddd;
+        padding: 1px;
+    }
+
+    .progress-bar {
+        width: 0px;
+        height: 20px;
+        background-color: #57be65;
+    }
+</style>
+
+<div id="content">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+            <h1 class="page-title txt-color-blueDark">
+                @*<a href="http://localhost:809/Home/Index?user=@ViewBag.User&pass=@ViewBag.Pass">Click here to go other site</a>*@
+                <a href="http://localhost:29308/Home/Index?user=@ViewBag.User&">Click here to go other site</a>
+            </h1>
+        </div>
+
+        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa-fw fa fa-pencil-square-o"></i>
+                Select CSV File to Upload
+            </h1>
+        </div>
+        <div class="col-md-12">
+            @using (Ajax.BeginForm("FileManagerUpload", "MarketR", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data", id = "formCSV" }))
+            {
+                <div>
+                    <div class="col-md-12">
+                        <div class="progress progress progress-striped active" id="dvProgressBar" style="width: 100%; display:none">
+                            <div class="progress-bar bg-color-darken" role="progressbar" style="width: 100%"></div>
+                        </div>
+                        <div id="dvStatus" style="display:none">
+                            <div class="alert alert-danger fade in" id="status"> Select file to upload</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="file" name="files" id="fu1" style="display:none" />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input class="btn btn-primary btn-lg" id="btnSubmit" style="display:none" type="submit" value="Upload File" />
+                        <input class="btn btn-primary btn-lg" id="btnFileUpload" type="button" value="Upload File" />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" style="margin-top:40px;">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa-fw fa fa-pencil-square-o"></i>
+                Select Excel File to Upload
+            </h1>
+        </div>
+        <div class="col-md-12">
+            @using (Ajax.BeginForm("FileManagerUploadExcel", "MarketR", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data", id = "formExcel" }))
+            {
+                <div>
+                    <div class="col-md-12">
+                        <div class="progress progress progress-striped active" id="dvProgressBar" style="width: 100%; display:none">
+                            <div class="progress-bar bg-color-darken" role="progressbar" style="width: 100%"></div>
+                        </div>
+                        <div id="dvStatusExcel" style="display:none">
+                            <div class="alert alert-danger fade in" id="statusExcel"> Select excel file to upload</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="file" name="files" id="fuExcel" style="display:none" />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input class="btn btn-primary btn-lg" id="btnSubmitExcel" style="display:none" type="submit" value="Upload File" />
+                        <input class="btn btn-primary btn-lg" id="btnFileUploadExcel" type="button" value="Upload File" />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="clearfix"></div>
+
+        <div id="dvCalculation">
+            <table class="table table-bordered">
+                <tr>
+                    <th>
+                        CalculationID
+                    </th>
+                    <th>
+                        FileID
+                    </th>
+                    <th>
+                        DealType
+                    </th>
+                    <th>
+                        KondorID
+                    </th>
+                </tr>
+                <tbody id="tblbodyCalculation">
+
+                    <tr><td class='CalculationID'>1</td><td class='FileID'>5</td><td class='DealType'>ForwardDeals</td><td class='KondorID'>52</td></tr>
+                </tbody>
+            </table>
+            <button id="btnSaveCalculation" class="btn-group-xs btn-success">Save Calculation</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript">
+    (function () {
+
+        $('#dvCalculation').hide();
+        $("#dvProgressBar").hide();
+
+        $("#btnFileUpload").click(function () {
+            $('#fu1').trigger("click");
+        });
+
+        $("#btnFileUploadExcel").click(function () {
+            $('#fuExcel').trigger("click");
+        });
+
+        $('#fu1').change(function () {
+            $('#btnSubmit').trigger("click");
+        });
+
+        $('#fuExcel').change(function () {
+            $('#btnSubmitExcel').trigger("click");
+        });
+
+        $('#btnSubmit').click(function () {
+    debugger;
+            if ($('#fu1').val() != '') {
+                var file = $('#fu1')[0].files[0];
+                var fileName = file.name;
+                var fileExt = '.' + fileName.split('.').pop();
+
+                if (fileExt != ".csv") {
+                debugger;
+                    $("#dvStatus").show();
+                    $('#status').html('Please select only .csv file.')
+                    $('#status').removeClass("alert-success");
+                    $('#status').addClass("alert-danger");
+
+                    return false;
+                }
+                else {
+                    $("#dvProgressBar").show();
+                    return true;
+                }
+
+            }
+            else {
+                $("#dvStatus").show();
+                $('#status').html('Please select a file.')
+                $('#status').removeClass("alert-success");
+                $('#status').addClass("alert-danger");
+                return false;
+            }
+        });
+
+        var status = $('#status');
+
+        $('#formCSV').ajaxForm({
+            beforeSend: function () {
+                $("#dvProgressBar").show();
+                status.html("Processing....");
+                $("#dvStatus").hide();
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                $("#dvProgressBar").show();
+            },
+            success: function (d) {
+    debugger;
+                $("#dvProgressBar").hide();
+                $("#dvStatus").show();
+                $('#fu1').val('');
+                status.html("File Uploaded");
+                if (d.Success) {
+
+                status.removeClass("alert-danger");
+                status.addClass("alert-success");
+                var calculation = "";
+                $.each(d.calculatedData, function (key, value) {
+    debugger;
+                    calculation += "<tr><td class='CalculationID'>" + value.CalculationID + "</td><td class='FileID'>" + value.FileID + "</td><td class='DealType'>" +
+                        value.DealType + "</td><td class='KondorID'>" + value.KondorID + "</td></tr>";
+                });
+                $('#dvCalculation').show();
+                $('#tblbodyCalculation').append(calculation);
+                $("#dvStatus").hide();
+                } else {
+                    status.html(d.Message);
+                    status.removeClass("alert-success");
+                    status.addClass("alert-danger");
+                }
+            },
+            complete: function (xhr) {
+            },
+            error: function (err) {
+                status.removeClass("alert-success");
+                status.addClass("alert-danger");
+            }
+        });
+
+    $('#btnSubmitExcel').click(function () {
+    debugger;
+            if ($('#fuExcel').val() != '') {
+                var file = $('#fuExcel')[0].files[0];
+                var fileName = file.name;
+                var fileExt = '.' + fileName.split('.').pop();
+
+                if (fileExt != ".xls" && fileExt != ".xlsx") {
+                debugger;
+                    $("#dvStatusExcel").show();
+                    $('#statusExcel').html('Please select only excel file.')
+                    $('#statusExcel').removeClass("alert-success");
+                    $('#statusExcel').addClass("alert-danger");
+
+                    return false;
+                }
+                else {
+                    $("#dvProgressBar").show();
+                    return true;
+                }
+
+            }
+            else {
+                $("#dvStatusExcel").show();
+                $('#statusExcel').html('Please select a file.')
+                $('#statusExcel').removeClass("alert-success");
+                $('#statusExcel').addClass("alert-danger");
+                return false;
+            }
+        });
+
+    var statusExcel = $('#statusExcel');
+
+    $('#formExcel').ajaxForm({
+            beforeSend: function () {
+                $("#dvProgressBar").show();
+                statusExcel.html("Processing....");
+                $("#dvStatusExcel").hide();
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                $("#dvProgressBar").show();
+            },
+            success: function (d) {
+    debugger;
+                $("#dvProgressBar").hide();
+                $("#dvStatusExcel").show();
+                $('#fuExcel').val('');
+                statusExcel.html("File Uploaded");
+                if (d.Success) {
+
+                statusExcel.removeClass("alert-danger");
+                statusExcel.addClass("alert-success");
+                var calculation = "";
+                $.each(d.calculatedData, function (key, value) {
+    debugger;
+                    calculation += "<tr><td class='CalculationID'>" + value.CalculationID + "</td><td class='FileID'>" + value.FileID + "</td><td class='DealType'>" +
+                        value.DealType + "</td><td class='KondorID'>" + value.KondorID + "</td></tr>";
+                });
+                $('#dvCalculation').show();
+                $('#tblbodyCalculation').append(calculation);
+                $("#dvStatusExcel").hide();
+                } else {
+                    statusExcel.html(d.Message);
+                    statusExcel.removeClass("alert-success");
+                    statusExcel.addClass("alert-danger");
+                }
+            },
+            complete: function (xhr) {
+            },
+            error: function (err) {
+                statusExcel.removeClass("alert-success");
+                statusExcel.addClass("alert-danger");
+            }
+        });
+
+
+        $('#btnSaveCalculation').click(function () {
+            var dataToSend = "{" + '"fileCalculationViewModel"' + ": [";
+            $('#tblbodyCalculation tr').each(function (key, value) {
+                dataToSend += "{" + '"CalculationID":' + $(this).find('.CalculationID').text() + "," + '"FileID":' + $(this).find('.FileID').text() +
+                    "," + '"DealType":' + '"' + $(this).find('.DealType').text() + '"' + "," + '"KondorID":' + '"' + $(this).find('.KondorID').text() + '"' +
+                    "," + '"CreatedDate":"abc"' + "},";
+                //var fileCalculationViewModel = {};
+                //fileCalculationViewModel.CalculationID = parseInt($(this).find('.CalculationID').text());
+                //fileCalculationViewModel.FileID = parseInt($(this).find('.FileID').text());
+                //fileCalculationViewModel.DealType = $(this).find('.DealType').text();
+                //fileCalculationViewModel.KondorID = $(this).find('.KondorID').text();
+                //fileCalculationViewModel.CreatedDate = $(this).find('.CreatedDate').text();
+                //dataArr.push(fileCalculationViewModel);
+            });
+            dataToSend += "]}";
+            dataToSend = dataToSend.replace(",]}", "]}");
+            var request = $.ajax({
+                type: "POST",
+                url: "../Marketr/SaveCalculation",
+                data: $.parseJSON(dataToSend),
+
+                success: function () {
+                    status.html("Calculation Saved");
+                    $("#dvStatus").show();
+                    $('#tblbodyCalculation').html("");
+                    $('#dvCalculation').hide();
+                }
+            });
+        });
+    })();
+</script>
+
+

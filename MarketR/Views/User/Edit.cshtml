@@ -1,0 +1,65 @@
+﻿@model MarketR.Models.User
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2 class="margin-left">Edit User</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="width:200px;">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control text-readius" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="width:200px;">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control text-readius" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.Role, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(m => m.Role, new SelectList(Model.Roles, "Value", "Text"), "Select Roles")
+                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<div class="detail margin-left">
+    @Html.ActionLink("Back to List", "List")
+</div>
+<script>
+    //$(document).ready(function () {
+    //    debugger;
+    //    ('#Role').css("width", "300px");
+    //});
+    var role = document.getElementById("Role");   // Get the element with id="demo"
+    role.className = "dropdown-list";
+</script>
+<style>
+    .dropdown-list {
+        width: 166px;
+        height: 30px;
+        border-radius: 6px;
+    }
+</style>

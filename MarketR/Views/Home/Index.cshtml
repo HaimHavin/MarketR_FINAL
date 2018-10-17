@@ -1,0 +1,606 @@
+﻿<!-- MAIN CONTENT -->
+
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Dashboard <span>> My Dashboard</span></h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+
+        </div>
+    </div>
+
+    <!-- widget grid -->
+    @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "Admin")
+    {
+        <section id="widget-grid" class="">
+
+            <div class="row">
+                <div class="col-md-2">
+                    <input id="txtSearch" type="text" name="txtSearch" class="form-control" value="">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="ddlCurrency">
+                        <option value="ILS">ILS</option>
+                        <option value="INR">INR</option>
+                        <option value="EUR">EUR</option>
+
+                        <option value="GBP">GBP</option>
+                        <option value="CHF">CHF</option>
+                        <option value="JPY">JPY</option>
+
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" id="btnCalculate">Calculate</button>
+                </div>
+            </div>
+
+            <div class="row m-t-20">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        </header>
+                        <div>
+                            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                            </div>
+                            <div class="jarviswidget-editbox">
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblReport1" class="table table-bordered table-borderd-top text-align">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align" colspan="2">Col9</th>
+                                                <th class="text-align" colspan="2">Col8</th>
+                                                <th class="text-align" colspan="2">Col7</th>
+                                                <th class="text-align">Col6</th>
+                                                <th class="text-align" colspan="2">C5</th>
+                                                <th class="text-align" colspan="2">Col4</th>
+                                                <th class="text-align" colspan="2">C3</th>
+                                                <th class="text-align">C2</th>
+                                                <th class="text-align">C1</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-align">Col15</th>
+                                                <th class="text-align">Col14</th>
+                                                <th class="text-align">Col13</th>
+                                                <th class="text-align">Col12</th>
+
+                                                <th class="text-align">Col11</th>
+                                                <th class="text-align">Col10</th>
+                                                <th class="text-align">Col9</th>
+                                                <th class="text-align">Col8</th>
+                                                <th class="text-align">Col7</th>
+                                                <th class="text-align">Col6</th>
+                                                <th class="text-align">Col5</th>
+                                                <th class="text-align">Col4</th>
+                                                <th class="text-align">Col3</th>
+                                                <th class="text-align">Col2</th>
+                                                <th class="text-align">Col1</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyReport1"></tbody>
+                                    </table>
+
+                                    <div>
+                                        @*<table class="table table-bordered table-borderd-top">
+                                            <thead>
+                                            <tr>
+                                            <th colspan="2">Adj Positions Between Zones</th>
+                                            <th colspan="2">Adj Positions in Time Zone</th>
+                                            <th colspan="2">Adj Positions in Time Brand</th>
+                                            <th colspan="2">Adj Positions</th>
+                                            <th>Risk Weight</th>
+                                            <th colspan="2">Positions</th>
+                                            <th colspan="2">Duration</th>
+                                            <th class="vertical-top" rowspan="2">Time Band</th>
+                                            <th class="vertical-top" rowspan="2">Zone</th>
+                                            </tr>
+                                            <tr>
+                                            <td>Open</td>
+                                            <td>Opposed</td>
+                                            <td>Open</td>
+                                            <td>Opposed</td>
+                                            <td>Open</td>
+                                            <td>Opposed</td>
+                                            <td>Short</td>
+                                            <td>Long</td>
+                                            <td></td>
+                                            <td>Short</td>
+                                            <td>Long</td>
+                                            <td>Coupon<%3</td>
+                                            <td>Coupon=>%3</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="border-bottom">
+                                            <tr>
+                                            <td class="border-none" rowspan="4"></td>
+                                            <td class="border-none text-center"><strong>Zone 1-2</strong></td>
+                                            <td class="border-none"></td>
+                                            <td class="border-none text-center"><strong>B</strong></td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0,00%</td>
+                                            <td class="text-right">900</td>
+                                            <td class="text-right">1000</td>
+                                            <td class="blue">On Demand up to 1M</td>
+                                            <td class="blue">On Demand up to 1M</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-none text-center"><strong>E</strong></td>
+                                            <td class="text-center border-none">1 100</td>
+                                            <td class="border-none blue text-center"><strong>0</strong></td>
+                                            <td class="text-right">1 100</td>
+                                            <td class="text-right">500</td>
+                                            <td class="text-right">500</td>
+                                            <td class="text-right">1600</td>
+                                            <td class="text-right">0,20%</td>
+                                            <td class="text-right">250 000</td>
+                                            <td class="text-right">800 000</td>
+                                            <td class="blue">Over 1M up to 3M</td>
+                                            <td class="blue">Over 1M up to 3M</td>
+                                            <td class="text-center">2</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-none blue text-center"><strong>1 100</strong></td>
+                                            <td class="border-none" rowspan="2"></td>
+                                            <td class="border-none"></td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0,40%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 3M up to 6M</td>
+                                            <td class="blue">Over 3M up to 6M</td>
+                                            <td class="text-center">3</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-none" rowspan="2"></td>
+                                            <td class="border-top-none"></td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0,70%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 6M up to 12M</td>
+                                            <td class="blue">Over 6M up to 12M</td>
+                                            <td class="text-center">4</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-center border-none"><strong>Zone 1-3</strong></td>
+                                            <td class="text-center border-bottom-none"></td>
+                                            <td class="text-center border-bottom-none"><strong>C</strong></td>
+                                            <td class="text-right">1375</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">1375</td>
+                                            <td class="text-right">1,25%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">110 000</td>
+                                            <td class="blue">Over 1Y up to 1.9Y</td>
+                                            <td class="blue">Over 1Y up to 2Y</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">2</td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-center border-none"><strong>G</strong></td>
+                                            <td class="text-center"><strong>Zone 2-3</strong></td>
+                                            <td class="text-center text-red border-none">(9 818)</td>
+                                            <td class="text-center blue border-none"><strong>2 433</strong></td>
+                                            <td class="text-red text-right">(12 250)</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">12 250</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">1,75%</td>
+                                            <td class="text-right">700 000</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 1.9Y up to 2.8Y</td>
+                                            <td class="blue">Over 2Y up to 3Y</td>
+                                            <td class="text-center">6</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-center blue border-none"><strong>0</strong></td>
+                                            <td class="text-center"><strong>F</strong></td>
+                                            <td class="border-top-none"></td>
+                                            <td class="border-top-none"></td>
+                                            <td class="text-right">1 058</td>
+                                            <td class="text-right">68</td>
+                                            <td class="text-right">68</td>
+                                            <td class="text-right">1 125</td>
+                                            <td class="text-right">2,25%</td>
+                                            <td class="text-right">3 000</td>
+                                            <td class="text-right">50 000</td>
+                                            <td class="blue">Over 2.8Y up to 3.6Y</td>
+                                            <td class="blue">Over 3Y up to 4Y</td>
+                                            <td class="text-center">7</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-top-none" rowspan="8"></td>
+                                            <td class="text-center blue"><strong>0</strong></td>
+                                            <td class="border-bottom-none"></td>
+                                            <td class="text-center"><strong>D</strong></td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">2,75%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 3.6Y up to 4.3Y</td>
+                                            <td class="blue">Over 4Y up to 5Y</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">3</td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-top-none" rowspan="7"></td>
+                                            <td class="border-none text-red text-center">(45 000)</td>
+                                            <td class="border-none blue text-center"><strong>0</strong></td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">3,25%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 4.3Y up to 5.7Y</td>
+                                            <td class="blue">Over 5Y up to 7Y</td>
+                                            <td class="text-center">9</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-top-none" rowspan="6"></td>
+                                            <td class="border-top-none" rowspan="6"></td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">3,75%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 5.7Y up to 7.3Y</td>
+                                            <td class="blue">Over 7Y up to 10Y</td>
+                                            <td class="text-center">10</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-red text-right">(45 000)</td>
+                                            <td class="text-right">45 000</td>
+                                            <td class="text-right">90 000</td>
+                                            <td class="text-right">45 000</td>
+                                            <td class="text-right">4,55%</td>
+                                            <td class="text-right">2 000 000</td>
+                                            <td class="text-right">1 000 000</td>
+                                            <td class="blue">Over 7.3Y up to 9.3Y</td>
+                                            <td class="blue">Over 10Y up to 15Y</td>
+                                            <td class="text-center">11</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">5,25%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 9.3Y up to 10.6Y</td>
+                                            <td class="blue">Over 15Y up to 20Y</td>
+                                            <td class="text-center">12</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">6,00%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 10.6Y up to 12Y</td>
+                                            <td class="blue">Over 20Y</td>
+                                            <td class="text-center">13</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">8,00%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 12Y up to 20Y</td>
+                                            <td></td>
+                                            <td class="text-center">14</td>
+                                            <td></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">12,50%</td>
+                                            <td class="text-right">0</td>
+                                            <td class="text-right">0</td>
+                                            <td class="blue">Over 20Y</td>
+                                            <td></td>
+                                            <td class="text-center">15</td>
+                                            <td></td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                            <td class="border-none" rowspan="2" colspan="2"></td>
+                                            <td class="text-center border-bottom-none"><strong>H</strong></td>
+                                            <td class="border-none" rowspan="2" colspan="2"></td>
+                                            <td class="text-center border-bottom-none"><strong>A</strong></td>
+                                            <td class="border-none" rowspan="2" colspan="9"></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="border-top-none blue text-center"><strong>53 718</strong></td>
+                                            <td class="border-top-none blue text-center"><strong>45 568</strong></td>
+                                            </tr>
+                                            </tfoot>
+                                            </table>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="row m-t-20">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        </header>
+                        <div>
+                            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                            </div>
+                            <div class="jarviswidget-editbox">
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+
+
+                                    <table id="tblReport2" class="table table-bordered table-borderd-top text-align">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align">Total</th>
+                                                <th class="text-align">Other</th>
+                                                <th class="text-align">JPY</th>
+                                                <th class="text-align">CHF</th>
+                                                <th class="text-align">GBP</th>
+                                                <th class="text-align">EUR</th>
+                                                <th class="text-align">USD</th>
+                                                <th class="text-align">ILS</th>
+                                                <th class="text-align">Text3</th>
+                                                <th class="text-align">Text2</th>
+                                                <th class="text-align">Text1</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyReport2"></tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+
+        </section>
+    }
+    else
+    {
+        <section>
+            <div class="row">
+                <h1 style="text-align:center;"><strong>You are not authorizes to view this page.</strong></h1>
+            </div>
+        </section>
+    }
+</div>
+<!-- END MAIN CONTENT -->
+@section pagespecific {
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+    <script src="~/Content/themes/base/jquery-ui-1.10.3.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+        $("#txtSearch").datepicker();
+        $("#txtSearch").datepicker("setDate", new Date());
+
+        GetReport();
+        $('#btnCalculate').click(function(){
+        debugger;
+        GetReport();
+        });
+
+            /* DO NOT REMOVE : GLOBAL FUNCTIONS!
+             *
+             * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+             *
+             * // activate tooltips
+             * $("[rel=tooltip]").tooltip();
+             *
+             * // activate popovers
+             * $("[rel=popover]").popover();
+             *
+             * // activate popovers with hover states
+             * $("[rel=popover-hover]").popover({ trigger: "hover" });
+             *
+             * // activate inline charts
+             * runAllCharts();
+             *
+             * // setup widgets
+             * setup_widgets_desktop();
+             *
+             * // run form elements
+             * runAllForms();
+             *
+             ********************************
+             *
+             * pageSetUp() is needed whenever you load a page.
+             * It initializes and checks for all basic elements of the page
+             * and makes rendering easier.
+             *
+             */
+
+            pageSetUp();
+
+            /*
+             * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
+             * eg alert("my home function");
+             *
+             * var pagefunction = function() {
+             *   ...
+             * }
+             * loadScript("js/plugin/_PLUGIN_NAME_.js", pagefunction);
+             *
+             * TO LOAD A SCRIPT:
+             * var pagefunction = function (){
+             *  loadScript(".../plugin.js", run_after_loaded);
+             * }
+             *
+             * OR
+             *
+             * loadScript(".../plugin.js", run_after_loaded);
+             */
+
+            // reference: http://www.chartjs.org/docs/
+
+            // LINE CHART
+            // ref: http://www.chartjs.org/docs/#line-chart-introduction
+            var lineOptions = {
+                ///Boolean - Whether grid lines are shown across the chart
+                scaleShowGridLines: true,
+                //String - Colour of the grid lines
+                scaleGridLineColor: "rgba(0,0,0,.05)",
+                //Number - Width of the grid lines
+                scaleGridLineWidth: 1,
+                //Boolean - Whether the line is curved between points
+                bezierCurve: true,
+                //Number - Tension of the bezier curve between points
+                bezierCurveTension: 0.4,
+                //Boolean - Whether to show a dot for each point
+                pointDot: true,
+                //Number - Radius of each point dot in pixels
+                pointDotRadius: 4,
+                //Number - Pixel width of point dot stroke
+                pointDotStrokeWidth: 1,
+                //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+                pointHitDetectionRadius: 20,
+                //Boolean - Whether to show a stroke for datasets
+                datasetStroke: true,
+                //Number - Pixel width of dataset stroke
+                datasetStrokeWidth: 2,
+                //Boolean - Whether to fill the dataset with a colour
+                datasetFill: true,
+                //Boolean - Re-draw chart on page resize
+                responsive: true,
+                //String - A legend template
+                legendTemplate:
+                    "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+            };
+
+            var lineData = {
+                labels: ["Dec-17", "Mar-17", "Apr-17", "May-17", "June-17"],
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: [10000, 59000, 80000, 81000, 56000, 55000, 40]
+                    },
+                    {
+                        label: "My Second dataset",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: [28000, 48000, 40000, 19000, 86000, 27000, 100000]
+                    }
+                ]
+            };
+
+            // render chart
+           // var ctx = document.getElementById("lineChart").getContext("2d");
+           // var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+
+            // END LINE CHART
+        });
+
+        function GetReport()
+        {
+        $("#dvProgressBar").show();
+        var parm={startDate:$('#txtSearch').val() , currencyFormat:$('#ddlCurrency :selected').val()};
+        $.ajax({
+        type: "Post",
+        url: "CalculateCurrency",
+        contentType: "application/json",
+        data:JSON.stringify(parm),
+        success: function(data){
+        debugger;
+        $("#dvProgressBar").hide();
+        $('#tbodyReport1').html("");
+        $('#tbodyReport2').html("");
+         $.each(data.report1, function(k, v) {
+     var report1="<tr><td>"+v.Col15+"</td> <td>"+v.col14+"</td> <td>"+v.Col13+"</td> <td>"+v.Col12+"</td> <td>"+v.Col11+"</td> <td>"+v.Col10+"</td> <td>"+v.Col9+"</td> <td>"+v.Col8+"</td> <td>"+v.Col7+"</td> <td>"+v.Col6+
+        "</td> <td>"+v.Col5+"</td> <td>"+v.Col4+"</td> <td>"+v.Col3+"</td> <td>"+v.Col2+"</td> <td>"+v.Col1+"</td> </tr>";
+        $('#tbodyReport1').append(report1);
+  });
+        $.each(data.report2, function(k, v) {
+     var report2="<tr><td>"+v.Total+"</td> <td>"+v.Other+"</td> <td>"+v.JPY+"</td> <td>"+v.CHF+"</td> <td>"+v.GBP+"</td> <td>"+v.EUR+"</td> <td>"+v.USD+"</td> <td>"+v.ILS+"</td> <td>"+v.Text3+"</td> <td>"+v.Text2+"</td> <td>"+v.Text1+"</td> </tr>";
+        $('#tbodyReport2').append(report2);
+  });
+
+        },
+        error: function(err){
+        debugger;
+        $("#dvProgressBar").hide();
+        }
+        });
+        }
+    </script>
+
+    <style type="text/css">
+        .m-t-20 {
+            margin-top: 20px;
+        }
+
+        .text-align {
+            text-align: right;
+        }
+    </style>
+}

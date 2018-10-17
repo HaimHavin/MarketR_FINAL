@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .progress {
+        position: relative;
+        width: 400px;
+        border: 1px solid #ddd;
+        padding: 1px;
+    }
+
+    .progress-bar {
+        width: 0px;
+        height: 20px;
+        background-color: #57be65;
+    }
+</style>
+
+<div id="content">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa-fw fa fa-pencil-square-o"></i>
+                Select File to Upload
+            </h1>
+        </div>
+        <div class="col-md-12">
+            @using (Ajax.BeginForm("FileManager", "MarketR", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+            {
+                <div>
+                    <div class="col-md-12">
+                        <div class="progress progress progress-striped active" id="dvProgressBar" style="width: 100%; display:none">
+                            <div class="progress-bar bg-color-darken" role="progressbar" style="width: 100%"></div>
+                        </div>
+                        <div id="dvStatus" style="display:none">
+                            <div class="alert alert-danger fade in" id="status"> Select file to upload</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="file" name="files" id="fu1" />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input class="btn btn-primary btn-lg" id="btnSubmit" type="submit" value="Upload File" />
+                    </div>
+                </div>
+            } 
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script>
+    (function () {
+
+
+
+        $("#dvProgressBar").hide();
+
+        $('#btnSubmit').click(function () {
+            if ($('#fu1').val() != '') {
+                var file = $('#fu1')[0].files[0];
+                var fileName = file.name;
+                var fileExt = '.' + fileName.split('.').pop();
+
+                if (fileExt != ".csv") {
+                    $("#dvStatus").show();
+                    $('#status').html('Please select only .csv file.')
+                    $('#status').removeClass("alert-success");
+                    $('#status').addClass("alert-danger");
+                    
+                    return false;
+                }
+                else {
+                    $("#dvProgressBar").show();
+                    return true;
+                }
+
+            }
+            else {
+                $("#dvStatus").show();
+                $('#status').html('Please select a file.')
+                $('#status').removeClass("alert-success");
+                $('#status').addClass("alert-danger");
+                return false;
+            }
+        });
+
+
+
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function () {
+                $("#dvProgressBar").show();
+                status.html("Processing....");
+
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                $("#dvProgressBar").show();
+            },
+            success: function (d) {
+                $("#dvProgressBar").hide();
+                $("#dvStatus").show();
+                $('#fu1').val('');
+                status.html(d);
+                if (d == "Uploaded successfully") {
+                    status.removeClass("alert-danger");
+                    status.addClass("alert-success");
+                }
+                else
+                {
+                    status.removeClass("alert-success");
+                    status.addClass("alert-danger");
+                }
+
+            },
+            complete: function (xhr) {
+            }
+        });
+    })();
+</script>

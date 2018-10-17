@@ -1,0 +1,47 @@
+﻿@model MarketR.Models.User
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2 class="margin-left">User Details</h2>
+
+<div>
+ 
+    <dl class="dl-horizontal">
+        <dt class="detail">
+            @Html.DisplayNameFor(model => model.UserName) :
+        </dt>
+
+        <dd class="detail">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="detail">
+            @Html.DisplayNameFor(model => model.Email) :
+        </dt>
+
+        <dd class="detail">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="detail">
+            @Html.DisplayNameFor(model => model.PhoneNumber) :
+        </dt>
+
+        <dd class="detail">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="detail">
+            @Html.DisplayNameFor(model => model.Role) :
+        </dt>
+
+        <dd class="detail">
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+
+    </dl>
+    <p class="detail margin-left">
+        @Html.ActionLink("Back to List", "List")
+    </p>
+</div>
+
+ 

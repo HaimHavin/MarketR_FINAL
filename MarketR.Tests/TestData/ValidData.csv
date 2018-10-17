@@ -1,0 +1,2 @@
+Deal ID,Balance Off Balance,Main Type,Deal Type,Pay Recieve,Underlying,CCY,Notional,Maturity Date,Interest Type,Interest Change Date,Interest change N,Interest change freq,Interest percent,NPL-DELTA ILS,Portfolio,GAMMA ILS,VEGA ILS,Couterparty
+02040573009999110000002300730000000000,Balance,PAM,AGH,-1,IR,CPE,15000000,31/07/2024,F,31/07/2024,M,0,0.04,22721461,0,10.00,20.00,COUNTRY_X
