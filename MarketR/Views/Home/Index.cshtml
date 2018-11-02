@@ -413,6 +413,113 @@
             </div>
 
 
+
+            @*<button type="button" data-toggle="modal" data-target="#remoteModal" class="btn btn-primary btn-lg" id="openModal">Modal</button>*@
+            <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">Simulation</h4>
+                        </div>
+                        <div class="modal-body">
+                            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                                    <header>
+                                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                    </header>
+                                    <div>
+                                        <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                            <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                                        </div>
+                                        <div class="jarviswidget-editbox">
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="table-responsive">
+
+                                                <input type="hidden" id="hdnID" />
+                                                <form class="smart-form">
+                                                    <table id="tblReport3" class="table table-bordered table-borderd-top ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-align">Data A</th>
+                                                                <th class="text-align">Data B</th>
+                                                                <th class="text-align">Data B</th>
+                                                                <th class="text-align">Data B</th>
+                                                                <th class="text-align">liquidate</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyReport3">
+                                                            <tr>
+
+                                                                <td>10/10/2018</td>
+                                                                <td>IRS</td>
+                                                                <td>100</td>
+                                                                <td>CP 1</td>
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" name="checkbox" id="check1" class="CheckedCheckBox">
+                                                                        <i></i>
+                                                                    </label>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+
+                                                                <td>12/10/2018</td>
+                                                                <td>BOND</td>
+                                                                <td>80</td>
+                                                                <td>CP 2</td>
+                                                                @*<td><input type="checkbox" id="check2" class="form-control" /></td>*@
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" name="checkbox" id="check2" >
+                                                                        <i></i>
+                                                                    </label>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+
+                                                                <td>13/10/2018</td>
+                                                                <td>IRS</td>
+                                                                <td>70</td>
+                                                                <td>CP 3</td>
+                                                                @*<td><input type="checkbox" id="check3" class="form-control" /></td>*@
+                                                                <td>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" name="checkbox" id="check3" >
+                                                                        <i></i>
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btnSimulate">
+                                Simulate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
     }
     else
@@ -432,14 +539,14 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-        $("#txtSearch").datepicker();
-        $("#txtSearch").datepicker("setDate", new Date());
+            $("#txtSearch").datepicker();
+            $("#txtSearch").datepicker("setDate", new Date());
 
-        GetReport();
-        $('#btnCalculate').click(function(){
-        debugger;
-        GetReport();
-        });
+            GetReport();
+            $('#btnCalculate').click(function () {
+                debugger;
+                GetReport();
+            });
 
             /* DO NOT REMOVE : GLOBAL FUNCTIONS!
              *
@@ -555,42 +662,90 @@
             };
 
             // render chart
-           // var ctx = document.getElementById("lineChart").getContext("2d");
-           // var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+            // var ctx = document.getElementById("lineChart").getContext("2d");
+            // var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
 
             // END LINE CHART
         });
 
-        function GetReport()
-        {
-        $("#dvProgressBar").show();
-        var parm={startDate:$('#txtSearch').val() , currencyFormat:$('#ddlCurrency :selected').val()};
-        $.ajax({
-        type: "Post",
-        url: "CalculateCurrency",
-        contentType: "application/json",
-        data:JSON.stringify(parm),
-        success: function(data){
-        debugger;
-        $("#dvProgressBar").hide();
-        $('#tbodyReport1').html("");
-        $('#tbodyReport2').html("");
-         $.each(data.report1, function(k, v) {
-     var report1="<tr><td>"+v.Col15+"</td> <td>"+v.col14+"</td> <td>"+v.Col13+"</td> <td>"+v.Col12+"</td> <td>"+v.Col11+"</td> <td>"+v.Col10+"</td> <td>"+v.Col9+"</td> <td>"+v.Col8+"</td> <td>"+v.Col7+"</td> <td>"+v.Col6+
-        "</td> <td>"+v.Col5+"</td> <td>"+v.Col4+"</td> <td>"+v.Col3+"</td> <td>"+v.Col2+"</td> <td>"+v.Col1+"</td> </tr>";
-        $('#tbodyReport1').append(report1);
-  });
-        $.each(data.report2, function(k, v) {
-     var report2="<tr><td>"+v.Total+"</td> <td>"+v.Other+"</td> <td>"+v.JPY+"</td> <td>"+v.CHF+"</td> <td>"+v.GBP+"</td> <td>"+v.EUR+"</td> <td>"+v.USD+"</td> <td>"+v.ILS+"</td> <td>"+v.Text3+"</td> <td>"+v.Text2+"</td> <td>"+v.Text1+"</td> </tr>";
-        $('#tbodyReport2').append(report2);
-  });
+        function GetReport() {
+            $("#dvProgressBar").show();
+            var parm = { startDate: $('#txtSearch').val(), currencyFormat: $('#ddlCurrency :selected').val() };
+            $.ajax({
+                type: "Post",
+                url: "CalculateCurrency",
+                contentType: "application/json",
+                data: JSON.stringify(parm),
+                success: function (data) {
+                    debugger;
+                    $("#dvProgressBar").hide();
+                    $('#tbodyReport1').html("");
+                    $('#tbodyReport2').html("");
+                    $.each(data.report1, function (k, v) {
+                        var report1 = "<tr><td>" + v.Col15 + "</td> <td>" + v.col14 + "</td> <td>" + v.Col13 + "</td> <td>" + v.Col12 + "</td> <td>" + v.Col11 + "</td> <td>" + v.Col10 + "</td> <td>" + v.Col9 + "</td> <td>" + v.Col8 + "</td> <td>" + v.Col7 + "</td> <td><a href='#' data-toggle='modal' data-target='#remoteModal' class='shortValue1' id='shortValue'>" + v.Col6 +
+                           "</a></td> <td><a href='#' class='longValue1' id='longValue' data-toggle='modal' data-target='#remoteModal'>" + v.Col5 + "</a></td> <td>" + v.Col4 + "</td> <td>" + v.Col3 + "</td> <td><span id=band>" + v.Col2 + "</span></td> <td>" + v.Col1 + "</td> </tr>";
+                        $('#tbodyReport1').append(report1);
+                    });
+                    $.each(data.report2, function (k, v) {
+                        var report2 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                        $('#tbodyReport2').append(report2);
+                    });
 
-        },
-        error: function(err){
-        debugger;
-        $("#dvProgressBar").hide();
+                },
+                error: function (err) {
+                    debugger;
+                    $("#dvProgressBar").hide();
+                }
+            });
         }
+    
+        var shortVal="";
+        var longVal="";
+        var bandValue="";
+        $("body").on('click', '.shortValue1', function () {
+            shortVal = $(this).parent().parent().find('shortValue').context.innerText;
+            bandValue = $(this).parent().parent().children().find('span')[0].innerText;
+     
+           
         });
+        $("body").on('click', '.longValue1', function ()
+        {
+            longVal = $(this).parent().parent().find('longValue').context.innerText;
+            bandValue = $(this).parent().parent().children().find('span')[0].innerText;
+           
+        });
+        
+        
+        
+
+        $("#btnSimulate").click(function () {
+            GetSimulate();
+        });
+
+        function GetSimulate() {
+            debugger;
+         
+            var parm = {
+                startDate: $('#txtSearch').val(),
+                currencyFormat: $('#ddlCurrency :selected').val(),
+                shortValue: shortVal,
+                longValue: longVal,
+                bandval: bandValue
+            };
+            $.ajax({
+                url: "Simulate",
+                contentType: "application/json",
+                method: "POST",
+                dataType: "json",
+                data: JSON.stringify(parm),
+                success: function (response) {
+                    debugger;
+                    var data = (response);
+                },
+                error: function (err) {
+
+                }
+            });
         }
     </script>
 

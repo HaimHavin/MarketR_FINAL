@@ -36,5 +36,17 @@ namespace MarketR.Reports
                
             }
         }
+
+        //public  IEnumerable<CondorDto> GetSimulate()
+        //{
+        //    try
+        //    {
+        //        var report = marketRRepo.GetAll<ST_1_REMOVE_FUTURES>();
+        //        var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_results_date_simulation>, IEnumerable<Report2Dto>>(report);
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //    }
+        //}
     }
 }
