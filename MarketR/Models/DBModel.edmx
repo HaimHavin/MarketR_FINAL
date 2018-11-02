@@ -159,6 +159,7 @@
           <Property Name="NETTING_COUNTER" Type="nvarchar" MaxLength="200" />
           <Property Name="CONTRACT_MAT_DATE" Type="nvarchar" MaxLength="200" />
           <Property Name="validity_date" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sim_Liquidate_flag" Type="bit" />
         </EntityType>
         <EntityType Name="NewFileRecordsCSV">
           <Key>
@@ -353,12 +354,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetResultView" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Currency" Type="varchar" Mode="In" />
+          <Parameter Name="Band" Type="int" Mode="In" />
+          <Parameter Name="NPV" Type="bit" Mode="In" />
+        </Function>
         <Function Name="sp_Simulate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="Date" Type="date" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
         </Function>
         <Function Name="spFILE_UPLOAD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FileName" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="UpdateSimLiquidate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RecordId" Type="int" Mode="In" />
+          <Parameter Name="Liquidate" Type="bit" Mode="In" />
         </Function>
         <EntityContainer Name="MarketRModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -466,6 +476,15 @@
           <FunctionImport Name="sp_Simulate1" ReturnType="Collection(MarketRModel.sp_Simulate1_Result)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Currency" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetResultView" ReturnType="Collection(MarketRModel.GetResultView_Result)">
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Band" Mode="In" Type="Int32" />
+            <Parameter Name="NPV" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateSimLiquidate">
+            <Parameter Name="RecordId" Mode="In" Type="Int32" />
+            <Parameter Name="Liquidate" Mode="In" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spFILE_UPLOAD_Result">
@@ -744,6 +763,7 @@
           <Property Name="CONTRACT_MAT_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="validity_date" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="FileHistory" Relationship="MarketRModel.FK_NewFileRecords_FileHistory" FromRole="NewFileRecord" ToRole="FileHistory" />
+          <Property Name="Sim_Liquidate_flag" Type="Boolean" />
         </EntityType>
         <Association Name="FK_NewFileRecords_FileHistory">
           <End Type="MarketRModel.FileHistory" Role="FileHistory" Multiplicity="0..1" />
@@ -905,6 +925,22 @@
           <Property Type="String" Name="NPVDeltaILS" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Portfolio" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="GammaILS" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetResultView_Result">
+          <Property Type="Int32" Name="Recordid" Nullable="false" />
+          <Property Type="String" Name="DEAL_ID" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DEAL_TYPE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="PROD_TYPE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="PAY_RECIEVE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CCY" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="MATURITY_DATE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="FIXING_DATE" Nullable="true" MaxLength="200" />
+          <Property Type="Double" Name="NOTIONAL" Nullable="true" />
+          <Property Type="String" Name="INTEREST_TYPE" Nullable="true" MaxLength="200" />
+          <Property Type="Double" Name="INT_PRE" Nullable="true" />
+          <Property Type="Double" Name="NPV_DELTA_ILS" Nullable="true" />
+          <Property Type="Int32" Name="Band" Nullable="true" />
+          <Property Type="Boolean" Name="Sim_Liquidate_flag" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1100,6 +1136,7 @@
           <EntitySetMapping Name="NewFileRecords">
             <EntityTypeMapping TypeName="MarketRModel.NewFileRecord">
               <MappingFragment StoreEntitySet="NewFileRecords">
+                <ScalarProperty Name="Sim_Liquidate_flag" ColumnName="Sim_Liquidate_flag" />
                 <ScalarProperty Name="validity_date" ColumnName="validity_date" />
                 <ScalarProperty Name="CONTRACT_MAT_DATE" ColumnName="CONTRACT_MAT_DATE" />
                 <ScalarProperty Name="NETTING_COUNTER" ColumnName="NETTING_COUNTER" />
@@ -1223,6 +1260,27 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetResultView" FunctionName="MarketRModel.Store.GetResultView">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MarketRModel.GetResultView_Result">
+                <ScalarProperty Name="Recordid" ColumnName="Recordid" />
+                <ScalarProperty Name="DEAL_ID" ColumnName="DEAL_ID" />
+                <ScalarProperty Name="DEAL_TYPE" ColumnName="DEAL_TYPE" />
+                <ScalarProperty Name="PROD_TYPE" ColumnName="PROD_TYPE" />
+                <ScalarProperty Name="PAY_RECIEVE" ColumnName="PAY_RECIEVE" />
+                <ScalarProperty Name="CCY" ColumnName="CCY" />
+                <ScalarProperty Name="MATURITY_DATE" ColumnName="MATURITY_DATE" />
+                <ScalarProperty Name="FIXING_DATE" ColumnName="FIXING_DATE" />
+                <ScalarProperty Name="NOTIONAL" ColumnName="NOTIONAL" />
+                <ScalarProperty Name="INTEREST_TYPE" ColumnName="INTEREST_TYPE" />
+                <ScalarProperty Name="INT_PRE" ColumnName="INT_PRE" />
+                <ScalarProperty Name="NPV_DELTA_ILS" ColumnName="NPV_DELTA_ILS" />
+                <ScalarProperty Name="Band" ColumnName="Band" />
+                <ScalarProperty Name="Sim_Liquidate_flag" ColumnName="Sim_Liquidate_flag" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UpdateSimLiquidate" FunctionName="MarketRModel.Store.UpdateSimLiquidate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -30,13 +30,26 @@ namespace MarketR.Reports
             try
             {
                 var result = dbEntity.sp_Simulate1(Convert.ToDateTime(startDate), currencyFormat);
-                
+
             }
-            catch (Exception ex) {
-               
+            catch (Exception ex)
+            {
+
             }
         }
+        public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band)
+        {
+            try
+            {
+                var result = dbEntity.GetResultView(currency, band, NPV);
+                return result;
+            }
+            catch (Exception ex)
+            {
 
+            }
+            return new List<GetResultView_Result>();
+        }
         //public  IEnumerable<CondorDto> GetSimulate()
         //{
         //    try

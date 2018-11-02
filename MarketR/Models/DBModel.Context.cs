@@ -76,5 +76,35 @@ namespace MarketR.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Simulate1_Result>("sp_Simulate1", dateParameter, currencyParameter);
         }
+    
+        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV)
+        {
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var bandParameter = band.HasValue ?
+                new ObjectParameter("Band", band) :
+                new ObjectParameter("Band", typeof(int));
+    
+            var nPVParameter = nPV.HasValue ?
+                new ObjectParameter("NPV", nPV) :
+                new ObjectParameter("NPV", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter);
+        }
+    
+        public virtual int UpdateSimLiquidate(Nullable<int> recordId, Nullable<bool> liquidate)
+        {
+            var recordIdParameter = recordId.HasValue ?
+                new ObjectParameter("RecordId", recordId) :
+                new ObjectParameter("RecordId", typeof(int));
+    
+            var liquidateParameter = liquidate.HasValue ?
+                new ObjectParameter("Liquidate", liquidate) :
+                new ObjectParameter("Liquidate", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateSimLiquidate", recordIdParameter, liquidateParameter);
+        }
     }
 }

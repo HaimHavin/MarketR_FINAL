@@ -1,0 +1,62 @@
+﻿@model  IEnumerable<MarketR.Models.GetResultView_Result>
+<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+        <header>
+            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+        </header>
+        <div>
+            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+            </div>
+            <div class="jarviswidget-editbox">
+            </div>
+
+            <div class="widget-body">
+                <div class="table-responsive">
+
+                    <input type="hidden" id="hdnID" />
+                    <form class="smart-form">
+                        <table id="tblReport3" class="table table-bordered table-borderd-top ">
+                            <thead>
+                                <tr>
+                                    <th>MATURITY DATE</th>
+                                    <th>DEAL TYPE</th>
+                                    <th>PROD TYPE</th>
+                                    <th>CCY</th>
+                                    <th>INTEREST TYPE</th>
+                                    <th>INT PRE</th>
+                                    <th>NPV DELTA ILS</th>
+                                    <th>BAND</th>
+                                    <th>LIQUIDATE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyReport3">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.MATURITY_DATE</td>
+                                        <td>@item.DEAL_TYPE</td>
+                                        <td>@item.PROD_TYPE</td>
+                                        <td>@item.CCY</td>
+                                        <td>@item.INTEREST_TYPE</td>
+                                        <td>@item.INT_PRE</td>
+                                        <td>@item.NPV_DELTA_ILS</td>
+                                        <td>@item.Band</td>
+                                        <td>
+                                            <label class="checkbox">
+                                                <input type="checkbox" data-recordid="@item.Recordid" name="checkbox" onchange="TrackChanges(this);" class="simulateCheckBox" @(item.Sim_Liquidate_flag.HasValue && item.Sim_Liquidate_flag.Value ? "checked" : "")>
+                                                <i></i>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

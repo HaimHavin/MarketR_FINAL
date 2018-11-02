@@ -416,7 +416,7 @@
 
             @*<button type="button" data-toggle="modal" data-target="#remoteModal" class="btn btn-primary btn-lg" id="openModal">Modal</button>*@
             <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg" style="width:80%">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -424,89 +424,8 @@
                             </button>
                             <h4 class="modal-title" id="myModalLabel">Simulation</h4>
                         </div>
-                        <div class="modal-body">
-                            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
-                                    <header>
-                                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                    </header>
-                                    <div>
-                                        <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
-                                            <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
-                                        </div>
-                                        <div class="jarviswidget-editbox">
-                                        </div>
+                        <div class="modal-body" id="dvSimView">
 
-                                        <div class="widget-body">
-                                            <div class="table-responsive">
-
-                                                <input type="hidden" id="hdnID" />
-                                                <form class="smart-form">
-                                                    <table id="tblReport3" class="table table-bordered table-borderd-top ">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-align">Data A</th>
-                                                                <th class="text-align">Data B</th>
-                                                                <th class="text-align">Data B</th>
-                                                                <th class="text-align">Data B</th>
-                                                                <th class="text-align">liquidate</th>
-
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tbodyReport3">
-                                                            <tr>
-
-                                                                <td>10/10/2018</td>
-                                                                <td>IRS</td>
-                                                                <td>100</td>
-                                                                <td>CP 1</td>
-                                                                <td>
-                                                                    <label class="checkbox">
-                                                                        <input type="checkbox" name="checkbox" id="check1" class="CheckedCheckBox">
-                                                                        <i></i>
-                                                                    </label>
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-
-                                                                <td>12/10/2018</td>
-                                                                <td>BOND</td>
-                                                                <td>80</td>
-                                                                <td>CP 2</td>
-                                                                @*<td><input type="checkbox" id="check2" class="form-control" /></td>*@
-                                                                <td>
-                                                                    <label class="checkbox">
-                                                                        <input type="checkbox" name="checkbox" id="check2" >
-                                                                        <i></i>
-                                                                    </label>
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-
-                                                                <td>13/10/2018</td>
-                                                                <td>IRS</td>
-                                                                <td>70</td>
-                                                                <td>CP 3</td>
-                                                                @*<td><input type="checkbox" id="check3" class="form-control" /></td>*@
-                                                                <td>
-                                                                    <label class="checkbox">
-                                                                        <input type="checkbox" name="checkbox" id="check3" >
-                                                                        <i></i>
-                                                                    </label>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </form>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -682,8 +601,8 @@
                     $('#tbodyReport1').html("");
                     $('#tbodyReport2').html("");
                     $.each(data.report1, function (k, v) {
-                        var report1 = "<tr><td>" + v.Col15 + "</td> <td>" + v.col14 + "</td> <td>" + v.Col13 + "</td> <td>" + v.Col12 + "</td> <td>" + v.Col11 + "</td> <td>" + v.Col10 + "</td> <td>" + v.Col9 + "</td> <td>" + v.Col8 + "</td> <td>" + v.Col7 + "</td> <td><a href='#' data-toggle='modal' data-target='#remoteModal' class='shortValue1' id='shortValue'>" + v.Col6 +
-                           "</a></td> <td><a href='#' class='longValue1' id='longValue' data-toggle='modal' data-target='#remoteModal'>" + v.Col5 + "</a></td> <td>" + v.Col4 + "</td> <td>" + v.Col3 + "</td> <td><span id=band>" + v.Col2 + "</span></td> <td>" + v.Col1 + "</td> </tr>";
+                        var report1 = "<tr><td>" + v.Col15 + "</td> <td>" + v.col14 + "</td> <td>" + v.Col13 + "</td> <td>" + v.Col12 + "</td> <td>" + v.Col11 + "</td> <td>" + v.Col10 + "</td> <td>" + v.Col9 + "</td> <td>" + v.Col8 + "</td> <td>" + v.Col7 + "</td> <td><a href='javascript:void(0);' onclick='GetResultView(0," + v.Col2 + ");'  class='shortValue1' id='shortValue'>" + v.Col6 +
+                           "</a></td> <td><a href='javascript:void(0);' onclick='GetResultView(1," + v.Col2 + ");' class='longValue1' id='longValue'>" + v.Col5 + "</a></td> <td>" + v.Col4 + "</td> <td>" + v.Col3 + "</td> <td><span id=band>" + v.Col2 + "</span></td> <td>" + v.Col1 + "</td> </tr>";
                         $('#tbodyReport1').append(report1);
                     });
                     $.each(data.report2, function (k, v) {
@@ -698,33 +617,45 @@
                 }
             });
         }
-    
-        var shortVal="";
-        var longVal="";
-        var bandValue="";
-        $("body").on('click', '.shortValue1', function () {
-            shortVal = $(this).parent().parent().find('shortValue').context.innerText;
-            bandValue = $(this).parent().parent().children().find('span')[0].innerText;
-     
-           
-        });
-        $("body").on('click', '.longValue1', function ()
-        {
-            longVal = $(this).parent().parent().find('longValue').context.innerText;
-            bandValue = $(this).parent().parent().children().find('span')[0].innerText;
-           
-        });
-        
-        
-        
+
 
         $("#btnSimulate").click(function () {
             GetSimulate();
         });
+        function GetResultView(NPV, band) {
+            $("#dvSimView").empty();
+            var parm = {
+                NPV: NPV,
+                currency: $('#ddlCurrency :selected').val(),
+                band: band
+            };
 
+            $.ajax({
+                url: "GetResultView",
+                contentType: "application/json",
+                method: "POST",
+                dataType: "html",
+                contentType: "application/json",
+                data: JSON.stringify(parm),
+                success: function (response) {
+                    $("#dvSimView").append(response);
+                    $("#remoteModal").modal("show");
+                },
+                error: function (err) {
+                    alert("error " + err);
+                }
+            });
+        }
+        function TrackChanges(item) {
+            $(item).addClass("changed");
+        }
         function GetSimulate() {
-            debugger;
-         
+            var changedItems = $(".changed");
+            var items={};
+            $.each(changedItems, function (index, item) {
+                var RecordId = $(this).attr("data-recordid");
+                var status = $(this).attr("");
+            });
             var parm = {
                 startDate: $('#txtSearch').val(),
                 currencyFormat: $('#ddlCurrency :selected').val(),

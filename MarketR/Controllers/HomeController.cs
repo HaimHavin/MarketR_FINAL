@@ -53,13 +53,19 @@ namespace MarketR.Controllers
             var report2 = report.GetReport2(startDate, currencyFormat);
             return Json(new { report1, report2 }, JsonRequestBehavior.AllowGet);
         }
-
         [HttpPost]
-        public JsonResult Simulate(string startDate, string currencyFormat, string shortValue,string longValue, string bandval)
+        public ActionResult GetResultView(bool? NPV, string currency, int? band)
+        {
+            var result = report.GetFilterResultView(NPV, currency, band);
+            return PartialView("_SimView", result);
+        }
+        [HttpPost]
+        public JsonResult Simulate(string startDate, string currencyFormat, string shortValue, string longValue, string bandval)
         {
             string checkvalue = "";
-            if (bandval != null) {
-                
+            if (bandval != null)
+            {
+
             }
 
             return Json(checkvalue, JsonRequestBehavior.AllowGet);
