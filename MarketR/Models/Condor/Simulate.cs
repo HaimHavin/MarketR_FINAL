@@ -21,4 +21,13 @@ namespace MarketR.Models.Condor
         public int Band { get; set; }
         public bool Sim_Liquidate_flag { get; set; }
     }
+    public class SimulateModel
+    {
+        public List<SimViewUpdate> SimViewChanges { get; set; }
+    }
+    public class SimViewUpdate
+    {
+        public int RecordId { get; set; }
+        public bool Status { get; set; }
+    }
 }

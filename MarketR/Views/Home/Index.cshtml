@@ -462,8 +462,7 @@
             $("#txtSearch").datepicker("setDate", new Date());
 
             GetReport();
-            $('#btnCalculate').click(function () {
-                debugger;
+            $('#btnCalculate').click(function () {               
                 GetReport();
             });
 
@@ -623,6 +622,7 @@
             GetSimulate();
         });
         function GetResultView(NPV, band) {
+            $("#dvProgressBar").show();
             $("#dvSimView").empty();
             var parm = {
                 NPV: NPV,
@@ -640,8 +640,10 @@
                 success: function (response) {
                     $("#dvSimView").append(response);
                     $("#remoteModal").modal("show");
+                    $("#dvProgressBar").hide();
                 },
                 error: function (err) {
+                    $("#dvProgressBar").hide();
                     alert("error " + err);
                 }
             });
@@ -650,31 +652,32 @@
             $(item).addClass("changed");
         }
         function GetSimulate() {
+            $("#dvProgressBar").show();
             var changedItems = $(".changed");
-            var items={};
+            var items = {};
+            var SimViewChanges = [];
             $.each(changedItems, function (index, item) {
-                var RecordId = $(this).attr("data-recordid");
-                var status = $(this).attr("");
+                var SimView = {};
+                SimView.RecordId = $(this).attr("data-recordid");
+                SimView.Status = $(this).prop("checked");               
+                SimViewChanges.push(SimView);
             });
-            var parm = {
-                startDate: $('#txtSearch').val(),
-                currencyFormat: $('#ddlCurrency :selected').val(),
-                shortValue: shortVal,
-                longValue: longVal,
-                bandval: bandValue
-            };
+            items.SimViewChanges = SimViewChanges;
+         
             $.ajax({
                 url: "Simulate",
                 contentType: "application/json",
                 method: "POST",
                 dataType: "json",
-                data: JSON.stringify(parm),
-                success: function (response) {
-                    debugger;
-                    var data = (response);
+                data: JSON.stringify(items),
+                success: function (response) {                  
+                    $("#remoteModal").modal("hide");
+                    $("#dvProgressBar").hide();
+                    GetReport();
                 },
                 error: function (err) {
-
+                    $("#dvProgressBar").hide();
+                    alert("error "+err);
                 }
             });
         }

@@ -50,6 +50,20 @@ namespace MarketR.Reports
             }
             return new List<GetResultView_Result>();
         }
+        public void UpdateSimLiquidate(SimulateModel model)
+        {
+            try
+            {
+                foreach (var item in model.SimViewChanges)
+                {
+                    dbEntity.UpdateSimLiquidate(item.RecordId, item.Status);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         //public  IEnumerable<CondorDto> GetSimulate()
         //{
         //    try

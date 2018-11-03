@@ -1,5 +1,6 @@
 ﻿#region Using
 
+using MarketR.Models.Condor;
 using MarketR.Reports;
 using System;
 using System.Web.Mvc;
@@ -60,15 +61,11 @@ namespace MarketR.Controllers
             return PartialView("_SimView", result);
         }
         [HttpPost]
-        public JsonResult Simulate(string startDate, string currencyFormat, string shortValue, string longValue, string bandval)
+        public JsonResult Simulate(SimulateModel model)
         {
-            string checkvalue = "";
-            if (bandval != null)
-            {
-
-            }
-
-            return Json(checkvalue, JsonRequestBehavior.AllowGet);
+            if (model != null && model.SimViewChanges.Count > 0)
+                report.UpdateSimLiquidate(model);
+            return Json("", JsonRequestBehavior.AllowGet);
         }
     }
 }

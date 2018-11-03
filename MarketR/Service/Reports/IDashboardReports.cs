@@ -13,5 +13,6 @@ namespace MarketR.Reports
         IEnumerable<Report2Dto> GetReport2(string startDate, string currencyFormat);
         void PerformCalculation(string startDate, string currencyFormat);
         IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band);
+        void UpdateSimLiquidate(SimulateModel model);
     }
 }
