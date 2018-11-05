@@ -413,8 +413,6 @@
             </div>
 
 
-
-            @*<button type="button" data-toggle="modal" data-target="#remoteModal" class="btn btn-primary btn-lg" id="openModal">Modal</button>*@
             <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false">
                 <div class="modal-dialog modal-lg" style="width:80%">
                     <div class="modal-content">
@@ -422,7 +420,12 @@
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 ×
                             </button>
-                            <h4 class="modal-title" id="myModalLabel">Simulation</h4>
+                            <h4 class="modal-title" id="myModalLabel">
+                                Simulation
+                                <span id="dvband" class="col-md-offset-4"></span>
+                                <span id="dvccy" class="text-center"></span>
+
+                            </h4>
                         </div>
                         <div class="modal-body" id="dvSimView">
 
@@ -462,7 +465,7 @@
             $("#txtSearch").datepicker("setDate", new Date());
 
             GetReport();
-            $('#btnCalculate').click(function () {               
+            $('#btnCalculate').click(function () {
                 GetReport();
             });
 
@@ -595,7 +598,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(parm),
                 success: function (data) {
-                    debugger;
+
                     $("#dvProgressBar").hide();
                     $('#tbodyReport1').html("");
                     $('#tbodyReport2').html("");
@@ -611,7 +614,7 @@
 
                 },
                 error: function (err) {
-                    debugger;
+
                     $("#dvProgressBar").hide();
                 }
             });
@@ -624,6 +627,8 @@
         function GetResultView(NPV, band) {
             $("#dvProgressBar").show();
             $("#dvSimView").empty();
+            $("#dvccy").text("Currency : " + $('#ddlCurrency :selected').text());
+            $("#dvband").text("Band : " + band);
             var parm = {
                 NPV: NPV,
                 currency: $('#ddlCurrency :selected').val(),
@@ -659,25 +664,25 @@
             $.each(changedItems, function (index, item) {
                 var SimView = {};
                 SimView.RecordId = $(this).attr("data-recordid");
-                SimView.Status = $(this).prop("checked");               
+                SimView.Status = $(this).prop("checked");
                 SimViewChanges.push(SimView);
             });
             items.SimViewChanges = SimViewChanges;
-         
+
             $.ajax({
                 url: "Simulate",
                 contentType: "application/json",
                 method: "POST",
                 dataType: "json",
                 data: JSON.stringify(items),
-                success: function (response) {                  
+                success: function (response) {
                     $("#remoteModal").modal("hide");
                     $("#dvProgressBar").hide();
                     GetReport();
                 },
                 error: function (err) {
                     $("#dvProgressBar").hide();
-                    alert("error "+err);
+                    alert("error " + err);
                 }
             });
         }

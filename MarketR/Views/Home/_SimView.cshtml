@@ -1,5 +1,5 @@
 ﻿@model  IEnumerable<MarketR.Models.GetResultView_Result>
-<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
         <header>
             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
@@ -19,6 +19,7 @@
                         <table id="tblReport3" class="table table-bordered table-borderd-top ">
                             <thead>
                                 <tr>
+                                    <th>DEAL NUMBER</th>
                                     <th>MATURITY DATE</th>
                                     <th>DEAL TYPE</th>
                                     <th>PROD TYPE</th>
@@ -34,6 +35,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
+                                        <td>@item.DEAL_ID</td>
                                         <td>@item.MATURITY_DATE</td>
                                         <td>@item.DEAL_TYPE</td>
                                         <td>@item.PROD_TYPE</td>
@@ -59,4 +61,4 @@
             </div>
         </div>
     </div>
-</article>
+
