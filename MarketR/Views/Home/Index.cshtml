@@ -420,12 +420,27 @@
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 ×
                             </button>
-                            <h4 class="modal-title" id="myModalLabel">
-                                Simulation
-                                <span id="dvband" class="col-md-offset-4"></span>
-                                <span id="dvccy" class="text-center"></span>
-
-                            </h4>
+                            <div class="modal-title" id="myModalLabel">
+                                <div class="row">
+                                    <div class="col-md-3"><label style="font-size:18px;">Simulation</label></div>
+                                    <div class="col-md-3">
+                                        <label id="dvband"></label>
+                                        <label id="dvccy"></label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="hidden" id="hdnNPV" />
+                                        <input type="hidden" id="hdnband" />
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="txtFilterbox" placeholder="Filter by Deal ID / CP Name" />
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary" type="button" onclick="FilterResultData();">
+                                                    <i class="glyphicon glyphicon-search"></i> Filter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-body" id="dvSimView">
 
@@ -624,15 +639,18 @@
         $("#btnSimulate").click(function () {
             GetSimulate();
         });
-        function GetResultView(NPV, band) {
+        function GetResultView(NPV, band, FilterText) {
             $("#dvProgressBar").show();
             $("#dvSimView").empty();
             $("#dvccy").text("Currency : " + $('#ddlCurrency :selected').text());
             $("#dvband").text("Band : " + band);
+            $("#hdnband").val(band);
+            $("#hdnNPV").val(NPV);
             var parm = {
                 NPV: NPV,
                 currency: $('#ddlCurrency :selected').val(),
-                band: band
+                band: band,
+                FilterText: FilterText
             };
 
             $.ajax({
@@ -652,6 +670,12 @@
                     alert("error " + err);
                 }
             });
+        }
+        function FilterResultData() {
+            var band = $("#hdnband").val();
+            var NPV = parseInt($("#hdnNPV").val());
+            var FilterText = $("#txtFilterbox").val();
+            GetResultView(NPV, band, FilterText);
         }
         function TrackChanges(item) {
             $(item).addClass("changed");

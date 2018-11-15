@@ -37,11 +37,11 @@ namespace MarketR.Reports
 
             }
         }
-        public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band)
+        public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band, string FilterText)
         {
             try
             {
-                var result = dbEntity.GetResultView(currency, band, NPV);
+                var result = dbEntity.GetResultView(currency, band, NPV, (string.IsNullOrWhiteSpace(FilterText) ? null : FilterText));
                 return result;
             }
             catch (Exception ex)

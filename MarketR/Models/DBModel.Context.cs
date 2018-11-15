@@ -77,7 +77,7 @@ namespace MarketR.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Simulate1_Result>("sp_Simulate1", dateParameter, currencyParameter);
         }
     
-        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV)
+        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)
         {
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
@@ -91,7 +91,11 @@ namespace MarketR.Models
                 new ObjectParameter("NPV", nPV) :
                 new ObjectParameter("NPV", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter);
+            var filterTextParameter = filterText != null ?
+                new ObjectParameter("FilterText", filterText) :
+                new ObjectParameter("FilterText", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter);
         }
     
         public virtual int UpdateSimLiquidate(Nullable<int> recordId, Nullable<bool> liquidate)

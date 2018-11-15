@@ -55,9 +55,9 @@ namespace MarketR.Controllers
             return Json(new { report1, report2 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult GetResultView(bool? NPV, string currency, int? band)
+        public ActionResult GetResultView(bool? NPV, string currency, int? band, string FilterText)
         {
-            var result = report.GetFilterResultView(NPV, currency, band);
+            var result = report.GetFilterResultView(NPV, currency, band, FilterText);
             return PartialView("_SimView", result);
         }
         [HttpPost]

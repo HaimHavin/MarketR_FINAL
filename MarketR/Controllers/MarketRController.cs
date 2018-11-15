@@ -243,7 +243,85 @@ namespace MarketR.Controllers
                 string targetPath = Path.Combine(targetFolder, files.FileName);
                 files.SaveAs(targetPath);
                 List<string> columnNames = new List<string>();
-                using (var package = new ExcelPackage(new FileInfo(targetPath)))
+                FileInfo newFile = new FileInfo(targetPath);
+                IExcelDataReader reader = null;
+                if (files.FileName.ToLower().EndsWith(".xls"))
+                {
+                    reader = ExcelReaderFactory.CreateBinaryReader(files.InputStream);
+                }
+                else if (files.FileName.ToLower().EndsWith(".xlsx"))
+                {
+                    reader = ExcelReaderFactory.CreateOpenXmlReader(files.InputStream);
+                }
+                else
+                {
+                    eventLog.SaveEventLog(ConstantEvent.InvalidFileType, ConstantEvent.Failed);
+                    return Json(new { Success = false, Message = "Please, upload xls or xlsx file" });
+                }
+
+                DataSet result = reader.AsDataSet();
+                reader.Close();
+                if (result.Tables.Count > 0)
+                {
+                    var noOfCol = result.Tables[0].Columns.Count;
+                    var noOfRow = result.Tables[0].Rows.Count;
+
+                    if (noOfCol != 20) return Json(new { Success = false, Message = "Some of columns are missing in excel" });
+
+                    //Read excel file 
+                    FileHistory fileHistory = new FileHistory();
+                    fileHistory.FileName = files.FileName;
+                    fileHistory.FilePath = targetPath;
+                    fileHistory.CreatedDate = DateTime.Now;
+                    marketRRepo.Add<FileHistory>(fileHistory);
+                    marketRRepo.UnitOfWork.SaveChanges();
+
+                    IList<NewFileRecord> newList = new List<NewFileRecord>();
+                    DateTime dateTime1 = DateTime.Now;
+                    for (int row = 1; row <= noOfRow - 1; row++)
+                    {
+                        if (row == 1 || row == 2 || row == 3 || row == 4) continue;
+                        NewFileRecord newRecord = new NewFileRecord();
+
+                        newRecord.N = result.Tables[0].Rows[row][0] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][0]);
+                        newRecord.DEAL_ID = result.Tables[0].Rows[row][1] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][1]);
+                        newRecord.ON_OFF_BALANCE = result.Tables[0].Rows[row][2] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][2]);
+                        newRecord.DEAL_TYPE = result.Tables[0].Rows[row][3] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][3]);
+                        newRecord.PROD_TYPE = result.Tables[0].Rows[row][4] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][4]);
+                        newRecord.PAY_RECIEVE = result.Tables[0].Rows[row][5] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][5]);
+                        newRecord.CCY = result.Tables[0].Rows[row][6] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][6]);
+                        newRecord.NOTIONAL = result.Tables[0].Rows[row][7] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][7]);
+                        newRecord.MATURITY_DATE = result.Tables[0].Rows[row][8] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][8]);
+                        newRecord.INTEREST_TYPE = result.Tables[0].Rows[row][9] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][9]);
+                        newRecord.FIXING_DATE = result.Tables[0].Rows[row][10] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][10]);
+                        newRecord.INT_CHANGE_FREQ = result.Tables[0].Rows[row][11] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][11]);
+                        newRecord.INT_CHAGE_TERM = result.Tables[0].Rows[row][12] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][12]);
+                        newRecord.INT_PRE = result.Tables[0].Rows[row][13] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][13]);
+                        newRecord.NPV_DELTA_ILS = result.Tables[0].Rows[row][14] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][14]);
+                        newRecord.NETED = result.Tables[0].Rows[row][15] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][15]);
+                        newRecord.NETED_ID = result.Tables[0].Rows[row][16] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][16]);
+                        newRecord.Portfolio = result.Tables[0].Rows[row][17] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][17]);
+                        newRecord.NETTING_COUNTER = result.Tables[0].Rows[row][18] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][18]);
+                        newRecord.CONTRACT_MAT_DATE = result.Tables[0].Rows[row][18] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][19]);
+                        newRecord.validity_date = result.Tables[0].Rows[0][3] == null ? "" : Convert.ToString(result.Tables[0].Rows[0][3]);
+                        newRecord.FileID = fileHistory.FileID;
+                        newList.Add(newRecord);
+                    }
+
+                    marketRRepo.AddRange<NewFileRecord>(newList);
+                    marketRRepo.UnitOfWork.SaveChanges();
+                    DateTime dateTime2 = DateTime.Now;
+                    TimeSpan diff = dateTime2 - dateTime1;
+
+                    var logData = $"Start Import- {dateTime1}. End Import - {dateTime2}. Total time {diff}. Total Record Import-{newList.Count()}";
+                    var fileName = $"C://Temp/Excellogfile{DateTime.Now.Ticks}.txt";
+                    System.IO.File.WriteAllText(fileName, logData);
+
+                    var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
+                    calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
+                }
+                /*
+                using (var package = new ExcelPackage(newFile))
                 {
                     var currentSheet = package.Workbook.Worksheets;
                     var workSheet = currentSheet.First();
@@ -339,6 +417,7 @@ namespace MarketR.Controllers
                     var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
                     calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
                 }
+                */
             }
             catch (Exception ex)
             {

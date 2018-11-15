@@ -216,7 +216,7 @@
             if ($('#fuExcel').val() != '') {
                 var file = $('#fuExcel')[0].files[0];
                 var fileName = file.name;
-                var fileExt = '.' + fileName.split('.').pop();
+                var fileExt = '.' + fileName.split('.').pop().toLowerCase();
 
                 if (fileExt != ".xls" && fileExt != ".xlsx") {
                 debugger;

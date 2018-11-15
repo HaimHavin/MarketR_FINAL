@@ -358,6 +358,7 @@
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="Band" Type="int" Mode="In" />
           <Parameter Name="NPV" Type="bit" Mode="In" />
+          <Parameter Name="FilterText" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_Simulate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="date" Mode="In" />
@@ -481,6 +482,7 @@
             <Parameter Name="Currency" Mode="In" Type="String" />
             <Parameter Name="Band" Mode="In" Type="Int32" />
             <Parameter Name="NPV" Mode="In" Type="Boolean" />
+            <Parameter Name="FilterText" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdateSimLiquidate">
             <Parameter Name="RecordId" Mode="In" Type="Int32" />
