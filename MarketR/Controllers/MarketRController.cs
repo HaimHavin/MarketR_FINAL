@@ -135,6 +135,22 @@ namespace MarketR.Controllers
         [HttpPost]
         public JsonResult FileManagerUpload(HttpPostedFileBase files)
         {
+            DateTime fileDate;
+            var splitFileName = files.FileName.Split('_').ToList();
+            if (splitFileName != null && splitFileName.Count > 1)
+            {
+                var fileDateStr = splitFileName.ElementAt(1).Substring(0, splitFileName.ElementAt(1).IndexOf('.')).Replace("-", "") + "00";
+                string format = "yyyyMMddHHmmss";
+                fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
+                if (fileDate == DateTime.MinValue)
+                {
+                    return Json(new { Success = false, Message = "Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx" });
+                }
+            }
+            else
+            {
+                return Json(new { Success = false, Message = "Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx" });
+            }
             var calculatedData = new List<FileCalculationViewModel>();
             if (ModelState.IsValid)
             {
@@ -181,6 +197,7 @@ namespace MarketR.Controllers
                     fileHistory.FileName = files.FileName;
                     fileHistory.FilePath = targetPath;
                     fileHistory.CreatedDate = DateTime.Now;
+                    fileHistory.FileDate = fileDate;
                     marketRRepo.Add<FileHistory>(fileHistory);
                     marketRRepo.UnitOfWork.SaveChanges();
                     // Saving file data to database.
@@ -239,6 +256,23 @@ namespace MarketR.Controllers
             var calculatedData = new List<FileCalculationViewModel>();
             try
             {
+                DateTime fileDate;
+                var splitFileName = files.FileName.Split('_').ToList();
+                if(splitFileName != null && splitFileName.Count > 1)
+                {
+                    var fileDateStr = splitFileName.ElementAt(1).Substring(0,splitFileName.ElementAt(1).IndexOf('.')).Replace("-","")+"00";
+                    string format = "yyyyMMddHHmmss";
+                    fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
+                    if(fileDate == DateTime.MinValue)
+                    {
+                        return Json(new { Success = false, Message = "Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx" });
+                    }
+                }
+                else
+                {
+                    return Json(new { Success = false, Message = "Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx" });
+                }
+
                 string targetFolder = Server.MapPath("~/Content/csv file");
                 string targetPath = Path.Combine(targetFolder, files.FileName);
                 files.SaveAs(targetPath);
@@ -267,12 +301,13 @@ namespace MarketR.Controllers
                     var noOfRow = result.Tables[0].Rows.Count;
 
                     if (noOfCol != 20) return Json(new { Success = false, Message = "Some of columns are missing in excel" });
-
+                    
                     //Read excel file 
                     FileHistory fileHistory = new FileHistory();
                     fileHistory.FileName = files.FileName;
                     fileHistory.FilePath = targetPath;
                     fileHistory.CreatedDate = DateTime.Now;
+                    fileHistory.FileDate = fileDate;
                     marketRRepo.Add<FileHistory>(fileHistory);
                     marketRRepo.UnitOfWork.SaveChanges();
 

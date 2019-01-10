@@ -1,0 +1,133 @@
+﻿<style>
+    .input-container {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  width: 100%;
+  
+}
+
+.icon {
+  padding-top: 10px;
+  padding-left:1px;
+  background: url(/content/img/mybg.png) ;
+  color: black;
+  min-width: 20px;
+  text-align: center;
+}
+
+</style>
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Dashboard <span>> Analytics</span></h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+
+        </div>
+    </div>
+
+
+    <section id="widget-grid" class="">
+
+        <div class="row">
+            <section class="col-md-2 ">
+                <label class="input input-container">
+                    <input id="txtSearch" type="text" name="txtSearch" class="form-control" data-dateformat='dd/mm/yy' value="" />
+                    <span class="icon-append fa fa-calendar icon"></span>
+                </label>
+            </section>
+
+            <div class="col-md-1">
+                <button class="btn btn-primary" id="btnCalculate">Search File</button>
+            </div>
+            <div id="performCalculationDiv" class="col-md-2" style="display:none;padding-left:40px;">
+                <button id="performCalculation" class="btn btn-success">Perform Calculation</button>
+            </div>
+        </div>
+
+        <div class="row m-t-20">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></article>
+        </div>
+
+
+
+    </section>
+    <div id="dvFileTable" style="display:none;">
+        <table class="table table-bordered">
+            <tr>
+                <th>
+                    FileID
+                </th>
+                <th>
+                    FileName
+                </th>
+                <th>
+                    FilePath
+                </th>
+                <th>
+                    CreatedDate
+                </th>
+                <th>
+                    FileDate
+                </th>
+            </tr>
+            <tbody id="tblbody"></tbody>
+        </table>
+
+    </div>
+
+</div>
+<!-- END MAIN CONTENT -->
+@section pagespecific {
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+    <script src="~/Content/themes/base/jquery-ui-1.10.3.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#txtSearch").datepicker();
+            $("#txtSearch").datepicker("setDate", new Date());
+
+            $('#btnCalculate').click(function () {
+                $.ajax({
+                    type: "Post",
+                    url: "GetAnalyticsFileData",
+                    contentType: "application/json",
+                    data: JSON.stringify({ date: $("#txtSearch").val() }),
+                    success: function (result) {
+                        var row = '<tr>';
+                        row += '<td>' + result.FileID + '</td>';
+                        row += '<td>' + result.FileName + '</td>';
+                        row += '<td>' + result.FilePath + '</td>';
+                        row += '<td>' + new Date(parseInt(result.CreatedDate.replace('/Date(', ''))).toLocaleDateString() + '</td>';
+                        row += '<td>' + new Date(parseInt(result.FileDate.replace('/Date(', ''))).toLocaleDateString() + '</td>';
+                        row += '</tr>';
+                        $("#tblbody").empty();
+                        $("#tblbody").append(row);
+                        $("#dvFileTable").css('display', 'block');
+                        $("#performCalculationDiv").css('display', 'block');
+                    },
+                    error: function (err) {
+                        debugger
+                        $("#tblbody").empty();
+                    }
+                })
+            });
+
+        });
+
+
+
+
+    </script>
+
+    <style type="text/css">
+        .m-t-20 {
+            margin-top: 20px;
+        }
+
+        .text-align {
+            text-align: right;
+        }
+    </style>
+}

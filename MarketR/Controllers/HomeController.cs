@@ -1,8 +1,11 @@
 ﻿#region Using
 
+using MarketR.Models;
 using MarketR.Models.Condor;
 using MarketR.Reports;
 using System;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Web.Mvc;
 
 #endregion
@@ -66,6 +69,23 @@ namespace MarketR.Controllers
             if (model != null && model.SimViewChanges.Count > 0)
                 report.UpdateSimLiquidate(model);
             return Json("", JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult Analytics()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult GetAnalyticsFileData(DateTime date)
+        {
+            MarketREntities marketREntities = new MarketREntities();
+            SqlParameter dateParam = new SqlParameter();
+            dateParam.ParameterName = "@date";
+            dateParam.Value = date;
+            dateParam.SqlDbType = System.Data.SqlDbType.DateTime;
+            var result= marketREntities.Database.SqlQuery<FileHistory>("GetAnalyticsFileData @date",
+                dateParam).FirstOrDefault();
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

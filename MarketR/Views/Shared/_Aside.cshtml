@@ -31,6 +31,9 @@
                             </li>
                         </ul>*@
                 </li>
+                <li class="@Html.RouteIf("Analytics", "active")">
+                    <a href="@Url.Action("Analytics", "home")" title="Analytics"><i class="fa fa-lg fa-fw fa-bar-chart"></i> <span class="menu-item-parent">Analytics</span></a>
+                </li>
                 <li class="@Html.RouteIf("list", "active")">
                     <a href="@Url.Action("List", "User")" title="Users"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Users</span></a>
                 </li>

@@ -1366,6 +1366,7 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\NostroDeals.cshtml" />
     <Content Include="Views\Home\_SimView.cshtml" />
+    <Content Include="Views\Home\Analytics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

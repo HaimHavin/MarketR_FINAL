@@ -96,6 +96,7 @@
           <Property Name="FileName" Type="nvarchar" MaxLength="100" />
           <Property Name="FilePath" Type="nvarchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="FileDate" Type="datetime" />
         </EntityType>
         <EntityType Name="FileRecords">
           <Key>
@@ -674,6 +675,7 @@
           <NavigationProperty Name="FileCalculations" Relationship="MarketRModel.FK_FileCalculation_FileHistory" FromRole="FileHistory" ToRole="FileCalculation" />
           <NavigationProperty Name="NewFileRecords" Relationship="MarketRModel.FK_NewFileRecords_FileHistory" FromRole="FileHistory" ToRole="NewFileRecord" />
           <NavigationProperty Name="NewFileRecordsCSVs" Relationship="MarketRModel.FK_NewFileRecordsCSV_FileHistory" FromRole="FileHistory" ToRole="NewFileRecordsCSV" />
+          <Property Name="FileDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="FileRecord">
           <Key>
@@ -1090,6 +1092,7 @@
           <EntitySetMapping Name="FileHistories">
             <EntityTypeMapping TypeName="MarketRModel.FileHistory">
               <MappingFragment StoreEntitySet="FileHistory">
+                <ScalarProperty Name="FileDate" ColumnName="FileDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />

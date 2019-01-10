@@ -26,6 +26,7 @@ namespace MarketR.Models
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<System.DateTime> FileDate { get; set; }
     
         public virtual ICollection<FileRecord> FileRecords { get; set; }
         public virtual ICollection<FileCalculation> FileCalculations { get; set; }
