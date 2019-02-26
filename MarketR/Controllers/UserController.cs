@@ -1,4 +1,4 @@
-﻿using MarketR.Models;
+﻿using MarketR.Common.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Mvc;
 using System.Linq;
@@ -11,6 +11,9 @@ using MarketR.Common;
 using MarketR.Utilities;
 using System.IO;
 using MarketR.Email;
+using MarketR.ViewModel;
+using MarketR.Models;
+using MarketR.DAL.Models;
 
 namespace MarketR.Controllers
 {

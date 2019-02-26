@@ -9,27 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using CsvHelper.TypeConversion;
-using MarketR.Models.Condor;
-using MarketR.Service;
-using MarketR.Service.CsvParser;
-using MarketR.Service.CsvParser.Exceptions;
-using MarketR.Service.CsvParser.Models;
-using MarketR.Service.CsvValidator;
+using MarketR.Common.Models.Condor;
+using MarketR.Common.Service;
+using MarketR.Common.Service.CsvParser;
+using MarketR.Common.Service.CsvParser.Exceptions;
+using MarketR.Common.Service.CsvParser.Models;
+using MarketR.Common.Service.CsvValidator;
 using MarketR.Common;
 using MarketR.Utilities;
-using MarketR.Repository;
-using MarketR.Models;
+using MarketR.Common.Repository;
+using MarketR.Common.Models;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
-using CsvHelper;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing;
 using System.Reflection;
 using OfficeOpenXml.Table;
-
 using ExcelDataReader;
+using MarketR.DAL.Models;
 
 namespace MarketR.Controllers
 {
@@ -43,7 +41,7 @@ namespace MarketR.Controllers
 
         public MarketRController()
         {
-            csvParseService = new CsvParseService<NewCondorDto>(GetConvertSettings());
+            csvParseService = new CsvParseService<NewCondorDto>(TypeConverter.GetConvertSettings());
             csvValidateService = new CsvValidateService();
         }
         // GET: MarketR
@@ -128,7 +126,7 @@ namespace MarketR.Controllers
         //public ActionResult Upload(string user, string pass)
         public ActionResult Upload(string user)
         {
-            ViewBag.User = Session["UserData"];
+            ViewBag.User = Session["UserData"];            
             return View();
         }
 
@@ -258,12 +256,12 @@ namespace MarketR.Controllers
             {
                 DateTime fileDate;
                 var splitFileName = files.FileName.Split('_').ToList();
-                if(splitFileName != null && splitFileName.Count > 1)
+                if (splitFileName != null && splitFileName.Count > 1)
                 {
-                    var fileDateStr = splitFileName.ElementAt(1).Substring(0,splitFileName.ElementAt(1).IndexOf('.')).Replace("-","")+"00";
+                    var fileDateStr = splitFileName.ElementAt(1).Substring(0, splitFileName.ElementAt(1).IndexOf('.')).Replace("-", "") + "00";
                     string format = "yyyyMMddHHmmss";
                     fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
-                    if(fileDate == DateTime.MinValue)
+                    if (fileDate == DateTime.MinValue)
                     {
                         return Json(new { Success = false, Message = "Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx" });
                     }
@@ -301,7 +299,7 @@ namespace MarketR.Controllers
                     var noOfRow = result.Tables[0].Rows.Count;
 
                     if (noOfCol != 20) return Json(new { Success = false, Message = "Some of columns are missing in excel" });
-                    
+
                     //Read excel file 
                     FileHistory fileHistory = new FileHistory();
                     fileHistory.FileName = files.FileName;
@@ -662,24 +660,6 @@ namespace MarketR.Controllers
             return string.Empty;
         }
 
-        //My methods
-        private TypeConvertSettings GetConvertSettings()
-        {
-            return new TypeConvertSettings
-            {
-                ConvertSettings = new List<TypeConverter>
-                {
-                    new TypeConverter
-                    {
-                        Type = typeof(DateTime),
-                        TypeConverterOptions = new TypeConverterOptions
-                        {
-                            Format = "dd/MM/yyyy",
-                        }
-                    }
-                }
-            };
-        }
 
         private void SaveCSVFile()
         {
@@ -691,7 +671,7 @@ namespace MarketR.Controllers
         {
             foreach (var record in fileCalculationViewModel)
             {
-                var fileRecord = AutoMapper.Mapper.Map<FileCalculationViewModel, FileCalculation>(record);
+                var fileRecord = AutoMapper.Mapper.Map<FileCalculation>(record);
                 marketRRepo.Add<FileCalculation>(fileRecord);
             }
             marketRRepo.UnitOfWork.SaveChanges();

@@ -10,7 +10,7 @@ using System.Web.Security;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using MarketR.Models;
+using MarketR.Common.Models;
 using static MarketR.AdAuthenticationService;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Claims;
@@ -22,6 +22,7 @@ using MarketR.Common;
 using System.Configuration;
 using MarketR.Email;
 using System.Web.Hosting;
+using MarketR.ViewModel;
 
 #endregion
 

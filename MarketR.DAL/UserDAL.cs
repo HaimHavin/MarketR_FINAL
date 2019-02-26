@@ -1,11 +1,13 @@
-﻿using System;
+﻿
+using MarketR.Common.Service.CsvParser.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
 
-namespace MarketR.DAL
+
+namespace MarketR.Common
 {
     public class UserDAL
     {

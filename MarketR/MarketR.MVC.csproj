@@ -47,10 +47,6 @@
       <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -70,10 +66,6 @@
     <Reference Include="ExcelDataReader.DataSet, Version=3.4.1.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.DataSet.3.4.1\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="MarketR.DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MarketR.DAL\bin\Debug\MarketR.DAL.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -216,115 +208,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\PayReceiveAttribute.cs" />
-    <Compile Include="Mapper\MapperInit.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AspNetRole.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AspNetUser.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Condor\NewCondorDto.cs" />
-    <Compile Include="Models\Condor\CondorDtoNew.cs" />
-    <Compile Include="Models\Condor\CondorDto.cs" />
-    <Compile Include="Models\Condor\Report1Dto.cs" />
-    <Compile Include="Models\Condor\Report2Dto.cs" />
-    <Compile Include="Models\Condor\Simulate.cs" />
-    <Compile Include="Models\CONDOR_ROW_INPUT.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CONDOR_ROW_INPUT_Model.cs" />
-    <Compile Include="Models\DBModel.Context.cs">
-      <DependentUpon>DBModel.Context.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Models\DBModel.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Models\DBModel.Designer.cs">
-      <DependentUpon>DBModel.edmx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Models\Deal_View.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FileCalculation.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FileHistory.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FileRecord.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetResultView_Result.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NewFileRecord.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NewFileRecordsCSV.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_Simulate1_Result.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_Simulate_Result.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_Simulate_Result1.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tbl_results_date_simulation.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TBL_Simulation_DATE_CCY.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Repository\IMarketRRepo.cs" />
-    <Compile Include="Repository\MarketRRepo.cs" />
-    <Compile Include="Service\Reports\DashboardReports.cs" />
-    <Compile Include="Service\Reports\IDashboardReports.cs" />
-    <Compile Include="UnitOfWork\IMarketRUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\MarketRUnitOfWork.cs" />
+    <Compile Include="ViewModel\AccountViewModels.cs" />
     <Compile Include="ViewModel\FileCalculationViewModel.cs" />
     <Compile Include="ViewModel\FileHistoryViewModel.cs" />
-    <Compile Include="Models\FolderPermission.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MarketRModel.cs" />
-    <Compile Include="Models\PermissionForCreatingUser.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\spFILE_UPLOAD_Result.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\spFILE_UPLOAD_Result1.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblEventLog.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Service\CsvParser\CsvParseService.cs" />
-    <Compile Include="Service\CsvParser\Exceptions\CsvParseException.cs" />
-    <Compile Include="Service\CsvParser\ICsvParseService.cs" />
-    <Compile Include="Service\CsvParser\Infrastructure\CsvFieldAttribute.cs" />
-    <Compile Include="Service\CsvParser\Models\ParseResult.cs" />
-    <Compile Include="Service\CsvParser\Models\ParseResultBase.cs" />
-    <Compile Include="Service\CsvParser\Models\ParseResultRow.cs" />
-    <Compile Include="Service\CsvParser\Models\TypeConverter.cs" />
-    <Compile Include="Service\CsvParser\Models\TypeConvertSettings.cs" />
-    <Compile Include="Service\CsvParser\Models\ValidationResult.cs" />
-    <Compile Include="Service\CsvValidator\CsvValidateService.cs" />
-    <Compile Include="Service\CsvValidator\ICsvValidateService.cs" />
     <Compile Include="Utilities\ConstantEvents.cs" />
+    <Compile Include="ViewModel\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Landing\Content\color\default.css" />
@@ -707,19 +595,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="EmailTemplate.html" />
     <Content Include="images\ui-icons_444444_256x240.png" />
-    <Content Include="Models\DBModel.Context.tt">
-      <DependentUpon>DBModel.edmx</DependentUpon>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DBModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\DBModel.edmx.diagram">
-      <DependentUpon>DBModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\DBModel.tt">
-      <DependentUpon>DBModel.edmx</DependentUpon>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DBModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -1384,10 +1259,14 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Models\DBModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DBModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
+    <ProjectReference Include="..\MarketR.Common\MarketR.Common.csproj">
+      <Project>{75dc3360-c82f-4892-abf5-3dcccd3666c2}</Project>
+      <Name>MarketR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarketR.DAL\MarketR.DAL.csproj">
+      <Project>{c4140b89-f6b6-4369-99fc-bf72cd502d2e}</Project>
+      <Name>MarketR.DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

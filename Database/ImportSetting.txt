@@ -1,0 +1,26 @@
+
+CREATE TABLE [dbo].[ImportSettings](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Interval] [int] NOT NULL,
+	[FolderPath] [nvarchar](100) NOT NULL,
+	[BackupFolderPath] [nvarchar](100) NULL,
+	[FileType] [int] NOT NULL,
+	[Active] [bit] NOT NULL,
+	[NotificationEmail] [nvarchar](100) NULL,
+	[LastRun] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET IDENTITY_INSERT [dbo].[ImportSettings] ON 
+
+GO
+INSERT [dbo].[ImportSettings] ([Id], [Interval], [FolderPath], [BackupFolderPath], [FileType], [Active], [NotificationEmail], [LastRun]) VALUES (2, 20, N'C:\Applications\MarketR', N'C:\Applications\MarketRBKP', 1, 1, N'stance.sandeep@gmail.com', CAST(N'2019-02-26 15:03:02.377' AS DateTime))
+GO
+INSERT [dbo].[ImportSettings] ([Id], [Interval], [FolderPath], [BackupFolderPath], [FileType], [Active], [NotificationEmail], [LastRun]) VALUES (3, 20, N'C:\Applications\MarketR', N'C:\Applications\MarketRBKP', 2, 1, N'stance.sandeep@gmail.com', CAST(N'2019-02-26 15:05:41.267' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[ImportSettings] OFF
+GO

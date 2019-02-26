@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3d9302b95ea644deb65685df7af43176" Name="Diagram1" ZoomLevel="61" >
+        <EntityTypeShape EntityType="MarketRModel.AspNetRole" Width="1.5" PointX="2.75" PointY="1.125" />
+        <EntityTypeShape EntityType="MarketRModel.AspNetUser" Width="1.5" PointX="5.375" PointY="1.125" />
+        <EntityTypeShape EntityType="MarketRModel.Deal_View" Width="1.5" PointX="7.875" PointY="4.375" />
+        <EntityTypeShape EntityType="MarketRModel.FolderPermission" Width="1.5" PointX="10.25" PointY="4.125" />
+        <EntityTypeShape EntityType="MarketRModel.PermissionForCreatingUser" Width="1.5" PointX="7.875" PointY="1.125" />
+        <EntityTypeShape EntityType="MarketRModel.tblEventLog" Width="1.5" PointX="10.125" PointY="1.25" />
+        <AssociationConnector Association="MarketRModel.FK_Deal_View_Deal_View" />
+        <AssociationConnector Association="MarketRModel.FK_PermissionForCreatingUser_AspNetUsers" />
+        <AssociationConnector Association="MarketRModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="MarketRModel.CONDOR_ROW_INPUT" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MarketRModel.FileHistory" Width="1.5" PointX="5.875" PointY="6.375" />
+        <EntityTypeShape EntityType="MarketRModel.FileRecord" Width="1.5" PointX="3" PointY="6.125" />
+        <AssociationConnector Association="MarketRModel.FK_FileRecords_FileHistory_FileID" />
+        <EntityTypeShape EntityType="MarketRModel.FileCalculation" Width="1.5" PointX="5.875" PointY="9.25" />
+        <AssociationConnector Association="MarketRModel.FK_FileCalculation_FileHistory" />
+        <EntityTypeShape EntityType="MarketRModel.NewFileRecord" Width="1.5" PointX="11.75" PointY="6.625" />
+        <AssociationConnector Association="MarketRModel.FK_NewFileRecords_FileHistory" />
+        <EntityTypeShape EntityType="MarketRModel.NewFileRecordsCSV" Width="2.375" PointX="8.125" PointY="7.875" />
+        <AssociationConnector Association="MarketRModel.FK_NewFileRecordsCSV_FileHistory" />
+        <EntityTypeShape EntityType="MarketRModel.tbl_results_date_simulation" Width="2.375" PointX="5" PointY="11.875" />
+        <EntityTypeShape EntityType="MarketRModel.TBL_Simulation_DATE_CCY" Width="2.875" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MarketRModel.ImportSetting" Width="1.5" PointX="0.75" PointY="12.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,6 +1,6 @@
 ﻿using System.Security.AccessControl;
 
-namespace MarketR.DAL
+namespace MarketR.Common
 {
     public class Example
     {

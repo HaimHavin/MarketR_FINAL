@@ -1,13 +1,12 @@
 ﻿using AutoMapper.Configuration;
 using AutoMapper;
-using MapperInit = MarketR.Mappers.MapperInit;
-using MarketR.Models;
-using MarketR.Models.Condor;
-using System.Collections.Generic;
+using MapperInit = MarketR.Common.Mappers.MapperInit;
 using MarketR.ViewModel;
-using MarketR.Service.CsvParser.Models;
 using System;
-using System.Globalization;
+using MarketR.Common.Service.CsvParser.Models;
+using MarketR.Common.Models.Condor;
+using MarketR.Common.Models;
+using MarketR.DAL.Models;
 
 namespace MarketR.MVC
 {
@@ -18,7 +17,7 @@ namespace MarketR.MVC
             try
             {
                 var cfg = new MapperConfigurationExpression();
-                MarketR.Mappers.MapperInit.Init(cfg);
+                MarketR.Common.Mappers.MapperInit.Init(cfg);
                 MapperInit.Init(cfg);
 
                 Mapper.Initialize(cfga =>

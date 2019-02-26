@@ -1,7 +1,7 @@
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using Unity.Mvc3;
-using MarketR.Reports;
+using MarketR.Common.Reports;
 
 namespace MarketR
 {

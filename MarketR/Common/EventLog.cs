@@ -1,4 +1,6 @@
-﻿using MarketR.Models;
+﻿
+using MarketR.Common.Models;
+using MarketR.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

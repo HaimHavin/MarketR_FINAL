@@ -1,8 +1,8 @@
 ﻿#region Using
 
-using MarketR.Models;
-using MarketR.Models.Condor;
-using MarketR.Reports;
+using MarketR.Common.Models.Condor;
+using MarketR.Common.Reports;
+using MarketR.Common.Repository;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -78,13 +78,8 @@ namespace MarketR.Controllers
         [HttpPost]
         public JsonResult GetAnalyticsFileData(DateTime date)
         {
-            MarketREntities marketREntities = new MarketREntities();
-            SqlParameter dateParam = new SqlParameter();
-            dateParam.ParameterName = "@date";
-            dateParam.Value = date;
-            dateParam.SqlDbType = System.Data.SqlDbType.DateTime;
-            var result= marketREntities.Database.SqlQuery<FileHistory>("GetAnalyticsFileData @date",
-                dateParam).FirstOrDefault();
+            AnalyticsRepo repository = new AnalyticsRepo();
+            var result = repository.GetAnalyticsData(date);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
