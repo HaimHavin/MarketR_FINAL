@@ -87,6 +87,10 @@
       <Project>{c4140b89-f6b6-4369-99fc-bf72cd502d2e}</Project>
       <Name>MarketR.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarketR\MarketR.MVC.csproj">
+      <Project>{84365375-C44A-4E7C-B84D-1FE6DCE36EFF}</Project>
+      <Name>MarketR.MVC</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

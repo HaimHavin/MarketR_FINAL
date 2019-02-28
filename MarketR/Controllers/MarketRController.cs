@@ -298,7 +298,7 @@ namespace MarketR.Controllers
                     var noOfCol = result.Tables[0].Columns.Count;
                     var noOfRow = result.Tables[0].Rows.Count;
 
-                    if (noOfCol != 20) return Json(new { Success = false, Message = "Some of columns are missing in excel" });
+                    if (noOfCol < 20) return Json(new { Success = false, Message = "Some of columns are missing in excel" });
 
                     //Read excel file 
                     FileHistory fileHistory = new FileHistory();

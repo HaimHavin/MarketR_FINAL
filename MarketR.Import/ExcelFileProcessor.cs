@@ -36,11 +36,8 @@ namespace MarketR.Import
                         {
                             var fileDateStr = splitFileName.ElementAt(1).Substring(0, splitFileName.ElementAt(1).IndexOf('.')).Replace("-", "") + "00";
                             string format = "yyyyMMddHHmmss";
-                            fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
-                            if (fileDate == DateTime.MinValue)
-                            {
-                                throw new Exception("Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx");
-                            }
+                            try { fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture); }
+                            catch (Exception ex) { throw new Exception("Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx"); }
                         }
                         else
                             throw new Exception("Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx");
@@ -68,7 +65,7 @@ namespace MarketR.Import
                                 var noOfCol = result.Tables[0].Columns.Count;
                                 var noOfRow = result.Tables[0].Rows.Count;
 
-                                if (noOfCol != 20) continue;
+                                if (noOfCol < 20) throw new Exception("Some of columns are missing in excel");
 
                                 //Read excel file 
                                 FileHistory fileHistory = new FileHistory();

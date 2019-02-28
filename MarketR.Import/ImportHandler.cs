@@ -1,6 +1,7 @@
 ﻿using log4net;
 using MarketR.Common.Repository;
 using MarketR.DAL.Models;
+using MarketR.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,11 @@ namespace MarketR.Import
         private FileProcesser obj;
         public void ProcessFiles()
         {
+            MapperConfig.RegisterMapper();
             var importSettings = marketRRepo.GetAll<ImportSetting>().Where(d => d.Active).ToList();
             foreach (var setting in importSettings)
             {
-                if (!setting.LastRun.HasValue || (DateTime.Now.Subtract(setting.LastRun.Value).TotalMinutes == setting.Interval))
+                if (!setting.LastRun.HasValue || (DateTime.Now.Subtract(setting.LastRun.Value).TotalMinutes >= setting.Interval))
                 {
                     obj = new FileProcesser(setting, marketRRepo);
                     obj.Import();

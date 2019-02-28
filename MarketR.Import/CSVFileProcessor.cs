@@ -38,20 +38,22 @@ namespace MarketR.Import
                     try
                     {
                         DateTime fileDate;
+                        IList<NewFileRecordsCSV> csvRecordList = new List<NewFileRecordsCSV>();
                         var splitFileName = file.Name.Split('_').ToList();
                         if (splitFileName != null && splitFileName.Count > 1)
                         {
                             var fileDateStr = splitFileName.ElementAt(1).Substring(0, splitFileName.ElementAt(1).IndexOf('.')).Replace("-", "") + "00";
                             string format = "yyyyMMddHHmmss";
-                            fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
-                            if (fileDate == DateTime.MinValue)
-                                throw new Exception("Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.csv");
+                            try
+                            {
+                                fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
+                            }
+                            catch (Exception ex) { throw new Exception("Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.csv"); }
                         }
                         else
                         {
                             throw new Exception("Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.csv");
                         }
-
                         if (file == null)
                         {
                             throw new Exception("Please, choose CSV file");
@@ -66,56 +68,39 @@ namespace MarketR.Import
                             {
                                 throw new Exception("Please, upload CSV file");
                             }
+                            ParseResult<NewCondorDto> condorDtoNew = csvParseService.ParseData(stream, ",");
 
-                            try
+                            if (!condorDtoNew.IsValid)
                             {
-                                ParseResult<NewCondorDto> condorDtoNew = csvParseService.ParseData(stream, ",");
+                                var builder = new StringBuilder("There are some problem \n");
 
-                                if (!condorDtoNew.IsValid)
+                                foreach (var error in condorDtoNew.Errors)
                                 {
-                                    var builder = new StringBuilder("There are some problem \n");
-
-                                    foreach (var error in condorDtoNew.Errors)
+                                    foreach (var subError in error.Value)
                                     {
-                                        foreach (var subError in error.Value)
-                                        {
-                                            builder.Append(string.Format("{0}\n", subError));
-                                        }
+                                        builder.Append(string.Format("{0}\n", subError));
                                     }
-                                    throw new Exception(builder.ToString());
                                 }
-                                #region Saving csv file and doing calculation
-
-                                FileHistory fileHistory = new FileHistory();
-                                fileHistory.FileName = file.Name;
-                                fileHistory.FilePath = setting.FolderPath + "/" + file.Name;
-                                fileHistory.CreatedDate = DateTime.Now;
-                                fileHistory.FileDate = fileDate;
-
-                                IList<NewFileRecordsCSV> csvRecordList = new List<NewFileRecordsCSV>();
-                                DateTime dateTime1 = DateTime.Now;
-                                foreach (var record in condorDtoNew.Records)
-                                {
-                                    var fileRecord = AutoMapper.Mapper.Map<NewCondorDto, NewFileRecordsCSV>(record);
-                                    fileRecord.FileHistory = fileHistory;
-                                    csvRecordList.Add(fileRecord);
-                                    if (!Directory.Exists(setting.BackupFolderPath)) Directory.CreateDirectory(setting.BackupFolderPath);
-                                    File.Move(setting.FolderPath + "/" + file, setting.BackupFolderPath + "/" + file);
-                                }
-                                if (csvRecordList.Count > 0)
-                                    SaveImportData(csvRecordList);
-
-                                #endregion
+                                throw new Exception(builder.ToString());
                             }
-                            catch (CsvParseException ex)
+
+                            FileHistory fileHistory = new FileHistory();
+                            fileHistory.FileName = file.Name;
+                            fileHistory.FilePath = setting.FolderPath + "/" + file.Name;
+                            fileHistory.CreatedDate = DateTime.Now;
+                            fileHistory.FileDate = fileDate;
+                            DateTime dateTime1 = DateTime.Now;
+                            foreach (var record in condorDtoNew.Records)
                             {
-                                throw new Exception("Could not read file! " + ex.Message);
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception("Could not read file! " + ex.Message);
+                                var fileRecord = AutoMapper.Mapper.Map<NewCondorDto, NewFileRecordsCSV>(record);
+                                fileRecord.FileHistory = fileHistory;
+                                csvRecordList.Add(fileRecord);
                             }
                         }
+                        if (!Directory.Exists(setting.BackupFolderPath)) Directory.CreateDirectory(setting.BackupFolderPath);
+                        File.Move(setting.FolderPath + "/" + file, setting.BackupFolderPath + "/" + file);
+                        if (csvRecordList.Count > 0)
+                            SaveImportData(csvRecordList);
                     }
                     catch (Exception ex)
                     {
