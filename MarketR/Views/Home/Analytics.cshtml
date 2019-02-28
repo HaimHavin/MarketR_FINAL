@@ -95,17 +95,23 @@
                     contentType: "application/json",
                     data: JSON.stringify({ date: $("#txtSearch").val() }),
                     success: function (result) {
-                        var row = '<tr>';
-                        row += '<td>' + result.FileID + '</td>';
-                        row += '<td>' + result.FileName + '</td>';
-                        row += '<td>' + result.FilePath + '</td>';
-                        row += '<td>' + new Date(parseInt(result.CreatedDate.replace('/Date(', ''))).toLocaleDateString() + '</td>';
-                        row += '<td>' + new Date(parseInt(result.FileDate.replace('/Date(', ''))).toLocaleDateString() + '</td>';
-                        row += '</tr>';
                         $("#tblbody").empty();
-                        $("#tblbody").append(row);
                         $("#dvFileTable").css('display', 'block');
-                        $("#performCalculationDiv").css('display', 'block');
+                        if (result != null && result != "") {
+                            var row = '<tr>';
+                            row += '<td>' + result.FileID + '</td>';
+                            row += '<td>' + result.FileName + '</td>';
+                            row += '<td>' + result.FilePath + '</td>';
+                            row += '<td>' + new Date(parseInt(result.CreatedDate.replace('/Date(', ''))).toLocaleDateString() + '</td>';
+                            row += '<td>' + new Date(parseInt(result.FileDate.replace('/Date(', ''))).toLocaleDateString() + '</td>';
+                            row += '</tr>';
+                            $("#tblbody").append(row);                            
+                            $("#performCalculationDiv").css('display', 'block');
+                        }
+                        else {
+                            $("#tblbody").append('<tr><td colspan="10" style="text-align:center">No files found !</td></tr>');
+                            $("#performCalculationDiv").css('display', 'none');
+                        }
                     },
                     error: function (err) {
                         debugger

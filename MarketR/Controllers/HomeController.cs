@@ -80,7 +80,9 @@ namespace MarketR.Controllers
         {
             AnalyticsRepo repository = new AnalyticsRepo();
             var result = repository.GetAnalyticsData(date);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            if (result != null) return Json(result, JsonRequestBehavior.AllowGet);
+            else return Json("", JsonRequestBehavior.AllowGet);
+
         }
     }
 }
