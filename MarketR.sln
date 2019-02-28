@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketR.MVC", "MarketR\MarketR.MVC.csproj", "{84365375-C44A-4E7C-B84D-1FE6DCE36EFF}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketR.ImportTest", "MarketR.ImportTest\MarketR.ImportTest.csproj", "{056462A5-E9F8-4A11-9FD1-99739620882F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketR.Common", "MarketR.Common\MarketR.Common.csproj", "{75DC3360-C82F-4892-ABF5-3DCCCD3666C2}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MarketR.ImportServiceSetup", "MarketR.ImportServiceSetup\MarketR.ImportServiceSetup.vdproj", "{5FBBBED2-6DAB-43FE-BDE7-A21759B8DD8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketR.ImportService", "MarketR.ImportService\MarketR.ImportService.csproj", "{A7A8754C-0D4C-479C-8A31-AD87CD58BDD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,11 +48,18 @@ Global
 		{75DC3360-C82F-4892-ABF5-3DCCCD3666C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75DC3360-C82F-4892-ABF5-3DCCCD3666C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75DC3360-C82F-4892-ABF5-3DCCCD3666C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FBBBED2-6DAB-43FE-BDE7-A21759B8DD8A}.Debug|Any CPU.ActiveCfg = Debug
+		{5FBBBED2-6DAB-43FE-BDE7-A21759B8DD8A}.Release|Any CPU.ActiveCfg = Release
+		{A7A8754C-0D4C-479C-8A31-AD87CD58BDD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7A8754C-0D4C-479C-8A31-AD87CD58BDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7A8754C-0D4C-479C-8A31-AD87CD58BDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7A8754C-0D4C-479C-8A31-AD87CD58BDD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+		SolutionGuid = {5D185786-948B-4F5F-8610-AB93EB6CFF88}
 	EndGlobalSection
 EndGlobal

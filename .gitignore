@@ -7,3 +7,13 @@
 /MarketR/bin/
 /MarketR/Properties/
 /MarketR/Logfiles/
+/.vs/
+/MarketR.Common/bin/
+/MarketR.Common/obj/
+/MarketR.Import/bin/
+/MarketR.Import/obj/
+/MarketR.ImportService/bin/
+/MarketR.ImportService/obj/
+/MarketR.ImportServiceSetup/Debug/
+/MarketR.ImportTest/bin/
+/MarketR.ImportTest/obj/

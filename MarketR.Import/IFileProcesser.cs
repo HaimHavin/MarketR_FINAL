@@ -23,8 +23,12 @@ namespace MarketR.Import
         public abstract void Import();
         public void HandleValidationErrorException(Exception ex, string notificationEmail, string fileName)
         {
-            if (!string.IsNullOrWhiteSpace(notificationEmail))
-                MailHelper.SendMail("MarketR import service exceptions with file --> " + fileName, ex.Message, notificationEmail);
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(notificationEmail))
+                    MailHelper.SendMail("MarketR import service exceptions with file --> " + fileName, ex.Message, notificationEmail);
+            }
+            catch { }
         }
     }
 }
