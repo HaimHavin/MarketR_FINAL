@@ -94,7 +94,7 @@ namespace MarketR.Import
                                     newRecord.INT_CHANGE_FREQ = result.Tables[0].Rows[row][11] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][11]);
                                     newRecord.INT_CHAGE_TERM = result.Tables[0].Rows[row][12] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][12]);
                                     newRecord.INT_PRE = result.Tables[0].Rows[row][13] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][13]);
-                                    newRecord.NPV_DELTA_ILS = result.Tables[0].Rows[row][14] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][14]);
+                                    newRecord.NPV_DELTA_ILS = object.ReferenceEquals(result.Tables[0].Rows[row][14], DBNull.Value) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][14]);
                                     newRecord.NETED = result.Tables[0].Rows[row][15] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][15]);
                                     newRecord.NETED_ID = result.Tables[0].Rows[row][16] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][16]);
                                     newRecord.Portfolio = result.Tables[0].Rows[row][17] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][17]);
