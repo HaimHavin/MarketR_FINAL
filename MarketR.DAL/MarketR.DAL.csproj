@@ -77,6 +77,7 @@
     </Compile>
     <Compile Include="Models\Condor\CondorDto.cs" />
     <Compile Include="Models\Condor\CondorDtoNew.cs" />
+    <Compile Include="Models\Condor\KONDOR_DATA.cs" />
     <Compile Include="Models\Condor\NewCondorDto.cs" />
     <Compile Include="Models\Condor\Report1Dto.cs" />
     <Compile Include="Models\Condor\Report2Dto.cs" />
@@ -121,6 +122,9 @@
     <Compile Include="Models\ImportSetting.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\KONDOR_DATACSV.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MarketRModel.cs" />
     <Compile Include="Models\NewFileRecord.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
@@ -161,6 +165,7 @@
     <Compile Include="Repository\AnalyticsRepo.cs" />
     <Compile Include="Repository\IMarketRRepo.cs" />
     <Compile Include="Repository\MarketRRepo.cs" />
+    <Compile Include="Repository\SelectList.cs" />
     <Compile Include="UnitOfWork\IMarketRUnitOfWork.cs" />
     <Compile Include="UnitOfWork\MarketRUnitOfWork.cs" />
     <Compile Include="UserDAL.cs" />

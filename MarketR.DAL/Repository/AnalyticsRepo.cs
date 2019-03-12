@@ -1,5 +1,6 @@
 ﻿using MarketR.Common.Models;
 using MarketR.DAL.Models;
+using MarketR.DAL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -23,6 +24,10 @@ namespace MarketR.Common.Repository
             dateParam.Value = date;
             dateParam.SqlDbType = System.Data.SqlDbType.DateTime;
             return  marketREntities.Database.SqlQuery<FileHistory>("GetAnalyticsFileData @date",dateParam).FirstOrDefault();
+        }
+        public List<SelectList> GetFileVersions()
+        {
+            return marketREntities.Database.SqlQuery<SelectList>("GetFileVersions").ToList();
         }
     }
 }

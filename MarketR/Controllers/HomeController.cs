@@ -4,6 +4,7 @@ using MarketR.Common.Models.Condor;
 using MarketR.Common.Reports;
 using MarketR.Common.Repository;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
@@ -50,9 +51,9 @@ namespace MarketR.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult CalculateCurrency(string startDate, string currencyFormat)
+        public JsonResult CalculateCurrency(string startDate, string currencyFormat,int fileId)
         {
-            report.PerformCalculation(startDate, currencyFormat);
+            report.PerformCalculation(startDate, currencyFormat, fileId);
             var report1 = report.GetReport1(startDate, currencyFormat);
             var report2 = report.GetReport2(startDate, currencyFormat);
             return Json(new { report1, report2 }, JsonRequestBehavior.AllowGet);
@@ -83,6 +84,31 @@ namespace MarketR.Controllers
             if (result != null) return Json(result, JsonRequestBehavior.AllowGet);
             else return Json("", JsonRequestBehavior.AllowGet);
 
+        }
+        [HttpPost]
+        public JsonResult GetFileVersions()
+        {
+            AnalyticsRepo repository = new AnalyticsRepo();
+            var result = repository.GetFileVersions();
+            if (result != null && result.Count > 0) {
+                var newData = result.GroupBy(
+                    k => k.Text,
+                    g => new { g.Value },
+                    (key, g) => new { Text = key, ids = g.ToArray() }
+                    );
+                var selectList = new List<DAL.Repository.SelectList>();
+                foreach (var item in newData) {
+                    if (item.ids.Count() > 0)
+                    {
+                        var selectListItem = new DAL.Repository.SelectList();
+                        selectListItem.Text = item.Text;
+                        selectListItem.Value = item.ids.Select(n=>n.Value).Max();
+                        selectList.Add(selectListItem);
+                    }
+                }
+                return Json(selectList, JsonRequestBehavior.AllowGet);
+            }
+            else return Json("", JsonRequestBehavior.AllowGet);
         }
     }
 }
