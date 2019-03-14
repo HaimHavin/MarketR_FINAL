@@ -146,6 +146,38 @@
           <Property Name="NotificationEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="LastRun" Type="datetime" />
         </EntityType>
+        <EntityType Name="KONDOR_DATACSV">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DealType" Type="nvarchar" MaxLength="500" />
+          <Property Name="KondorId" Type="nvarchar" MaxLength="500" />
+          <Property Name="KTPId" Type="nvarchar" MaxLength="500" />
+          <Property Name="BalanceDeal" Type="nvarchar" MaxLength="500" />
+          <Property Name="TypeOfInstrument" Type="nvarchar" MaxLength="500" />
+          <Property Name="SubTypeOfInstrument" Type="nvarchar" MaxLength="500" />
+          <Property Name="LegType" Type="nvarchar" MaxLength="500" />
+          <Property Name="Asset" Type="nvarchar" MaxLength="500" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="500" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="MaturityDate" Type="datetime" />
+          <Property Name="RateType" Type="nvarchar" MaxLength="500" />
+          <Property Name="FixingDate" Type="datetime" />
+          <Property Name="FixingFrequencyNumber" Type="nvarchar" MaxLength="500" />
+          <Property Name="FixingFrequencyPeriod" Type="nvarchar" MaxLength="500" />
+          <Property Name="Rate" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="NPVDeltaILS" Type="float" />
+          <Property Name="Portfolio" Type="nvarchar" MaxLength="500" />
+          <Property Name="GammaILS" Type="nvarchar" MaxLength="500" />
+          <Property Name="VegaILS" Type="nvarchar" MaxLength="500" />
+          <Property Name="Cpty" Type="nvarchar" MaxLength="500" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="500" />
+          <Property Name="TradeDate" Type="datetime" />
+          <Property Name="CalcA" Type="nvarchar" MaxLength="500" />
+          <Property Name="CalcB" Type="nvarchar" MaxLength="500" />
+          <Property Name="CalcC" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="NewFileRecords">
           <Key>
             <PropertyRef Name="RecordID" />
@@ -396,6 +428,7 @@
           <EntitySet Name="FileRecords" EntityType="Self.FileRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FolderPermission" EntityType="Self.FolderPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportSettings" EntityType="Self.ImportSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KONDOR_DATACSV" EntityType="Self.KONDOR_DATACSV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecords" EntityType="Self.NewFileRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecordsCSV" EntityType="Self.NewFileRecordsCSV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermissionForCreatingUser" EntityType="Self.PermissionForCreatingUser" Schema="dbo" store:Type="Tables" />
@@ -504,6 +537,7 @@
             <Parameter Name="Liquidate" Mode="In" Type="Boolean" />
           </FunctionImport>
           <EntitySet Name="ImportSettings" EntityType="MarketRModel.ImportSetting" />
+          <EntitySet Name="KONDOR_DATACSV" EntityType="MarketRModel.KONDOR_DATACSV" />
         </EntityContainer>
         <ComplexType Name="spFILE_UPLOAD_Result">
           <Property Type="String" Name="Deal_ID" Nullable="true" MaxLength="50" />
@@ -974,6 +1008,38 @@
           <Property Name="NotificationEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="LastRun" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="KONDOR_DATACSV">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DealType" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="KondorId" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="KTPId" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BalanceDeal" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOfInstrument" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SubTypeOfInstrument" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LegType" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Asset" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="MaturityDate" Type="DateTime" Precision="3" />
+          <Property Name="RateType" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FixingDate" Type="DateTime" Precision="3" />
+          <Property Name="FixingFrequencyNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FixingFrequencyPeriod" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="NPVDeltaILS" Type="Double" />
+          <Property Name="Portfolio" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="GammaILS" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="VegaILS" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Cpty" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TradeDate" Type="DateTime" Precision="3" />
+          <Property Name="CalcA" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CalcB" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CalcC" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1324,6 +1390,39 @@
                 <ScalarProperty Name="BackupFolderPath" ColumnName="BackupFolderPath" />
                 <ScalarProperty Name="FolderPath" ColumnName="FolderPath" />
                 <ScalarProperty Name="Interval" ColumnName="Interval" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KONDOR_DATACSV">
+            <EntityTypeMapping TypeName="MarketRModel.KONDOR_DATACSV">
+              <MappingFragment StoreEntitySet="KONDOR_DATACSV">
+                <ScalarProperty Name="CalcC" ColumnName="CalcC" />
+                <ScalarProperty Name="CalcB" ColumnName="CalcB" />
+                <ScalarProperty Name="CalcA" ColumnName="CalcA" />
+                <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Cpty" ColumnName="Cpty" />
+                <ScalarProperty Name="VegaILS" ColumnName="VegaILS" />
+                <ScalarProperty Name="GammaILS" ColumnName="GammaILS" />
+                <ScalarProperty Name="Portfolio" ColumnName="Portfolio" />
+                <ScalarProperty Name="NPVDeltaILS" ColumnName="NPVDeltaILS" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="FixingFrequencyPeriod" ColumnName="FixingFrequencyPeriod" />
+                <ScalarProperty Name="FixingFrequencyNumber" ColumnName="FixingFrequencyNumber" />
+                <ScalarProperty Name="FixingDate" ColumnName="FixingDate" />
+                <ScalarProperty Name="RateType" ColumnName="RateType" />
+                <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Asset" ColumnName="Asset" />
+                <ScalarProperty Name="LegType" ColumnName="LegType" />
+                <ScalarProperty Name="SubTypeOfInstrument" ColumnName="SubTypeOfInstrument" />
+                <ScalarProperty Name="TypeOfInstrument" ColumnName="TypeOfInstrument" />
+                <ScalarProperty Name="BalanceDeal" ColumnName="BalanceDeal" />
+                <ScalarProperty Name="KTPId" ColumnName="KTPId" />
+                <ScalarProperty Name="KondorId" ColumnName="KondorId" />
+                <ScalarProperty Name="DealType" ColumnName="DealType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -46,9 +46,14 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\40-System.IO.Compression.1.0.0.2\lib\net40-client\System.IO.Compression.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Shim, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Shim.1.0.0.1\lib\net40-client\System.Shim.dll</HintPath>
+    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
@@ -72,6 +77,7 @@
     </Compile>
     <Compile Include="Models\Condor\CondorDto.cs" />
     <Compile Include="Models\Condor\CondorDtoNew.cs" />
+    <Compile Include="Models\Condor\KONDOR_DATA.cs" />
     <Compile Include="Models\Condor\NewCondorDto.cs" />
     <Compile Include="Models\Condor\Report1Dto.cs" />
     <Compile Include="Models\Condor\Report2Dto.cs" />
@@ -116,6 +122,9 @@
     <Compile Include="Models\ImportSetting.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\KONDOR_DATACSV.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MarketRModel.cs" />
     <Compile Include="Models\NewFileRecord.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
@@ -156,6 +165,7 @@
     <Compile Include="Repository\AnalyticsRepo.cs" />
     <Compile Include="Repository\IMarketRRepo.cs" />
     <Compile Include="Repository\MarketRRepo.cs" />
+    <Compile Include="Repository\SelectList.cs" />
     <Compile Include="UnitOfWork\IMarketRUnitOfWork.cs" />
     <Compile Include="UnitOfWork\MarketRUnitOfWork.cs" />
     <Compile Include="UserDAL.cs" />

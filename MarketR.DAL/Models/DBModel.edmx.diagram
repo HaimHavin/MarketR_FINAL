@@ -27,6 +27,7 @@
         <EntityTypeShape EntityType="MarketRModel.tbl_results_date_simulation" Width="2.375" PointX="5" PointY="11.875" />
         <EntityTypeShape EntityType="MarketRModel.TBL_Simulation_DATE_CCY" Width="2.875" PointX="12.375" PointY="0.75" />
         <EntityTypeShape EntityType="MarketRModel.ImportSetting" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="MarketRModel.KONDOR_DATACSV" Width="1.5" PointX="11.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

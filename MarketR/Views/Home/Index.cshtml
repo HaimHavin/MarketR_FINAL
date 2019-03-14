@@ -32,6 +32,11 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="ddlFileVersion">
+                       
+                    </select>
+                </div>
                 <div class="col-md-2">
                     <button class="btn btn-primary" id="btnCalculate">Calculate</button>
                 </div>
@@ -478,7 +483,7 @@
         $(document).ready(function () {
             $("#txtSearch").datepicker();
             $("#txtSearch").datepicker("setDate", new Date());
-
+            GetFileVersions();
             GetReport();
             $('#btnCalculate').click(function () {
                 GetReport();
@@ -603,10 +608,30 @@
 
             // END LINE CHART
         });
+       
+        function GetFileVersions() {
+            $("#dvProgressBar").show();
+            $.ajax({
+                type: "Post",
+                url: "GetFileVersions",
+                async:false,
+                contentType: "application/json",
+                success: function (data) {
+                    $("#ddlFileVersion").empty();
+                    $.each(data, function (k, v) {
+                        var option = "<option value=" + v.Value + ">" + v.Text + "</option>";
+                        $('#ddlFileVersion').append(option);
+                    });
+                },
+                error: function (err) {
+                    $("#dvProgressBar").hide();
+                }
+            });
+        }
 
         function GetReport() {
             $("#dvProgressBar").show();
-            var parm = { startDate: $('#txtSearch').val(), currencyFormat: $('#ddlCurrency :selected').val() };
+            var parm = { startDate: $('#txtSearch').val(), currencyFormat: $('#ddlCurrency :selected').val(), fileId: $('#ddlFileVersion :selected').val()};
             $.ajax({
                 type: "Post",
                 url: "CalculateCurrency",
