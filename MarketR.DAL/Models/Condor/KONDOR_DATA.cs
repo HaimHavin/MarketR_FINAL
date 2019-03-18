@@ -118,12 +118,18 @@ namespace MarketR.DAL.Models.Condor
 
         public KONDOR_DATACSV MapToKONDOR_DATACSV(KONDOR_DATA model)
         {
-            double? newAmount = double.TryParse(model.Amount, out double outAmount) ? outAmount : default(double?);
-            DateTime? newMaturityDate = DateTime.TryParse(model.MaturityDate, out DateTime outMaturityDate) ? outMaturityDate : default(DateTime?);
-            DateTime? newFixingDate = DateTime.TryParse(model.FixingDate, out DateTime outFixingDate) ? outFixingDate : default(DateTime?);
-            decimal? newRate = decimal.TryParse(model.Rate, out decimal outRate) ? outRate : default(decimal?);
-            double? newNPVDeltaILS = double.TryParse(model.NPVDeltaILS, out double outNPVDeltaILS) ? outNPVDeltaILS : default(double?);
-            DateTime? newTradeDate = DateTime.TryParse(model.TradeDate, out DateTime outTradeDate) ? outTradeDate : default(DateTime?);
+            double outAmount;
+            DateTime outMaturityDate;
+            DateTime outFixingDate;
+            decimal outRate;
+            double outNPVDeltaILS;
+            DateTime outTradeDate;
+            double? newAmount = double.TryParse(model.Amount, out outAmount) ? outAmount : default(double?);
+            DateTime? newMaturityDate = DateTime.TryParse(model.MaturityDate, out outMaturityDate) ? outMaturityDate : default(DateTime?);
+            DateTime? newFixingDate = DateTime.TryParse(model.FixingDate, out outFixingDate) ? outFixingDate : default(DateTime?);
+            decimal? newRate = decimal.TryParse(model.Rate, out outRate) ? outRate : default(decimal?);
+            double? newNPVDeltaILS = double.TryParse(model.NPVDeltaILS, out outNPVDeltaILS) ? outNPVDeltaILS : default(double?);
+            DateTime? newTradeDate = DateTime.TryParse(model.TradeDate, out outTradeDate) ? outTradeDate : default(DateTime?);
             return new KONDOR_DATACSV()
             {
                 DealType = model.DealType,
