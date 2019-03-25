@@ -258,8 +258,8 @@ namespace MarketR.Controllers
                 var splitFileName = files.FileName.Split('_').ToList();
                 if (splitFileName != null && splitFileName.Count > 1)
                 {
-                    var fileDateStr = splitFileName.ElementAt(1).Substring(0, splitFileName.ElementAt(1).IndexOf('.')).Replace("-", "") + "00";
-                    string format = "yyyyMMddHHmmss";
+                    string fileDateStr = String.Join("", splitFileName.ElementAt(0).Where(char.IsDigit))+"00";
+                    string format = "yyyyMMddHH";
                     fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
                     if (fileDate == DateTime.MinValue)
                     {
@@ -323,14 +323,14 @@ namespace MarketR.Controllers
                         newRecord.PROD_TYPE = result.Tables[0].Rows[row][4] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][4]);
                         newRecord.PAY_RECIEVE = result.Tables[0].Rows[row][5] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][5]);
                         newRecord.CCY = result.Tables[0].Rows[row][6] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][6]);
-                        newRecord.NOTIONAL = result.Tables[0].Rows[row][7] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][7]);
+                        newRecord.NOTIONAL = object.ReferenceEquals(result.Tables[0].Rows[row][7],DBNull.Value ) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][7]);
                         newRecord.MATURITY_DATE = result.Tables[0].Rows[row][8] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][8]);
                         newRecord.INTEREST_TYPE = result.Tables[0].Rows[row][9] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][9]);
                         newRecord.FIXING_DATE = result.Tables[0].Rows[row][10] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][10]);
                         newRecord.INT_CHANGE_FREQ = result.Tables[0].Rows[row][11] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][11]);
                         newRecord.INT_CHAGE_TERM = result.Tables[0].Rows[row][12] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][12]);
-                        newRecord.INT_PRE = result.Tables[0].Rows[row][13] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][13]);
-                        newRecord.NPV_DELTA_ILS = result.Tables[0].Rows[row][14] == null ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][14]);
+                        newRecord.INT_PRE = object.ReferenceEquals(result.Tables[0].Rows[row][13],DBNull.Value) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][13]);
+                        newRecord.NPV_DELTA_ILS = object.ReferenceEquals(result.Tables[0].Rows[row][14], DBNull.Value) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][14]); 
                         newRecord.NETED = result.Tables[0].Rows[row][15] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][15]);
                         newRecord.NETED_ID = result.Tables[0].Rows[row][16] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][16]);
                         newRecord.Portfolio = result.Tables[0].Rows[row][17] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][17]);
@@ -353,104 +353,7 @@ namespace MarketR.Controllers
                     var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
                     calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
                 }
-                /*
-                using (var package = new ExcelPackage(newFile))
-                {
-                    var currentSheet = package.Workbook.Worksheets;
-                    var workSheet = currentSheet.First();
-                    var noOfCol = workSheet.Dimension.End.Column;
-                    var noOfRow = workSheet.Dimension.End.Row;
-                    //get header
-                    for (int i = 1; i <= workSheet.Dimension.End.Column; i++)
-                    {
-                        if (workSheet.Cells[5, i].Value == null)
-                        {
-                            columnNames.Add(workSheet.Cells[1, 1].Value.ToString().Trim());
-                            break;
-                        }
-                        columnNames.Add(workSheet.Cells[5, i].Value.ToString().Trim());
-                        if (i == workSheet.Dimension.End.Column)
-                        {
-                            columnNames.Add(workSheet.Cells[1, 1].Value.ToString().Trim());
-                        }
-                    }
-                    //match column();
-                    NewCondorDto dto = new NewCondorDto();
-                    Type t = dto.GetType();
-                    PropertyInfo[] prop = t.GetProperties();
-                    bool columnMatched = false;
-                    for (int i = 0; i < columnNames.Count; i++)
-                    {
-                        //columnMatched = false;
-                        foreach (var item in prop)
-                        {
-                            if (columnNames[i].ToString().ToLower().Trim() == item.Name.ToString().ToLower().Trim())
-                            {
-                                columnMatched = true;
-                                break;
-                            }
-                        }
-                        if (!columnMatched)
-                            throw new ArgumentException("File not correct");
-                    }
-                    //Read excel file 
-                    FileHistory fileHistory = new FileHistory();
-                    fileHistory.FileName = files.FileName;
-                    fileHistory.FilePath = targetPath;
-                    fileHistory.CreatedDate = DateTime.Now;
-                    marketRRepo.Add<FileHistory>(fileHistory);
-                    marketRRepo.UnitOfWork.SaveChanges();
-
-                    IList<NewFileRecord> newList = new List<NewFileRecord>();
-
-                    DateTime dateTime1 = DateTime.Now;
-
-                    for (int row = 1; row <= noOfRow; row++)
-                    {
-                        if (row == 1 || row == 2 || row == 3 || row == 4 || row == 5) continue;
-                        NewFileRecord newRecord = new NewFileRecord();
-
-                        newRecord.N = workSheet.Cells[row, 1].Value == null ? "" : Convert.ToString(workSheet.Cells[row, 1].Value);
-                        newRecord.DEAL_ID = workSheet.Cells[row, 2].Value == null ? "" : workSheet.Cells[row, 2].Value.ToString();
-                        newRecord.ON_OFF_BALANCE = workSheet.Cells[row, 3].Value == null ? "" : workSheet.Cells[row, 3].Value.ToString();
-                        newRecord.DEAL_TYPE = workSheet.Cells[row, 4].Value == null ? "" : workSheet.Cells[row, 4].Value.ToString();
-                        newRecord.PROD_TYPE = workSheet.Cells[row, 5].Value == null ? "" : workSheet.Cells[row, 5].Value.ToString();
-                        newRecord.PAY_RECIEVE = workSheet.Cells[row, 6].Value == null ? "" : Convert.ToString(workSheet.Cells[row, 6].Value);
-                        newRecord.CCY = workSheet.Cells[row, 7].Value == null ? "" : workSheet.Cells[row, 7].Value.ToString();
-                        newRecord.NOTIONAL = Convert.ToDouble(workSheet.Cells[row, 8].Value);
-                        newRecord.MATURITY_DATE = Convert.ToString(workSheet.Cells[row, 9].Value);
-                        newRecord.INTEREST_TYPE = workSheet.Cells[row, 10].Value == null ? "" : workSheet.Cells[row, 10].Value.ToString();
-                        newRecord.FIXING_DATE = Convert.ToString(workSheet.Cells[row, 11].Value);
-                        newRecord.INT_CHANGE_FREQ = workSheet.Cells[row, 12].Value == null ? "" : Convert.ToString(workSheet.Cells[row, 12].Value);
-                        newRecord.INT_CHAGE_TERM = workSheet.Cells[row, 13].Value == null ? "" : workSheet.Cells[row, 13].Value.ToString();
-                        newRecord.INT_PRE = Convert.ToDouble(workSheet.Cells[row, 14].Value);
-                        newRecord.NPV_DELTA_ILS = Convert.ToDouble(workSheet.Cells[row, 15].Value);
-                        newRecord.NETED = workSheet.Cells[row, 16].Value == null ? "" : Convert.ToString(workSheet.Cells[row, 16].Value);
-                        newRecord.NETED_ID = workSheet.Cells[row, 17].Value == null ? "" : workSheet.Cells[row, 17].Value.ToString();
-                        newRecord.Portfolio = workSheet.Cells[row, 18].Value == null ? "" : workSheet.Cells[row, 18].Value.ToString();
-                        newRecord.NETTING_COUNTER = workSheet.Cells[row, 19].Value == null ? "" : Convert.ToString(workSheet.Cells[row, 19].Value);
-                        newRecord.CONTRACT_MAT_DATE = Convert.ToString(workSheet.Cells[row, 20].Value);
-                        newRecord.validity_date = Convert.ToString(workSheet.Cells[1, 4].Value);
-                        newRecord.FileID = fileHistory.FileID;
-                        newList.Add(newRecord);
-                    }
-
-
-                    marketRRepo.AddRange<NewFileRecord>(newList);
-
-                    marketRRepo.UnitOfWork.SaveChanges();
-                    DateTime dateTime2 = DateTime.Now;
-
-                    TimeSpan diff = dateTime2 - dateTime1;
-
-                    var logData = $"Start Import- {dateTime1}. End Import - {dateTime2}. Total time {diff}. Total Record Import-{newList.Count()}";
-                    var fileName = $"C://Temp/Excellogfile{DateTime.Now.Ticks}.txt";
-                    System.IO.File.WriteAllText(fileName, logData);
-
-                    var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
-                    calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
-                }
-                */
+              
             }
             catch (Exception ex)
             {

@@ -137,14 +137,12 @@
         });
 
         $('#btnSubmit').click(function () {
-    debugger;
             if ($('#fu1').val() != '') {
                 var file = $('#fu1')[0].files[0];
                 var fileName = file.name;
                 var fileExt = '.' + fileName.split('.').pop();
 
                 if (fileExt != ".csv") {
-                debugger;
                     $("#dvStatus").show();
                     $('#status').html('Please select only .csv file.')
                     $('#status').removeClass("alert-success");
@@ -179,7 +177,6 @@
                 $("#dvProgressBar").show();
             },
             success: function (d) {
-    debugger;
                 $("#dvProgressBar").hide();
                 $("#dvStatus").show();
                 $('#fu1').val('');
@@ -190,7 +187,6 @@
                 status.addClass("alert-success");
                 var calculation = "";
                 $.each(d.calculatedData, function (key, value) {
-    debugger;
                     calculation += "<tr><td class='CalculationID'>" + value.CalculationID + "</td><td class='FileID'>" + value.FileID + "</td><td class='DealType'>" +
                         value.DealType + "</td><td class='KondorID'>" + value.KondorID + "</td></tr>";
                 });
@@ -212,14 +208,12 @@
         });
 
     $('#btnSubmitExcel').click(function () {
-    debugger;
             if ($('#fuExcel').val() != '') {
                 var file = $('#fuExcel')[0].files[0];
                 var fileName = file.name;
                 var fileExt = '.' + fileName.split('.').pop().toLowerCase();
 
                 if (fileExt != ".xls" && fileExt != ".xlsx") {
-                debugger;
                     $("#dvStatusExcel").show();
                     $('#statusExcel').html('Please select only excel file.')
                     $('#statusExcel').removeClass("alert-success");
@@ -254,7 +248,6 @@
                 $("#dvProgressBar").show();
             },
             success: function (d) {
-    debugger;
                 $("#dvProgressBar").hide();
                 $("#dvStatusExcel").show();
                 $('#fuExcel').val('');
@@ -265,7 +258,6 @@
                 statusExcel.addClass("alert-success");
                 var calculation = "";
                 $.each(d.calculatedData, function (key, value) {
-    debugger;
                     calculation += "<tr><td class='CalculationID'>" + value.CalculationID + "</td><td class='FileID'>" + value.FileID + "</td><td class='DealType'>" +
                         value.DealType + "</td><td class='KondorID'>" + value.KondorID + "</td></tr>";
                 });
@@ -281,6 +273,7 @@
             complete: function (xhr) {
             },
             error: function (err) {
+                console.log(err.responseText);
                 statusExcel.removeClass("alert-success");
                 statusExcel.addClass("alert-danger");
             }
