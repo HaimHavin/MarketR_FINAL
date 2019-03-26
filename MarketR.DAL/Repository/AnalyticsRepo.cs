@@ -23,11 +23,15 @@ namespace MarketR.Common.Repository
             dateParam.ParameterName = "@date";
             dateParam.Value = date;
             dateParam.SqlDbType = System.Data.SqlDbType.DateTime;
-            return  marketREntities.Database.SqlQuery<FileHistory>("GetAnalyticsFileData @date",dateParam).FirstOrDefault();
+            return marketREntities.Database.SqlQuery<FileHistory>("GetAnalyticsFileData @date", dateParam).FirstOrDefault();
         }
         public List<SelectList> GetFileVersions()
         {
             return marketREntities.Database.SqlQuery<SelectList>("GetFileVersions").ToList();
+        }
+        public ImportSetting GetImportSetting(fileType fileType)
+        {
+            return marketREntities.ImportSettings.Where(d => d.FileType == (int)fileType).FirstOrDefault();
         }
     }
 }

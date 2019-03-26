@@ -34,14 +34,15 @@ namespace MarketR.Controllers
     public class MarketRController : Controller
     {
         EventLog eventLog = new EventLog();
-        private readonly ICsvParseService<NewCondorDto> csvParseService;
+        private readonly ICsvParseService<DAL.Models.Condor.KONDOR_DATA> csvParseService;
         private readonly ICsvValidateService csvValidateService;
         //IRepository repository = new Repository(new MyFirstDbContex);
         IMarketRRepo marketRRepo = new MarketRRepo(new MarketREntities());
+        AnalyticsRepo analyticsRepo = new AnalyticsRepo();
 
         public MarketRController()
         {
-            csvParseService = new CsvParseService<NewCondorDto>(TypeConverter.GetConvertSettings());
+            csvParseService = new CsvParseService<DAL.Models.Condor.KONDOR_DATA>(TypeConverter.GetConvertSettings());
             csvValidateService = new CsvValidateService();
         }
         // GET: MarketR
@@ -126,7 +127,7 @@ namespace MarketR.Controllers
         //public ActionResult Upload(string user, string pass)
         public ActionResult Upload(string user)
         {
-            ViewBag.User = Session["UserData"];            
+            ViewBag.User = Session["UserData"];
             return View();
         }
 
@@ -169,13 +170,12 @@ namespace MarketR.Controllers
                 }
                 try
                 {
-                    ParseResult<NewCondorDto> condorDtoNew = csvParseService.ParseData(files.InputStream, ",");
-
-                    if (!condorDtoNew.IsValid)
+                    ParseResult<DAL.Models.Condor.KONDOR_DATA> KONDOR_DATAcsv = csvParseService.ParseData(files.InputStream, ",");
+                    if (!KONDOR_DATAcsv.IsValid)
                     {
                         var builder = new StringBuilder("There are some problem \n");
 
-                        foreach (var error in condorDtoNew.Errors)
+                        foreach (var error in KONDOR_DATAcsv.Errors)
                         {
                             foreach (var subError in error.Value)
                             {
@@ -187,41 +187,24 @@ namespace MarketR.Controllers
                     }
                     #region Saving csv file and doing calculation
                     //saving file and it's path
-                    string targetFolder = Server.MapPath("~/Content/csv file");
-                    string targetPath = Path.Combine(targetFolder, files.FileName);
-                    files.SaveAs(targetPath);
 
-                    FileHistory fileHistory = new FileHistory();
-                    fileHistory.FileName = files.FileName;
-                    fileHistory.FilePath = targetPath;
-                    fileHistory.CreatedDate = DateTime.Now;
-                    fileHistory.FileDate = fileDate;
-                    marketRRepo.Add<FileHistory>(fileHistory);
-                    marketRRepo.UnitOfWork.SaveChanges();
-                    // Saving file data to database.
-                    //var aa = AutoMapper.Mapper.Map<ParseResult<CondorDtoNew>, ParseResult<FileRecord>>(condorDtoNew);
+                    var setting = analyticsRepo.GetImportSetting(fileType.Csv);
+                    if (setting != null && !string.IsNullOrWhiteSpace(setting.FileSavePath))
+                    {                       
+                        string targetPath = Path.Combine(setting.FileSavePath, files.FileName);
+                        files.SaveAs(targetPath);
 
-                    IList<NewFileRecordsCSV> csvRecordList = new List<NewFileRecordsCSV>();
-                    DateTime dateTime1 = DateTime.Now;
-                    foreach (var record in condorDtoNew.Records)
-                    {
-                        var fileRecord = AutoMapper.Mapper.Map<NewCondorDto, NewFileRecordsCSV>(record);
-                        fileRecord.FileID = fileHistory.FileID;
-                        csvRecordList.Add(fileRecord);
+                        KondorFileHistory fileHistory = new KondorFileHistory();
+                        fileHistory.FileName = files.FileName;
+                        fileHistory.FilePath = targetPath;
+                        fileHistory.CreatedDate = DateTime.Now;
+                        fileHistory.FileDate = fileDate;
+                        marketRRepo.Add<KondorFileHistory>(fileHistory);
+                        marketRRepo.UnitOfWork.SaveChanges();
+
+                        var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
+                        calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
                     }
-                    marketRRepo.AddRange(csvRecordList);
-                    marketRRepo.UnitOfWork.SaveChanges();
-
-                    DateTime dateTime2 = DateTime.Now;
-
-                    TimeSpan diff = dateTime2 - dateTime1;
-
-                    var logData = $"Start Import- {dateTime1}. End Import - {dateTime2}. Total time {diff}. Total Record Import-{csvRecordList.Count()}";
-                    var fileName = $"C://Temp/CSVlogfile{DateTime.Now.Ticks}.txt";
-                    System.IO.File.WriteAllText(fileName, logData);
-
-                    var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
-                    calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
                     #endregion
                 }
                 catch (CsvParseException ex)
@@ -258,7 +241,7 @@ namespace MarketR.Controllers
                 var splitFileName = files.FileName.Split('_').ToList();
                 if (splitFileName != null && splitFileName.Count > 1)
                 {
-                    string fileDateStr = String.Join("", splitFileName.ElementAt(0).Where(char.IsDigit))+"00";
+                    string fileDateStr = String.Join("", splitFileName.ElementAt(0).Where(char.IsDigit)) + "00";
                     string format = "yyyyMMddHH";
                     fileDate = DateTime.ParseExact(fileDateStr, format, CultureInfo.InvariantCulture);
                     if (fileDate == DateTime.MinValue)
@@ -270,35 +253,12 @@ namespace MarketR.Controllers
                 {
                     return Json(new { Success = false, Message = "Error! file name sholud be in formate MarketRisk_20180630-0331.xls or MarketRisk_20180630-0331.xlsx" });
                 }
-
-                string targetFolder = Server.MapPath("~/Content/csv file");
-                string targetPath = Path.Combine(targetFolder, files.FileName);
-                files.SaveAs(targetPath);
-                List<string> columnNames = new List<string>();
-                FileInfo newFile = new FileInfo(targetPath);
-                IExcelDataReader reader = null;
-                if (files.FileName.ToLower().EndsWith(".xls"))
+                var setting = analyticsRepo.GetImportSetting(fileType.Excel);
+                if (setting != null && !string.IsNullOrWhiteSpace(setting.FileSavePath))
                 {
-                    reader = ExcelReaderFactory.CreateBinaryReader(files.InputStream);
-                }
-                else if (files.FileName.ToLower().EndsWith(".xlsx"))
-                {
-                    reader = ExcelReaderFactory.CreateOpenXmlReader(files.InputStream);
-                }
-                else
-                {
-                    eventLog.SaveEventLog(ConstantEvent.InvalidFileType, ConstantEvent.Failed);
-                    return Json(new { Success = false, Message = "Please, upload xls or xlsx file" });
-                }
-
-                DataSet result = reader.AsDataSet();
-                reader.Close();
-                if (result.Tables.Count > 0)
-                {
-                    var noOfCol = result.Tables[0].Columns.Count;
-                    var noOfRow = result.Tables[0].Rows.Count;
-
-                    if (noOfCol < 20) return Json(new { Success = false, Message = "Some of columns are missing in excel" });
+                    if (!Directory.Exists(setting.FileSavePath)) Directory.CreateDirectory(setting.FileSavePath);
+                    string targetPath = Path.Combine(setting.FileSavePath, files.FileName);
+                    files.SaveAs(targetPath);
 
                     //Read excel file 
                     FileHistory fileHistory = new FileHistory();
@@ -309,51 +269,13 @@ namespace MarketR.Controllers
                     marketRRepo.Add<FileHistory>(fileHistory);
                     marketRRepo.UnitOfWork.SaveChanges();
 
-                    IList<NewFileRecord> newList = new List<NewFileRecord>();
-                    DateTime dateTime1 = DateTime.Now;
-                    for (int row = 1; row <= noOfRow - 1; row++)
-                    {
-                        if (row == 1 || row == 2 || row == 3 || row == 4) continue;
-                        NewFileRecord newRecord = new NewFileRecord();
-
-                        newRecord.N = result.Tables[0].Rows[row][0] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][0]);
-                        newRecord.DEAL_ID = result.Tables[0].Rows[row][1] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][1]);
-                        newRecord.ON_OFF_BALANCE = result.Tables[0].Rows[row][2] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][2]);
-                        newRecord.DEAL_TYPE = result.Tables[0].Rows[row][3] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][3]);
-                        newRecord.PROD_TYPE = result.Tables[0].Rows[row][4] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][4]);
-                        newRecord.PAY_RECIEVE = result.Tables[0].Rows[row][5] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][5]);
-                        newRecord.CCY = result.Tables[0].Rows[row][6] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][6]);
-                        newRecord.NOTIONAL = object.ReferenceEquals(result.Tables[0].Rows[row][7],DBNull.Value ) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][7]);
-                        newRecord.MATURITY_DATE = result.Tables[0].Rows[row][8] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][8]);
-                        newRecord.INTEREST_TYPE = result.Tables[0].Rows[row][9] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][9]);
-                        newRecord.FIXING_DATE = result.Tables[0].Rows[row][10] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][10]);
-                        newRecord.INT_CHANGE_FREQ = result.Tables[0].Rows[row][11] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][11]);
-                        newRecord.INT_CHAGE_TERM = result.Tables[0].Rows[row][12] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][12]);
-                        newRecord.INT_PRE = object.ReferenceEquals(result.Tables[0].Rows[row][13],DBNull.Value) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][13]);
-                        newRecord.NPV_DELTA_ILS = object.ReferenceEquals(result.Tables[0].Rows[row][14], DBNull.Value) ? 0 : Convert.ToDouble(result.Tables[0].Rows[row][14]); 
-                        newRecord.NETED = result.Tables[0].Rows[row][15] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][15]);
-                        newRecord.NETED_ID = result.Tables[0].Rows[row][16] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][16]);
-                        newRecord.Portfolio = result.Tables[0].Rows[row][17] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][17]);
-                        newRecord.NETTING_COUNTER = result.Tables[0].Rows[row][18] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][18]);
-                        newRecord.CONTRACT_MAT_DATE = result.Tables[0].Rows[row][18] == null ? "" : Convert.ToString(result.Tables[0].Rows[row][19]);
-                        newRecord.validity_date = result.Tables[0].Rows[0][3] == null ? "" : Convert.ToString(result.Tables[0].Rows[0][3]);
-                        newRecord.FileID = fileHistory.FileID;
-                        newList.Add(newRecord);
-                    }
-
-                    marketRRepo.AddRange<NewFileRecord>(newList);
-                    marketRRepo.UnitOfWork.SaveChanges();
-                    DateTime dateTime2 = DateTime.Now;
-                    TimeSpan diff = dateTime2 - dateTime1;
-
-                    var logData = $"Start Import- {dateTime1}. End Import - {dateTime2}. Total time {diff}. Total Record Import-{newList.Count()}";
-                    var fileName = $"C://Temp/Excellogfile{DateTime.Now.Ticks}.txt";
-                    System.IO.File.WriteAllText(fileName, logData);
-
                     var calculation = marketRRepo.Find<FileCalculation>(x => x.FileID == fileHistory.FileID).ToList();
                     calculatedData = AutoMapper.Mapper.Map<List<FileCalculation>, List<FileCalculationViewModel>>(calculation);
                 }
-              
+                else
+                {
+                    return Json(new { Success = false, Message = "Import setting is not configured properly!" });
+                }
             }
             catch (Exception ex)
             {

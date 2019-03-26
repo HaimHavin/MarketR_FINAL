@@ -1,8 +1,10 @@
 ﻿#region Using
 
+using MarketR.Common;
 using MarketR.Common.Models.Condor;
 using MarketR.Common.Reports;
 using MarketR.Common.Repository;
+using MarketR.DAL.ExcelParser;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -51,12 +53,20 @@ namespace MarketR.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult CalculateCurrency(string startDate, string currencyFormat,int fileId)
+        public JsonResult CalculateCurrency(string startDate, string currencyFormat, int fileId)
         {
-            report.PerformCalculation(startDate, currencyFormat, fileId);
-            var report1 = report.GetReport1(startDate, currencyFormat);
-            var report2 = report.GetReport2(startDate, currencyFormat);
-            return Json(new { report1, report2 }, JsonRequestBehavior.AllowGet);
+            try
+            {
+                Handler handler = new Handler(fileId, fileType.Excel);
+                report.PerformCalculation(startDate, currencyFormat, fileId);
+                var report1 = report.GetReport1(startDate, currencyFormat);
+                var report2 = report.GetReport2(startDate, currencyFormat);
+                return Json(new { Success = true, report1, report2 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
         [HttpPost]
         public ActionResult GetResultView(bool? NPV, string currency, int? band, string FilterText)
@@ -90,19 +100,21 @@ namespace MarketR.Controllers
         {
             AnalyticsRepo repository = new AnalyticsRepo();
             var result = repository.GetFileVersions();
-            if (result != null && result.Count > 0) {
+            if (result != null && result.Count > 0)
+            {
                 var newData = result.GroupBy(
                     k => k.Text,
                     g => new { g.Value },
                     (key, g) => new { Text = key, ids = g.ToArray() }
                     );
                 var selectList = new List<DAL.Repository.SelectList>();
-                foreach (var item in newData) {
+                foreach (var item in newData)
+                {
                     if (item.ids.Count() > 0)
                     {
                         var selectListItem = new DAL.Repository.SelectList();
                         selectListItem.Text = item.Text;
-                        selectListItem.Value = item.ids.Select(n=>n.Value).Max();
+                        selectListItem.Value = item.ids.Select(n => n.Value).Max();
                         selectList.Add(selectListItem);
                     }
                 }

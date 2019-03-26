@@ -29,6 +29,6 @@ namespace MarketR.Import
                     MailHelper.SendMail("MarketR import service exceptions with file --> " + fileName, ex.Message, notificationEmail);
             }
             catch { }
-        }
+        }        
     }
 }

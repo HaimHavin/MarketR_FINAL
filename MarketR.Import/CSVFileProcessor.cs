@@ -21,13 +21,13 @@ namespace MarketR.Import
     {
         private readonly ImportSetting setting;
         private readonly ICsvValidateService csvValidateService;
-        private readonly ICsvParseService<KONDOR_DATA> csvParseService;
+        private readonly ICsvParseService<DAL.Models.Condor.KONDOR_DATA> csvParseService;
         public CSVFileProcessor(ImportSetting importSetting, IMarketRRepo Repo)
         {
             setting = importSetting;
             marketRRepo = Repo;
             csvValidateService = new CsvValidateService();
-            csvParseService = new CsvParseService<KONDOR_DATA>(TypeConverter.GetConvertSettings());
+            csvParseService = new CsvParseService<DAL.Models.Condor.KONDOR_DATA>(TypeConverter.GetConvertSettings());
         }
         public override void Import()
         {
@@ -39,7 +39,7 @@ namespace MarketR.Import
                     try
                     {
                         DateTime fileDate;
-                        IList<KONDOR_DATACSV> csvRecordList = new List<KONDOR_DATACSV>();
+                        IList<DAL.Models.KONDOR_DATA> csvRecordList = new List<DAL.Models.KONDOR_DATA>();
                         var splitFileName = file.Name.Split('_').ToList();
                         if (splitFileName != null && splitFileName.Count > 1)
                         {
@@ -59,6 +59,7 @@ namespace MarketR.Import
                         {
                             throw new Exception("Please, choose CSV file");
                         }
+                        bool IsValid = false;
                         using (FileStream stream = File.Open(setting.FolderPath + "/" + file.Name, FileMode.Open))
                         {
                             if (csvValidateService.FileIsEmpty(stream))
@@ -69,7 +70,7 @@ namespace MarketR.Import
                             {
                                 throw new Exception("Please, upload CSV file");
                             }
-                            ParseResult<KONDOR_DATA> KONDOR_DATAcsv = csvParseService.ParseData(stream, ",");
+                            ParseResult<DAL.Models.Condor.KONDOR_DATA> KONDOR_DATAcsv = csvParseService.ParseData(stream, ",");
 
                             if (!KONDOR_DATAcsv.IsValid)
                             {
@@ -84,16 +85,25 @@ namespace MarketR.Import
                                 }
                                 throw new Exception(builder.ToString());
                             }
-                            foreach (var record in KONDOR_DATAcsv.Records)
-                            {
-                                var fileRecord = new KONDOR_DATA().MapToKONDOR_DATACSV(record);   
-                                csvRecordList.Add(fileRecord);
-                            }
+                            else IsValid = true;
+                        }
+                        if (IsValid)
+                        {
+                            if (!Directory.Exists(setting.FileSavePath))
+                                Directory.CreateDirectory(setting.FileSavePath);
+                            if (File.Exists(Path.Combine(setting.FileSavePath, file.Name))) File.Delete(Path.Combine(setting.FileSavePath, file.Name));
+                            File.Copy(Path.Combine(setting.FolderPath, file.Name), Path.Combine(setting.FileSavePath, file.Name));
+
+                            KondorFileHistory fileHistory = new KondorFileHistory();
+                            fileHistory.FileName = file.Name;
+                            fileHistory.FilePath = Path.Combine(setting.FileSavePath, file.Name);
+                            fileHistory.CreatedDate = DateTime.Now;
+                            fileHistory.FileDate = fileDate;
+                            AddFileHistory(fileHistory);
                         }
                         if (!Directory.Exists(setting.BackupFolderPath)) Directory.CreateDirectory(setting.BackupFolderPath);
                         File.Move(setting.FolderPath + "/" + file, setting.BackupFolderPath + "/" + file);
-                        if (csvRecordList.Count > 0)
-                            SaveImportData(csvRecordList);
+
                     }
                     catch (Exception ex)
                     {
@@ -103,9 +113,9 @@ namespace MarketR.Import
                 }
             }
         }
-        public void SaveImportData(IList<KONDOR_DATACSV> records)
+        public void AddFileHistory(KondorFileHistory fileHistory)
         {
-            marketRRepo.AddRange(records);
+            marketRRepo.Add<KondorFileHistory>(fileHistory);
             marketRRepo.UnitOfWork.SaveChanges();
         }
     }

@@ -116,7 +116,7 @@ namespace MarketR.DAL.Models.Condor
         public string CalcC { get; set; }
 
 
-        public KONDOR_DATACSV MapToKONDOR_DATACSV(KONDOR_DATA model)
+        public Models.KONDOR_DATA MapToKONDOR_DATAEntity(KONDOR_DATA model)
         {
             double outAmount;
             DateTime outMaturityDate;
@@ -130,7 +130,7 @@ namespace MarketR.DAL.Models.Condor
             decimal? newRate = decimal.TryParse(model.Rate, out outRate) ? outRate : default(decimal?);
             double? newNPVDeltaILS = double.TryParse(model.NPVDeltaILS, out outNPVDeltaILS) ? outNPVDeltaILS : default(double?);
             DateTime? newTradeDate = DateTime.TryParse(model.TradeDate, out outTradeDate) ? outTradeDate : default(DateTime?);
-            return new KONDOR_DATACSV()
+            return new Models.KONDOR_DATA()
             {
                 DealType = model.DealType,
                 KondorId = model.KondorId,

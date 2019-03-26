@@ -14,14 +14,12 @@ namespace MarketR.DAL.Models
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    using System.Data.SqlClient;
-
+    
     public partial class MarketREntities : DbContext
     {
         public MarketREntities()
             : base("name=MarketREntities")
         {
-            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -44,7 +42,8 @@ namespace MarketR.DAL.Models
         public virtual DbSet<tbl_results_date_simulation> tbl_results_date_simulation { get; set; }
         public virtual DbSet<TBL_Simulation_DATE_CCY> TBL_Simulation_DATE_CCY { get; set; }
         public virtual DbSet<ImportSetting> ImportSettings { get; set; }
-        public virtual DbSet<KONDOR_DATACSV> KONDOR_DATACSV { get; set; }
+        public virtual DbSet<KONDOR_DATA> KONDOR_DATA { get; set; }
+        public virtual DbSet<KondorFileHistory> KondorFileHistories { get; set; }
     
         public virtual ObjectResult<spFILE_UPLOAD_Result1> spFILE_UPLOAD(string fileName)
         {
@@ -55,34 +54,6 @@ namespace MarketR.DAL.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spFILE_UPLOAD_Result1>("spFILE_UPLOAD", fileNameParameter);
         }
     
-        public virtual ObjectResult<sp_Simulate_Result1> sp_Simulate(Nullable<System.DateTime> date, string currency)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var currencyParameter = currency != null ?
-                new ObjectParameter("Currency", currency) :
-                new ObjectParameter("Currency", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Simulate_Result1>("sp_Simulate", dateParameter, currencyParameter);
-        }
-    
-        public virtual ObjectResult<sp_Simulate1_Result> sp_Simulate1(Nullable<System.DateTime> date, string currency, int fileId)
-        {
-            var dateParameter = date.HasValue ?
-                new SqlParameter("Date", date) :
-                new SqlParameter("Date", System.DateTime.Now);
-
-            var currencyParameter = currency != null ?
-                new SqlParameter("Currency", currency) :
-                new SqlParameter("Currency", "");
-
-            var fileIdParameter = new SqlParameter("FileId", fileId);
-            this.Database.ExecuteSqlCommand("sp_Simulate @Date,@Currency,@FileId", dateParameter, currencyParameter, fileIdParameter);
-            return null;
-        }
-
         public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)
         {
             var currencyParameter = currency != null ?
@@ -115,6 +86,23 @@ namespace MarketR.DAL.Models
                 new ObjectParameter("Liquidate", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateSimLiquidate", recordIdParameter, liquidateParameter);
+        }
+    
+        public virtual int sp_Simulate(Nullable<System.DateTime> date, string currency, Nullable<int> fileId)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var fileIdParameter = fileId.HasValue ?
+                new ObjectParameter("FileId", fileId) :
+                new ObjectParameter("FileId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Simulate", dateParameter, currencyParameter, fileIdParameter);
         }
     }
 }

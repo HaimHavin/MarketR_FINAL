@@ -145,8 +145,9 @@
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="NotificationEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="LastRun" Type="datetime" />
+          <Property Name="FileSavePath" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <EntityType Name="KONDOR_DATACSV">
+        <EntityType Name="KONDOR_DATA">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -177,6 +178,16 @@
           <Property Name="CalcA" Type="nvarchar" MaxLength="500" />
           <Property Name="CalcB" Type="nvarchar" MaxLength="500" />
           <Property Name="CalcC" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="KondorFileHistory">
+          <Key>
+            <PropertyRef Name="FileID" />
+          </Key>
+          <Property Name="FileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FilePath" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="FileDate" Type="datetime" />
         </EntityType>
         <EntityType Name="NewFileRecords">
           <Key>
@@ -234,6 +245,7 @@
           <Property Name="NETTING_COUNTER" Type="nvarchar" MaxLength="200" />
           <Property Name="CONTRACT_MAT_DATE" Type="nvarchar" MaxLength="200" />
           <Property Name="validity_date" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sim_liquidate_flag" Type="bit" />
         </EntityType>
         <EntityType Name="PermissionForCreatingUser">
           <Key>
@@ -409,6 +421,7 @@
         <Function Name="sp_Simulate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="date" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
+          <Parameter Name="FileId" Type="int" Mode="In" />
         </Function>
         <Function Name="spFILE_UPLOAD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FileName" Type="nvarchar(max)" Mode="In" />
@@ -428,7 +441,8 @@
           <EntitySet Name="FileRecords" EntityType="Self.FileRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FolderPermission" EntityType="Self.FolderPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportSettings" EntityType="Self.ImportSettings" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="KONDOR_DATACSV" EntityType="Self.KONDOR_DATACSV" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KONDOR_DATA" EntityType="Self.KONDOR_DATA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KondorFileHistory" EntityType="Self.KondorFileHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecords" EntityType="Self.NewFileRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecordsCSV" EntityType="Self.NewFileRecordsCSV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermissionForCreatingUser" EntityType="Self.PermissionForCreatingUser" Schema="dbo" store:Type="Tables" />
@@ -518,14 +532,6 @@
           </AssociationSet>
           <EntitySet Name="tbl_results_date_simulation" EntityType="MarketRModel.tbl_results_date_simulation" />
           <EntitySet Name="TBL_Simulation_DATE_CCY" EntityType="MarketRModel.TBL_Simulation_DATE_CCY" />
-          <FunctionImport Name="sp_Simulate" ReturnType="Collection(MarketRModel.sp_Simulate_Result1)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
-            <Parameter Name="Currency" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_Simulate1" ReturnType="Collection(MarketRModel.sp_Simulate1_Result)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
-            <Parameter Name="Currency" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GetResultView" ReturnType="Collection(MarketRModel.GetResultView_Result)">
             <Parameter Name="Currency" Mode="In" Type="String" />
             <Parameter Name="Band" Mode="In" Type="Int32" />
@@ -537,7 +543,13 @@
             <Parameter Name="Liquidate" Mode="In" Type="Boolean" />
           </FunctionImport>
           <EntitySet Name="ImportSettings" EntityType="MarketRModel.ImportSetting" />
-          <EntitySet Name="KONDOR_DATACSV" EntityType="MarketRModel.KONDOR_DATACSV" />
+          <EntitySet Name="KONDOR_DATA" EntityType="MarketRModel.KONDOR_DATA" />
+          <EntitySet Name="KondorFileHistories" EntityType="MarketRModel.KondorFileHistory" />
+          <FunctionImport Name="sp_Simulate">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="FileId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spFILE_UPLOAD_Result">
           <Property Type="String" Name="Deal_ID" Nullable="true" MaxLength="50" />
@@ -858,6 +870,7 @@
           <Property Name="CONTRACT_MAT_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="validity_date" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="FileHistory" Relationship="MarketRModel.FK_NewFileRecordsCSV_FileHistory" FromRole="NewFileRecordsCSV" ToRole="FileHistory" />
+          <Property Name="Sim_liquidate_flag" Type="Boolean" />
         </EntityType>
         <Association Name="FK_NewFileRecordsCSV_FileHistory">
           <End Type="MarketRModel.FileHistory" Role="FileHistory" Multiplicity="0..1" />
@@ -910,75 +923,6 @@
           <Property Name="Col15" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Col16" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
-        <ComplexType Name="sp_Simulate_Result">
-          <Property Type="Int32" Name="RecordID" Nullable="false" />
-          <Property Type="Int32" Name="FileID" Nullable="true" />
-          <Property Type="String" Name="DealType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="KondorID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="KTPID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BalanceDeal" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TypeOfInstrument" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SubTypeOfInstrument" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LegType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Asset" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Currency" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Amount" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="MaturityDate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="RateType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingDate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingFrequencyNumber" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingFrequencyPeriod" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Rate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NPVDeltaILS" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Portfolio" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="GammaILS" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="sp_Simulate_Result1">
-          <Property Type="Int32" Name="RecordID" Nullable="false" />
-          <Property Type="Int32" Name="FileID" Nullable="true" />
-          <Property Type="String" Name="DealType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="KondorID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="KTPID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BalanceDeal" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TypeOfInstrument" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SubTypeOfInstrument" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LegType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Asset" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Currency" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Amount" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="MaturityDate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="RateType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingDate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingFrequencyNumber" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingFrequencyPeriod" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Rate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NPVDeltaILS" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Portfolio" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="GammaILS" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="sp_Simulate1_Result">
-          <Property Type="Int32" Name="RecordID" Nullable="false" />
-          <Property Type="Int32" Name="FileID" Nullable="true" />
-          <Property Type="String" Name="DealType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="KondorID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="KTPID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="BalanceDeal" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TypeOfInstrument" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SubTypeOfInstrument" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LegType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Asset" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Currency" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Amount" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="MaturityDate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="RateType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingDate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingFrequencyNumber" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FixingFrequencyPeriod" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Rate" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NPVDeltaILS" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Portfolio" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="GammaILS" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <ComplexType Name="GetResultView_Result">
           <Property Type="Int32" Name="Recordid" Nullable="false" />
           <Property Type="String" Name="DEAL_ID" Nullable="true" MaxLength="200" />
@@ -1007,8 +951,9 @@
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="NotificationEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="LastRun" Type="DateTime" Precision="3" />
+          <Property Name="FileSavePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="KONDOR_DATACSV">
+        <EntityType Name="KONDOR_DATA">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1039,6 +984,16 @@
           <Property Name="CalcA" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CalcB" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CalcC" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="KondorFileHistory">
+          <Key>
+            <PropertyRef Name="FileID" />
+          </Key>
+          <Property Name="FileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="FileDate" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1265,6 +1220,7 @@
           <EntitySetMapping Name="NewFileRecordsCSVs">
             <EntityTypeMapping TypeName="MarketRModel.NewFileRecordsCSV">
               <MappingFragment StoreEntitySet="NewFileRecordsCSV">
+                <ScalarProperty Name="Sim_liquidate_flag" ColumnName="Sim_liquidate_flag" />
                 <ScalarProperty Name="validity_date" ColumnName="validity_date" />
                 <ScalarProperty Name="CONTRACT_MAT_DATE" ColumnName="CONTRACT_MAT_DATE" />
                 <ScalarProperty Name="NETTING_COUNTER" ColumnName="NETTING_COUNTER" />
@@ -1332,33 +1288,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_Simulate1" FunctionName="MarketRModel.Store.sp_Simulate">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="MarketRModel.sp_Simulate1_Result">
-                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
-                <ScalarProperty Name="FileID" ColumnName="FileID" />
-                <ScalarProperty Name="DealType" ColumnName="DealType" />
-                <ScalarProperty Name="KondorID" ColumnName="KondorID" />
-                <ScalarProperty Name="KTPID" ColumnName="KTPID" />
-                <ScalarProperty Name="BalanceDeal" ColumnName="BalanceDeal" />
-                <ScalarProperty Name="TypeOfInstrument" ColumnName="TypeOfInstrument" />
-                <ScalarProperty Name="SubTypeOfInstrument" ColumnName="SubTypeOfInstrument" />
-                <ScalarProperty Name="LegType" ColumnName="LegType" />
-                <ScalarProperty Name="Asset" ColumnName="Asset" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
-                <ScalarProperty Name="RateType" ColumnName="RateType" />
-                <ScalarProperty Name="FixingDate" ColumnName="FixingDate" />
-                <ScalarProperty Name="FixingFrequencyNumber" ColumnName="FixingFrequencyNumber" />
-                <ScalarProperty Name="FixingFrequencyPeriod" ColumnName="FixingFrequencyPeriod" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="NPVDeltaILS" ColumnName="NPVDeltaILS" />
-                <ScalarProperty Name="Portfolio" ColumnName="Portfolio" />
-                <ScalarProperty Name="GammaILS" ColumnName="GammaILS" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetResultView" FunctionName="MarketRModel.Store.GetResultView">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MarketRModel.GetResultView_Result">
@@ -1383,6 +1312,7 @@
           <EntitySetMapping Name="ImportSettings">
             <EntityTypeMapping TypeName="MarketRModel.ImportSetting">
               <MappingFragment StoreEntitySet="ImportSettings">
+                <ScalarProperty Name="FileSavePath" ColumnName="FileSavePath" />
                 <ScalarProperty Name="LastRun" ColumnName="LastRun" />
                 <ScalarProperty Name="NotificationEmail" ColumnName="NotificationEmail" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
@@ -1394,9 +1324,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="KONDOR_DATACSV">
-            <EntityTypeMapping TypeName="MarketRModel.KONDOR_DATACSV">
-              <MappingFragment StoreEntitySet="KONDOR_DATACSV">
+          <EntitySetMapping Name="KONDOR_DATA">
+            <EntityTypeMapping TypeName="MarketRModel.KONDOR_DATA">
+              <MappingFragment StoreEntitySet="KONDOR_DATA">
                 <ScalarProperty Name="CalcC" ColumnName="CalcC" />
                 <ScalarProperty Name="CalcB" ColumnName="CalcB" />
                 <ScalarProperty Name="CalcA" ColumnName="CalcA" />
@@ -1427,6 +1357,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="KondorFileHistories">
+            <EntityTypeMapping TypeName="MarketRModel.KondorFileHistory">
+              <MappingFragment StoreEntitySet="KondorFileHistory">
+                <ScalarProperty Name="FileDate" ColumnName="FileDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileID" ColumnName="FileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_Simulate" FunctionName="MarketRModel.Store.sp_Simulate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

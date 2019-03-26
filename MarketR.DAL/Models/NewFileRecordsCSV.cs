@@ -37,6 +37,7 @@ namespace MarketR.DAL.Models
         public string NETTING_COUNTER { get; set; }
         public string CONTRACT_MAT_DATE { get; set; }
         public string validity_date { get; set; }
+        public Nullable<bool> Sim_liquidate_flag { get; set; }
     
         public virtual FileHistory FileHistory { get; set; }
     }

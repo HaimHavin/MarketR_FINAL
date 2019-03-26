@@ -12,16 +12,12 @@ namespace MarketR.DAL.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ImportSetting
+    public partial class KondorFileHistory
     {
-        public int Id { get; set; }
-        public int Interval { get; set; }
-        public string FolderPath { get; set; }
-        public string BackupFolderPath { get; set; }
-        public int FileType { get; set; }
-        public bool Active { get; set; }
-        public string NotificationEmail { get; set; }
-        public Nullable<System.DateTime> LastRun { get; set; }
-        public string FileSavePath { get; set; }
+        public int FileID { get; set; }
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<System.DateTime> FileDate { get; set; }
     }
 }
