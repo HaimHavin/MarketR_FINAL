@@ -122,5 +122,28 @@ namespace MarketR.Controllers
             }
             else return Json("", JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Compare()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult CalculateCompare(string startDate, string currencyFormat, int fileId, string version)
+        {
+            try
+            {
+                Handler handler = new Handler(fileId, fileType.Excel);
+                report.PerformCompareCalculation(startDate, currencyFormat, fileId);
+                var version1 = report.GetVersion1();
+                var version2 = report.GetVersion2();
+                var version3 = report.GetVersion3();
+                return Json(new { Success = true, version1, version2, version3 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

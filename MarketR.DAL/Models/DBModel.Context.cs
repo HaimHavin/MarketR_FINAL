@@ -44,6 +44,9 @@ namespace MarketR.DAL.Models
         public virtual DbSet<ImportSetting> ImportSettings { get; set; }
         public virtual DbSet<KONDOR_DATA> KONDOR_DATA { get; set; }
         public virtual DbSet<KondorFileHistory> KondorFileHistories { get; set; }
+        public virtual DbSet<tbl_comp1> tbl_comp1 { get; set; }
+        public virtual DbSet<tbl_comp2> tbl_comp2 { get; set; }
+        public virtual DbSet<tbl_comp3> tbl_comp3 { get; set; }
     
         public virtual ObjectResult<spFILE_UPLOAD_Result1> spFILE_UPLOAD(string fileName)
         {
@@ -103,6 +106,23 @@ namespace MarketR.DAL.Models
                 new ObjectParameter("FileId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Simulate", dateParameter, currencyParameter, fileIdParameter);
+        }
+    
+        public virtual int sp_compare(Nullable<System.DateTime> date, string currency, Nullable<int> fileId)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var fileIdParameter = fileId.HasValue ?
+                new ObjectParameter("FileId", fileId) :
+                new ObjectParameter("FileId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", dateParameter, currencyParameter, fileIdParameter);
         }
     }
 }

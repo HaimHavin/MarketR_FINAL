@@ -1,0 +1,330 @@
+﻿
+@{
+    ViewBag.Title = "Compare";
+   // Layout = "~/Views/Shared/_Aside.cshtml";
+}
+<style>
+    .report {
+        display: none;
+    }
+
+    .disable {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Compare <span></span></h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+
+        </div>
+    </div>
+
+    <!-- widget grid -->
+    @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "Admin")
+    {
+        <section id="widget-grid" class="">
+
+            <div class="row">
+                <div class="col-md-2">
+                    <input id="txtCompareDate" type="text" name="txtCompareDate" class="form-control" value="">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" id="ddlCurrency">
+                        <option value="ILS">ILS</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="CHF">CHF</option>
+                        <option value="JPY">JPY</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control FileVersion" id="ddlFileVersion"></select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control FileVersion" id="ddlVersion">
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" id="btnCalculate">Calculate</button>
+                </div>
+            </div>
+            <div id="dvProgressBar" style="display:none;position:absolute;top:50%;left:50%;padding:2px;">
+                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+            </div>
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">                    
+                </article>
+            </div>
+            <div class="row m-t-20 report" style="display: block;">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable"></article>
+            </div>
+            @*Version1 Data*@
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        </header>
+                        <div>
+                            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                            </div>
+                            <div class="jarviswidget-editbox">
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblVersion1" class="table table-bordered table-borderd-top text-align">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align">Total</th>
+                                                <th class="text-align">Other</th>
+                                                <th class="text-align">JPY</th>
+                                                <th class="text-align">CHF</th>
+                                                <th class="text-align">GBP</th>
+                                                <th class="text-align">EUR</th>
+                                                <th class="text-align">USD</th>
+                                                <th class="text-align">ILS</th>
+                                                <th class="text-align">Text3</th>
+                                                <th class="text-align">Text2</th>
+                                                <th class="text-align">Text1</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyVersion1"></tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            @*Version2 Data*@
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        </header>
+                        <div>
+                            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                            </div>
+                            <div class="jarviswidget-editbox">
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblVersion2" class="table table-bordered table-borderd-top text-align">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align">Total</th>
+                                                <th class="text-align">Other</th>
+                                                <th class="text-align">JPY</th>
+                                                <th class="text-align">CHF</th>
+                                                <th class="text-align">GBP</th>
+                                                <th class="text-align">EUR</th>
+                                                <th class="text-align">USD</th>
+                                                <th class="text-align">ILS</th>
+                                                <th class="text-align">Text3</th>
+                                                <th class="text-align">Text2</th>
+                                                <th class="text-align">Text1</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyVersion2"></tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            @*Version3 Data*@
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        </header>
+                        <div>
+                            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                            </div>
+                            <div class="jarviswidget-editbox">
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblVersion3" class="table table-bordered table-borderd-top text-align">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align">Total</th>
+                                                <th class="text-align">Other</th>
+                                                <th class="text-align">JPY</th>
+                                                <th class="text-align">CHF</th>
+                                                <th class="text-align">GBP</th>
+                                                <th class="text-align">EUR</th>
+                                                <th class="text-align">USD</th>
+                                                <th class="text-align">ILS</th>
+                                                <th class="text-align">Text3</th>
+                                                <th class="text-align">Text2</th>
+                                                <th class="text-align">Text1</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyVersion3"></tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false">
+                <div class="modal-dialog modal-lg" style="width:80%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+                            <div class="modal-title" id="myModalLabel">
+                                <div class="row">
+                                    <div class="col-md-3"><label style="font-size:18px;">Simulation</label></div>
+                                    <div class="col-md-3">
+                                        <label id="dvband"></label>
+                                        <label id="dvccy"></label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="hidden" id="hdnNPV" />
+                                        <input type="hidden" id="hdnband" />
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="txtFilterbox" placeholder="Filter by Deal ID / CP Name" />
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary" type="button" onclick="FilterResultData();">
+                                                    <i class="glyphicon glyphicon-search"></i> Filter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body" id="dvSimView">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btnSimulate">
+                                Simulate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    }
+    else
+    {
+        <section>
+            <div class="row">
+                <h1 style="text-align:center;"><strong>You are not authorizes to view this page.</strong></h1>
+            </div>
+        </section>
+    }
+
+</div>
+
+@section pagespecific{
+    <script>
+        $(document).ready(function () {
+            GetFileVersions();
+            $("#txtCompareDate").datepicker();
+            $("#txtCompareDate").datepicker("setDate", new Date());
+            $('#btnCalculate').click(function () {
+                GetReport();
+            });
+        });
+        function GetFileVersions() {
+            $("#dvProgressBar").show();
+            $.ajax({
+                type: "Post",
+                url: "GetFileVersions",
+                async: false,
+                contentType: "application/json",
+                success: function (data) {
+                    $(".FileVersion").empty();
+                    $.each(data, function (k, v) {
+                        var option = "<option value=" + v.Value + ">" + v.Text + "</option>";
+                        $('.FileVersion').append(option);
+                    });
+                    $("#dvProgressBar").hide();
+                },
+                error: function (err) {
+                    $("#dvProgressBar").hide();
+                }
+            });
+        }
+
+
+        function GetReport() {
+            $("#dvProgressBar").show();
+            $("body").addClass("disable");
+            debugger;          
+            
+            $('.FileVersion').css('border-color', '');
+            var parm = { startDate: $('#txtCompareDate').val(), currencyFormat: $('#ddlCurrency :selected').val(), fileId: $('#ddlFileVersion :selected').val() };
+            $.ajax({
+                type: "Post",
+                url: "CalculateCompare",
+                contentType: "application/json",
+                data: JSON.stringify(parm),
+                success: function (data) {
+                    $("#dvProgressBar").hide();
+                    $('#tbodyVersion1').html("");
+                    $('#tbodyVersion2').html("");
+                    $('#tbodyVersion3').html("");
+                    if (data.Success) {
+                        $.each(data.version1, function (k, v) {
+                            var report1 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                            $('#tbodyVersion1').append(report1);
+                        });
+                        $.each(data.version2, function (k, v) {
+                            var report2 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                            $('#tbodyVersion2').append(report2);
+                        });
+                        $.each(data.version3, function (k, v) {
+                            var report3 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                            $('#tbodyVersion3').append(report3);
+                        });
+                        $(".report").show();
+                        $("body").removeClass("disable");
+                    }
+                    else {
+                        $(".report").hide();
+                        $("body").removeClass("disable");
+                        alert(data.Message);
+                    }
+                },
+                error: function (err) {
+                    $("#dvProgressBar").hide();
+                    $("body").removeClass("disable");
+                }
+            });
+        }
+    </script>
+    }

@@ -1249,11 +1249,13 @@
     <Content Include="Views\User\NostroDeals.cshtml" />
     <Content Include="Views\Home\_SimView.cshtml" />
     <Content Include="Views\Home\Analytics.cshtml" />
+    <Content Include="Views\Home\Compare.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\csv file\" />
     <Folder Include="Content\img\realestate\thumbs\" />
+    <Folder Include="Views\Compare\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

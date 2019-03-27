@@ -157,6 +157,15 @@
     <Compile Include="Models\tblEventLog.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_comp1.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_comp2.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_comp3.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_results_date_simulation.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

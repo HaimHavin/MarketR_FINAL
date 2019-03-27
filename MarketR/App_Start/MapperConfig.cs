@@ -38,6 +38,9 @@ namespace MarketR.MVC
                     cfga.CreateMap<FileCalculationViewModel, FileCalculation>().ForMember(x => x.FileHistory, opt => opt.Ignore()).ReverseMap();
                     cfga.CreateMap<ParseResult<Report1Dto>, ParseResult<TBL_Simulation_DATE_CCY>>().ReverseMap();
                     cfga.CreateMap<ParseResult<Report2Dto>, ParseResult<tbl_results_date_simulation>>().ReverseMap();
+                    cfga.CreateMap<ParseResult<Report2Dto>, ParseResult<tbl_comp1>>().ReverseMap();
+                    cfga.CreateMap<ParseResult<Report2Dto>, ParseResult<tbl_comp2>>().ReverseMap();
+                    cfga.CreateMap<ParseResult<Report2Dto>, ParseResult<tbl_comp3>>().ReverseMap();
                 });
                 //Mapper.Initialize(cfg);
                 Mapper.AssertConfigurationIsValid();

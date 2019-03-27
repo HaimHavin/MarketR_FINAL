@@ -26,6 +26,8 @@ namespace MarketR.Common.Reports
             var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_results_date_simulation>, IEnumerable<Report2Dto>>(report);
             return reportData;
         }
+        
+       
         public void PerformCalculation(string startDate, string currencyFormat, int fileId)
         {
             try
@@ -37,6 +39,7 @@ namespace MarketR.Common.Reports
 
             }
         }
+        
         public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band, string FilterText)
         {
             try
@@ -64,6 +67,40 @@ namespace MarketR.Common.Reports
 
             }
         }
+
+        public void PerformCompareCalculation(string startDate, string currencyFormat, int fileId)
+        {
+            try
+            {
+                dbEntity.sp_compare(Convert.ToDateTime(startDate), currencyFormat, fileId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public IEnumerable<Report2Dto> GetVersion1()
+        {
+            var report = marketRRepo.GetAll<tbl_comp1>();
+            var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_comp1>, IEnumerable<Report2Dto>>(report);
+            return reportData;
+        }
+        public IEnumerable<Report2Dto> GetVersion2()
+        {
+            var report = marketRRepo.GetAll<tbl_comp2>();
+            var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_comp2>, IEnumerable<Report2Dto>>(report);
+            return reportData;
+        }
+   
+
+        public IEnumerable<Report2Dto> GetVersion3()
+        {
+            var report = marketRRepo.GetAll<tbl_comp3>();
+            var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_comp3>, IEnumerable<Report2Dto>>(report);
+            return reportData;
+        }
+
+
         //public  IEnumerable<CondorDto> GetSimulate()
         //{
         //    try

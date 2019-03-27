@@ -139,13 +139,13 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Interval" Type="int" Nullable="false" />
-          <Property Name="FolderPath" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="BackupFolderPath" Type="nvarchar" MaxLength="100" />
+          <Property Name="FolderPath" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="BackupFolderPath" Type="nvarchar" MaxLength="200" />
+          <Property Name="FileSavePath" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="FileType" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="NotificationEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="LastRun" Type="datetime" />
-          <Property Name="FileSavePath" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="KONDOR_DATA">
           <Key>
@@ -258,6 +258,63 @@
           <Property Name="Add_User" Type="nvarchar" MaxLength="256" />
           <Property Name="Delete_User" Type="nvarchar" MaxLength="256" />
           <Property Name="Alter_User" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MarketR.dbo.tbl_comp1' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbl_comp1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text3" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILS" Type="float" />
+          <Property Name="USD" Type="float" />
+          <Property Name="EUR" Type="float" />
+          <Property Name="GBP" Type="float" />
+          <Property Name="CHF" Type="float" />
+          <Property Name="JPY" Type="float" />
+          <Property Name="Other" Type="float" />
+          <Property Name="Total" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MarketR.dbo.tbl_comp2' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbl_comp2">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text3" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILS" Type="float" />
+          <Property Name="USD" Type="float" />
+          <Property Name="EUR" Type="float" />
+          <Property Name="GBP" Type="float" />
+          <Property Name="CHF" Type="float" />
+          <Property Name="JPY" Type="float" />
+          <Property Name="Other" Type="float" />
+          <Property Name="Total" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbl_comp3">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text3" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILS" Type="float" />
+          <Property Name="USD" Type="float" />
+          <Property Name="EUR" Type="float" />
+          <Property Name="GBP" Type="float" />
+          <Property Name="CHF" Type="float" />
+          <Property Name="JPY" Type="float" />
+          <Property Name="Other" Type="float" />
+          <Property Name="Total" Type="float" />
         </EntityType>
         <EntityType Name="tbl_results_date_simulation">
           <Key>
@@ -418,6 +475,11 @@
           <Parameter Name="NPV" Type="bit" Mode="In" />
           <Parameter Name="FilterText" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="sp_compare" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="date" Mode="In" />
+          <Parameter Name="Currency" Type="varchar" Mode="In" />
+          <Parameter Name="FileId" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_Simulate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="date" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
@@ -449,6 +511,54 @@
           <EntitySet Name="tbl_results_date_simulation" EntityType="Self.tbl_results_date_simulation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBL_Simulation_DATE_CCY" EntityType="Self.TBL_Simulation_DATE_CCY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblEventLog" EntityType="Self.tblEventLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_comp1" EntityType="Self.tbl_comp1" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbl_comp1].[ID] AS [ID], 
+    [tbl_comp1].[Text1] AS [Text1], 
+    [tbl_comp1].[Text2] AS [Text2], 
+    [tbl_comp1].[Text3] AS [Text3], 
+    [tbl_comp1].[ILS] AS [ILS], 
+    [tbl_comp1].[USD] AS [USD], 
+    [tbl_comp1].[EUR] AS [EUR], 
+    [tbl_comp1].[GBP] AS [GBP], 
+    [tbl_comp1].[CHF] AS [CHF], 
+    [tbl_comp1].[JPY] AS [JPY], 
+    [tbl_comp1].[Other] AS [Other], 
+    [tbl_comp1].[Total] AS [Total]
+    FROM [dbo].[tbl_comp1] AS [tbl_comp1]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tbl_comp2" EntityType="Self.tbl_comp2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbl_comp2].[ID] AS [ID], 
+    [tbl_comp2].[Text1] AS [Text1], 
+    [tbl_comp2].[Text2] AS [Text2], 
+    [tbl_comp2].[Text3] AS [Text3], 
+    [tbl_comp2].[ILS] AS [ILS], 
+    [tbl_comp2].[USD] AS [USD], 
+    [tbl_comp2].[EUR] AS [EUR], 
+    [tbl_comp2].[GBP] AS [GBP], 
+    [tbl_comp2].[CHF] AS [CHF], 
+    [tbl_comp2].[JPY] AS [JPY], 
+    [tbl_comp2].[Other] AS [Other], 
+    [tbl_comp2].[Total] AS [Total]
+    FROM [dbo].[tbl_comp2] AS [tbl_comp2]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tbl_comp3" EntityType="Self.tbl_comp3" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbl_comp3].[ID] AS [ID], 
+    [tbl_comp3].[Text1] AS [Text1], 
+    [tbl_comp3].[Text2] AS [Text2], 
+    [tbl_comp3].[Text3] AS [Text3], 
+    [tbl_comp3].[ILS] AS [ILS], 
+    [tbl_comp3].[USD] AS [USD], 
+    [tbl_comp3].[EUR] AS [EUR], 
+    [tbl_comp3].[GBP] AS [GBP], 
+    [tbl_comp3].[CHF] AS [CHF], 
+    [tbl_comp3].[JPY] AS [JPY], 
+    [tbl_comp3].[Other] AS [Other], 
+    [tbl_comp3].[Total] AS [Total]
+    FROM [dbo].[tbl_comp3] AS [tbl_comp3]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
@@ -546,6 +656,14 @@
           <EntitySet Name="KONDOR_DATA" EntityType="MarketRModel.KONDOR_DATA" />
           <EntitySet Name="KondorFileHistories" EntityType="MarketRModel.KondorFileHistory" />
           <FunctionImport Name="sp_Simulate">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="FileId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="tbl_comp1" EntityType="MarketRModel.tbl_comp1" />
+          <EntitySet Name="tbl_comp2" EntityType="MarketRModel.tbl_comp2" />
+          <EntitySet Name="tbl_comp3" EntityType="MarketRModel.tbl_comp3" />
+          <FunctionImport Name="sp_compare">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Currency" Mode="In" Type="String" />
             <Parameter Name="FileId" Mode="In" Type="Int32" />
@@ -945,13 +1063,13 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Interval" Type="Int32" Nullable="false" />
-          <Property Name="FolderPath" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BackupFolderPath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FolderPath" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BackupFolderPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="FileType" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="NotificationEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="LastRun" Type="DateTime" Precision="3" />
-          <Property Name="FileSavePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileSavePath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="KONDOR_DATA">
           <Key>
@@ -994,6 +1112,57 @@
           <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="FileDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_comp1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text3" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILS" Type="Double" />
+          <Property Name="USD" Type="Double" />
+          <Property Name="EUR" Type="Double" />
+          <Property Name="GBP" Type="Double" />
+          <Property Name="CHF" Type="Double" />
+          <Property Name="JPY" Type="Double" />
+          <Property Name="Other" Type="Double" />
+          <Property Name="Total" Type="Double" />
+        </EntityType>
+        <EntityType Name="tbl_comp2">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text3" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILS" Type="Double" />
+          <Property Name="USD" Type="Double" />
+          <Property Name="EUR" Type="Double" />
+          <Property Name="GBP" Type="Double" />
+          <Property Name="CHF" Type="Double" />
+          <Property Name="JPY" Type="Double" />
+          <Property Name="Other" Type="Double" />
+          <Property Name="Total" Type="Double" />
+        </EntityType>
+        <EntityType Name="tbl_comp3">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text3" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILS" Type="Double" />
+          <Property Name="USD" Type="Double" />
+          <Property Name="EUR" Type="Double" />
+          <Property Name="GBP" Type="Double" />
+          <Property Name="CHF" Type="Double" />
+          <Property Name="JPY" Type="Double" />
+          <Property Name="Other" Type="Double" />
+          <Property Name="Total" Type="Double" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1369,6 +1538,61 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_Simulate" FunctionName="MarketRModel.Store.sp_Simulate" />
+          <EntitySetMapping Name="tbl_comp1">
+            <EntityTypeMapping TypeName="MarketRModel.tbl_comp1">
+              <MappingFragment StoreEntitySet="tbl_comp1">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Other" ColumnName="Other" />
+                <ScalarProperty Name="JPY" ColumnName="JPY" />
+                <ScalarProperty Name="CHF" ColumnName="CHF" />
+                <ScalarProperty Name="GBP" ColumnName="GBP" />
+                <ScalarProperty Name="EUR" ColumnName="EUR" />
+                <ScalarProperty Name="USD" ColumnName="USD" />
+                <ScalarProperty Name="ILS" ColumnName="ILS" />
+                <ScalarProperty Name="Text3" ColumnName="Text3" />
+                <ScalarProperty Name="Text2" ColumnName="Text2" />
+                <ScalarProperty Name="Text1" ColumnName="Text1" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_comp2">
+            <EntityTypeMapping TypeName="MarketRModel.tbl_comp2">
+              <MappingFragment StoreEntitySet="tbl_comp2">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Other" ColumnName="Other" />
+                <ScalarProperty Name="JPY" ColumnName="JPY" />
+                <ScalarProperty Name="CHF" ColumnName="CHF" />
+                <ScalarProperty Name="GBP" ColumnName="GBP" />
+                <ScalarProperty Name="EUR" ColumnName="EUR" />
+                <ScalarProperty Name="USD" ColumnName="USD" />
+                <ScalarProperty Name="ILS" ColumnName="ILS" />
+                <ScalarProperty Name="Text3" ColumnName="Text3" />
+                <ScalarProperty Name="Text2" ColumnName="Text2" />
+                <ScalarProperty Name="Text1" ColumnName="Text1" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_comp3">
+            <EntityTypeMapping TypeName="MarketRModel.tbl_comp3">
+              <MappingFragment StoreEntitySet="tbl_comp3">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Other" ColumnName="Other" />
+                <ScalarProperty Name="JPY" ColumnName="JPY" />
+                <ScalarProperty Name="CHF" ColumnName="CHF" />
+                <ScalarProperty Name="GBP" ColumnName="GBP" />
+                <ScalarProperty Name="EUR" ColumnName="EUR" />
+                <ScalarProperty Name="USD" ColumnName="USD" />
+                <ScalarProperty Name="ILS" ColumnName="ILS" />
+                <ScalarProperty Name="Text3" ColumnName="Text3" />
+                <ScalarProperty Name="Text2" ColumnName="Text2" />
+                <ScalarProperty Name="Text1" ColumnName="Text1" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_compare" FunctionName="MarketRModel.Store.sp_compare" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
