@@ -26,20 +26,14 @@ namespace MarketR.Common.Reports
             var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_results_date_simulation>, IEnumerable<Report2Dto>>(report);
             return reportData;
         }
-        
-       
+
+
         public void PerformCalculation(string startDate, string currencyFormat, int fileId)
         {
-            try
-            {
-                dbEntity.sp_Simulate(Convert.ToDateTime(startDate), currencyFormat, fileId);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            dbEntity.Database.CommandTimeout = 1200;
+            dbEntity.sp_Simulate(Convert.ToDateTime(startDate), currencyFormat, fileId);
         }
-        
+
         public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band, string FilterText)
         {
             try
@@ -91,7 +85,7 @@ namespace MarketR.Common.Reports
             var reportData = AutoMapper.Mapper.Map<IEnumerable<tbl_comp2>, IEnumerable<Report2Dto>>(report);
             return reportData;
         }
-   
+
 
         public IEnumerable<Report2Dto> GetVersion3()
         {

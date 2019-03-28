@@ -64,8 +64,8 @@ namespace MarketR.Controllers
                 return Json(new { Success = true, report1, report2 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
-            {
-                return Json(new { Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            {                
+                return Json(new { Success = false, Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "") }, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
