@@ -1,7 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Compare";
-   // Layout = "~/Views/Shared/_Aside.cshtml";
+    ViewBag.Title = "Compare";   
 }
 <style>
     .report {
@@ -11,6 +10,9 @@
     .disable {
         opacity: 0.5;
         pointer-events: none;
+    }
+    .error{
+        border-color:red
     }
 </style>
 <div id="content">
@@ -47,19 +49,17 @@
                     <select class="form-control FileVersion" id="ddlFileVersion"></select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control FileVersion" id="ddlVersion">
-                    </select>
+                    <select class="form-control FileVersion" id="ddlVersion"></select>
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-primary" id="btnCalculate">Calculate</button>
                 </div>
             </div>
-            <div id="dvProgressBar" style="display:none;position:absolute;top:50%;left:50%;padding:2px;">
+            <div id="dvProgressBar" style="display:none;position:relative;top:50%;margin-left:45%;padding:2px;">
                 <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
             </div>
             <div class="row m-t-20 report">
-                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">                    
-                </article>
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></article>
             </div>
             <div class="row m-t-20 report" style="display: block;">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable"></article>
@@ -256,9 +256,26 @@
             $("#txtCompareDate").datepicker();
             $("#txtCompareDate").datepicker("setDate", new Date());
             $('#btnCalculate').click(function () {
-                GetReport();
+                if (ValidateFileVersion()) { GetReport() };
             });
         });
+        function ValidateFileVersion() {
+            debugger;
+            var IsValid = true;
+            var version1 = $("#ddlFileVersion option:selected").val();
+            var version2 = $("#ddlVersion option:selected").val();
+            if (version1 == "") { $("#ddlFileVersion").addBack("error"); IsValid = false; }
+            else { $("#ddlFileVersion").removeClass("error"); }
+            if (version2 == "") { $("#ddlVersion").addBack("error"); IsValid = false; }
+            else { $("#ddlVersion").removeClass("error"); }
+            if (IsValid) {
+                if (version1 != version2) { return true; }
+                else { alert("Sorry ! both file version can not be same."); return false; }
+            }
+            else { return IsValid; }
+            if (version1 != "" && version2 != "" && version1 != version2) { return true; }
+            else return false;
+        }
         function GetFileVersions() {
             $("#dvProgressBar").show();
             $.ajax({
@@ -284,10 +301,9 @@
         function GetReport() {
             $("#dvProgressBar").show();
             $("body").addClass("disable");
-            debugger;          
-            
+          
             $('.FileVersion').css('border-color', '');
-            var parm = { startDate: $('#txtCompareDate').val(), currencyFormat: $('#ddlCurrency :selected').val(), fileId: $('#ddlFileVersion :selected').val() };
+            var parm = { startDate: $('#txtCompareDate').val(), currencyFormat: $('#ddlCurrency :selected').val(), Version1Id: $('#ddlFileVersion :selected').val(), Version2Id: $("#ddlVersion option:selected").val() };
             $.ajax({
                 type: "Post",
                 url: "CalculateCompare",
@@ -327,4 +343,4 @@
             });
         }
     </script>
-    }
+}

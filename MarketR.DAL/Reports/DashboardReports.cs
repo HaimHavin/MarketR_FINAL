@@ -64,14 +64,7 @@ namespace MarketR.Common.Reports
 
         public void PerformCompareCalculation(string startDate, string currencyFormat, int fileId)
         {
-            try
-            {
-                dbEntity.sp_compare(Convert.ToDateTime(startDate), currencyFormat, fileId);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            dbEntity.sp_compare(Convert.ToDateTime(startDate), currencyFormat, fileId);
         }
         public IEnumerable<Report2Dto> GetVersion1()
         {

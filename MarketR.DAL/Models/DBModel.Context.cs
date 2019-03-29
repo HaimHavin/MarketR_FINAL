@@ -47,6 +47,8 @@ namespace MarketR.DAL.Models
         public virtual DbSet<tbl_comp1> tbl_comp1 { get; set; }
         public virtual DbSet<tbl_comp2> tbl_comp2 { get; set; }
         public virtual DbSet<tbl_comp3> tbl_comp3 { get; set; }
+        public virtual DbSet<NewFileRecords2> NewFileRecords2 { get; set; }
+        public virtual DbSet<Sim_View> Sim_View { get; set; }
     
         public virtual ObjectResult<spFILE_UPLOAD_Result1> spFILE_UPLOAD(string fileName)
         {
@@ -55,27 +57,6 @@ namespace MarketR.DAL.Models
                 new ObjectParameter("FileName", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spFILE_UPLOAD_Result1>("spFILE_UPLOAD", fileNameParameter);
-        }
-    
-        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)
-        {
-            var currencyParameter = currency != null ?
-                new ObjectParameter("Currency", currency) :
-                new ObjectParameter("Currency", typeof(string));
-    
-            var bandParameter = band.HasValue ?
-                new ObjectParameter("Band", band) :
-                new ObjectParameter("Band", typeof(int));
-    
-            var nPVParameter = nPV.HasValue ?
-                new ObjectParameter("NPV", nPV) :
-                new ObjectParameter("NPV", typeof(bool));
-    
-            var filterTextParameter = filterText != null ?
-                new ObjectParameter("FilterText", filterText) :
-                new ObjectParameter("FilterText", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter);
         }
     
         public virtual int UpdateSimLiquidate(Nullable<int> recordId, Nullable<bool> liquidate)
@@ -123,6 +104,27 @@ namespace MarketR.DAL.Models
                 new ObjectParameter("FileId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", dateParameter, currencyParameter, fileIdParameter);
+        }
+    
+        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)
+        {
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var bandParameter = band.HasValue ?
+                new ObjectParameter("Band", band) :
+                new ObjectParameter("Band", typeof(int));
+    
+            var nPVParameter = nPV.HasValue ?
+                new ObjectParameter("NPV", nPV) :
+                new ObjectParameter("NPV", typeof(bool));
+    
+            var filterTextParameter = filterText != null ?
+                new ObjectParameter("FilterText", filterText) :
+                new ObjectParameter("FilterText", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter);
         }
     }
 }

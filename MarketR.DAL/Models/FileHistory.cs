@@ -20,6 +20,7 @@ namespace MarketR.DAL.Models
             this.FileCalculations = new HashSet<FileCalculation>();
             this.NewFileRecords = new HashSet<NewFileRecord>();
             this.NewFileRecordsCSVs = new HashSet<NewFileRecordsCSV>();
+            this.NewFileRecords2 = new HashSet<NewFileRecords2>();
         }
     
         public int FileID { get; set; }
@@ -32,5 +33,6 @@ namespace MarketR.DAL.Models
         public virtual ICollection<FileCalculation> FileCalculations { get; set; }
         public virtual ICollection<NewFileRecord> NewFileRecords { get; set; }
         public virtual ICollection<NewFileRecordsCSV> NewFileRecordsCSVs { get; set; }
+        public virtual ICollection<NewFileRecords2> NewFileRecords2 { get; set; }
     }
 }

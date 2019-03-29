@@ -14,6 +14,7 @@ namespace MarketR.DAL.ExcelParser
         public MarketREntities _Context { get; set; }
         public FileHistory fileInfo { get; set; }
         public abstract void ImportData();
+        public virtual void ImportData2() { }
         public FileHistory GetFileInfo(int FileId)
         {
             return marketRRepo.GetAll<FileHistory>().Where(f => f.FileID == FileId).FirstOrDefault();

@@ -12,19 +12,28 @@ namespace MarketR.DAL.ExcelParser
     public class Handler
     {
         private readonly FileHandler processer;
-        public Handler(int FileId, fileType FileType)
+        public Handler(int FileId, fileType FileType, fileVersion file)
         {
             switch (FileType)
             {
                 case fileType.Csv:
                     processer = new CSVHandler(FileId);
+                    processer.ImportData();
                     break;
-
                 case fileType.Excel:
-                    processer = new ExcelHandler(FileId);
+                    switch (file)
+                    {
+                        case fileVersion.Version1:
+                            processer = new ExcelHandler(FileId);
+                            processer.ImportData();
+                            break;
+                        case fileVersion.Version2:
+                            processer = new ExcelHandler(FileId);
+                            processer.ImportData2();
+                            break;
+                    }
                     break;
             }
-            processer.ImportData();
         }
     }
 }

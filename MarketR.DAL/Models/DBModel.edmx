@@ -218,6 +218,35 @@
           <Property Name="validity_date" Type="nvarchar" MaxLength="200" />
           <Property Name="Sim_Liquidate_flag" Type="bit" />
         </EntityType>
+        <EntityType Name="NewFileRecords2">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileID" Type="int" />
+          <Property Name="N" Type="nvarchar" MaxLength="200" />
+          <Property Name="DEAL_ID" Type="nvarchar" MaxLength="200" />
+          <Property Name="ON_OFF_BALANCE" Type="nvarchar" MaxLength="200" />
+          <Property Name="DEAL_TYPE" Type="nvarchar" MaxLength="200" />
+          <Property Name="PROD_TYPE" Type="nvarchar" MaxLength="200" />
+          <Property Name="PAY_RECIEVE" Type="nvarchar" MaxLength="200" />
+          <Property Name="CCY" Type="nvarchar" MaxLength="200" />
+          <Property Name="NOTIONAL" Type="float" />
+          <Property Name="MATURITY_DATE" Type="nvarchar" MaxLength="200" />
+          <Property Name="INTEREST_TYPE" Type="nvarchar" MaxLength="200" />
+          <Property Name="FIXING_DATE" Type="nvarchar" MaxLength="200" />
+          <Property Name="INT_CHANGE_FREQ" Type="nvarchar" MaxLength="200" />
+          <Property Name="INT_CHAGE_TERM" Type="nvarchar" MaxLength="200" />
+          <Property Name="INT_PRE" Type="float" />
+          <Property Name="NPV_DELTA_ILS" Type="float" />
+          <Property Name="NETED" Type="nvarchar" MaxLength="200" />
+          <Property Name="NETED_ID" Type="nvarchar" MaxLength="200" />
+          <Property Name="Portfolio" Type="nvarchar" MaxLength="200" />
+          <Property Name="NETTING_COUNTER" Type="nvarchar" MaxLength="200" />
+          <Property Name="CONTRACT_MAT_DATE" Type="nvarchar" MaxLength="200" />
+          <Property Name="validity_date" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sim_Liquidate_flag" Type="bit" />
+        </EntityType>
         <EntityType Name="NewFileRecordsCSV">
           <Key>
             <PropertyRef Name="RecordID" />
@@ -365,6 +394,31 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           <Property Name="Status" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="LoggedDate" Type="datetime" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Sim_View">
+          <Key>
+            <PropertyRef Name="RecordID" />
+            <PropertyRef Name="Kondor_N" />
+            <PropertyRef Name="CPName" />
+          </Key>
+          <Property Name="RecordID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DEAL_ID" Type="nvarchar" MaxLength="200" />
+          <Property Name="DEAL_TYPE" Type="nvarchar" MaxLength="200" />
+          <Property Name="PROD_TYPE" Type="nvarchar" MaxLength="200" />
+          <Property Name="PAY_RECIEVE" Type="nvarchar" MaxLength="200" />
+          <Property Name="CCY" Type="nvarchar" MaxLength="200" />
+          <Property Name="MATURITY_DATE" Type="nvarchar" MaxLength="200" />
+          <Property Name="FIXING_DATE" Type="nvarchar" MaxLength="200" />
+          <Property Name="NOTIONAL" Type="float" />
+          <Property Name="INTEREST_TYPE" Type="nvarchar" MaxLength="200" />
+          <Property Name="INT_PRE" Type="float" />
+          <Property Name="NPV_DELTA_ILS" Type="float" />
+          <Property Name="Band" Type="int" />
+          <Property Name="Kondor_N" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="CPName" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="Sim_Liquidate_flag" Type="bit" />
+        </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -445,6 +499,18 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NewFileRecords2_FileHistory">
+          <End Role="FileHistory" Type="Self.FileHistory" Multiplicity="0..1" />
+          <End Role="NewFileRecords2" Type="Self.NewFileRecords2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileHistory">
+              <PropertyRef Name="FileID" />
+            </Principal>
+            <Dependent Role="NewFileRecords2">
+              <PropertyRef Name="FileID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NewFileRecordsCSV_FileHistory">
           <End Role="FileHistory" Type="Self.FileHistory" Multiplicity="0..1" />
           <End Role="NewFileRecordsCSV" Type="Self.NewFileRecordsCSV" Multiplicity="*" />
@@ -506,6 +572,7 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           <EntitySet Name="KONDOR_DATA" EntityType="Self.KONDOR_DATA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KondorFileHistory" EntityType="Self.KondorFileHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecords" EntityType="Self.NewFileRecords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NewFileRecords2" EntityType="Self.NewFileRecords2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecordsCSV" EntityType="Self.NewFileRecordsCSV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermissionForCreatingUser" EntityType="Self.PermissionForCreatingUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_results_date_simulation" EntityType="Self.tbl_results_date_simulation" Schema="dbo" store:Type="Tables" />
@@ -559,6 +626,26 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
     [tbl_comp3].[Total] AS [Total]
     FROM [dbo].[tbl_comp3] AS [tbl_comp3]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="Sim_View" EntityType="Self.Sim_View" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Sim_View].[RecordID] AS [RecordID], 
+    [Sim_View].[DEAL_ID] AS [DEAL_ID], 
+    [Sim_View].[DEAL_TYPE] AS [DEAL_TYPE], 
+    [Sim_View].[PROD_TYPE] AS [PROD_TYPE], 
+    [Sim_View].[PAY_RECIEVE] AS [PAY_RECIEVE], 
+    [Sim_View].[CCY] AS [CCY], 
+    [Sim_View].[MATURITY_DATE] AS [MATURITY_DATE], 
+    [Sim_View].[FIXING_DATE] AS [FIXING_DATE], 
+    [Sim_View].[NOTIONAL] AS [NOTIONAL], 
+    [Sim_View].[INTEREST_TYPE] AS [INTEREST_TYPE], 
+    [Sim_View].[INT_PRE] AS [INT_PRE], 
+    [Sim_View].[NPV_DELTA_ILS] AS [NPV_DELTA_ILS], 
+    [Sim_View].[Band] AS [Band], 
+    [Sim_View].[Kondor_N] AS [Kondor_N], 
+    [Sim_View].[CPName] AS [CPName], 
+    [Sim_View].[Sim_Liquidate_flag] AS [Sim_Liquidate_flag]
+    FROM [dbo].[Sim_View] AS [Sim_View]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
@@ -582,6 +669,10 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           <AssociationSet Name="FK_NewFileRecords_FileHistory" Association="Self.FK_NewFileRecords_FileHistory">
             <End Role="FileHistory" EntitySet="FileHistory" />
             <End Role="NewFileRecords" EntitySet="NewFileRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewFileRecords2_FileHistory" Association="Self.FK_NewFileRecords2_FileHistory">
+            <End Role="FileHistory" EntitySet="FileHistory" />
+            <End Role="NewFileRecords2" EntitySet="NewFileRecords2" />
           </AssociationSet>
           <AssociationSet Name="FK_NewFileRecordsCSV_FileHistory" Association="Self.FK_NewFileRecordsCSV_FileHistory">
             <End Role="FileHistory" EntitySet="FileHistory" />
@@ -642,12 +733,6 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           </AssociationSet>
           <EntitySet Name="tbl_results_date_simulation" EntityType="MarketRModel.tbl_results_date_simulation" />
           <EntitySet Name="TBL_Simulation_DATE_CCY" EntityType="MarketRModel.TBL_Simulation_DATE_CCY" />
-          <FunctionImport Name="GetResultView" ReturnType="Collection(MarketRModel.GetResultView_Result)">
-            <Parameter Name="Currency" Mode="In" Type="String" />
-            <Parameter Name="Band" Mode="In" Type="Int32" />
-            <Parameter Name="NPV" Mode="In" Type="Boolean" />
-            <Parameter Name="FilterText" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="UpdateSimLiquidate">
             <Parameter Name="RecordId" Mode="In" Type="Int32" />
             <Parameter Name="Liquidate" Mode="In" Type="Boolean" />
@@ -667,6 +752,18 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Currency" Mode="In" Type="String" />
             <Parameter Name="FileId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="NewFileRecords2" EntityType="MarketRModel.NewFileRecords2" />
+          <AssociationSet Name="FK_NewFileRecords2_FileHistory" Association="MarketRModel.FK_NewFileRecords2_FileHistory">
+            <End Role="FileHistory" EntitySet="FileHistories" />
+            <End Role="NewFileRecords2" EntitySet="NewFileRecords2" />
+          </AssociationSet>
+          <EntitySet Name="Sim_View" EntityType="MarketRModel.Sim_View" />
+          <FunctionImport Name="GetResultView" ReturnType="Collection(MarketRModel.GetResultView_Result)">
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Band" Mode="In" Type="Int32" />
+            <Parameter Name="NPV" Mode="In" Type="Boolean" />
+            <Parameter Name="FilterText" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spFILE_UPLOAD_Result">
@@ -855,6 +952,7 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           <NavigationProperty Name="NewFileRecords" Relationship="MarketRModel.FK_NewFileRecords_FileHistory" FromRole="FileHistory" ToRole="NewFileRecord" />
           <NavigationProperty Name="NewFileRecordsCSVs" Relationship="MarketRModel.FK_NewFileRecordsCSV_FileHistory" FromRole="FileHistory" ToRole="NewFileRecordsCSV" />
           <Property Name="FileDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="NewFileRecords2" Relationship="MarketRModel.FK_NewFileRecords2_FileHistory" FromRole="FileHistory" ToRole="NewFileRecords2" />
         </EntityType>
         <EntityType Name="FileRecord">
           <Key>
@@ -1041,22 +1139,6 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           <Property Name="Col15" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Col16" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
-        <ComplexType Name="GetResultView_Result">
-          <Property Type="Int32" Name="Recordid" Nullable="false" />
-          <Property Type="String" Name="DEAL_ID" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="DEAL_TYPE" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="PROD_TYPE" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="PAY_RECIEVE" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="CCY" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="MATURITY_DATE" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="FIXING_DATE" Nullable="true" MaxLength="200" />
-          <Property Type="Double" Name="NOTIONAL" Nullable="true" />
-          <Property Type="String" Name="INTEREST_TYPE" Nullable="true" MaxLength="200" />
-          <Property Type="Double" Name="INT_PRE" Nullable="true" />
-          <Property Type="Double" Name="NPV_DELTA_ILS" Nullable="true" />
-          <Property Type="Int32" Name="Band" Nullable="true" />
-          <Property Type="Boolean" Name="Sim_Liquidate_flag" Nullable="true" />
-        </ComplexType>
         <EntityType Name="ImportSetting">
           <Key>
             <PropertyRef Name="Id" />
@@ -1164,6 +1246,89 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
           <Property Name="Other" Type="Double" />
           <Property Name="Total" Type="Double" />
         </EntityType>
+        <EntityType Name="NewFileRecords2">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileID" Type="Int32" />
+          <Property Name="N" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DEAL_ID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ON_OFF_BALANCE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DEAL_TYPE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PROD_TYPE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PAY_RECIEVE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CCY" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NOTIONAL" Type="Double" />
+          <Property Name="MATURITY_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="INTEREST_TYPE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FIXING_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="INT_CHANGE_FREQ" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="INT_CHAGE_TERM" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="INT_PRE" Type="Double" />
+          <Property Name="NPV_DELTA_ILS" Type="Double" />
+          <Property Name="NETED" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NETED_ID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Portfolio" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NETTING_COUNTER" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CONTRACT_MAT_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="validity_date" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sim_Liquidate_flag" Type="Boolean" />
+          <NavigationProperty Name="FileHistory" Relationship="MarketRModel.FK_NewFileRecords2_FileHistory" FromRole="NewFileRecords2" ToRole="FileHistory" />
+        </EntityType>
+        <Association Name="FK_NewFileRecords2_FileHistory">
+          <End Type="MarketRModel.FileHistory" Role="FileHistory" Multiplicity="0..1" />
+          <End Type="MarketRModel.NewFileRecords2" Role="NewFileRecords2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileHistory">
+              <PropertyRef Name="FileID" />
+            </Principal>
+            <Dependent Role="NewFileRecords2">
+              <PropertyRef Name="FileID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Sim_View">
+          <Key>
+            <PropertyRef Name="RecordID" />
+            <PropertyRef Name="Kondor_N" />
+            <PropertyRef Name="CPName" />
+          </Key>
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DEAL_ID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DEAL_TYPE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PROD_TYPE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PAY_RECIEVE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CCY" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MATURITY_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FIXING_DATE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NOTIONAL" Type="Double" />
+          <Property Name="INTEREST_TYPE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="INT_PRE" Type="Double" />
+          <Property Name="NPV_DELTA_ILS" Type="Double" />
+          <Property Name="Band" Type="Int32" />
+          <Property Name="Kondor_N" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CPName" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="Sim_Liquidate_flag" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="GetResultView_Result">
+          <Property Type="Int32" Name="RecordID" Nullable="false" />
+          <Property Type="String" Name="DEAL_ID" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DEAL_TYPE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="PROD_TYPE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="PAY_RECIEVE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CCY" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="MATURITY_DATE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="FIXING_DATE" Nullable="true" MaxLength="200" />
+          <Property Type="Double" Name="NOTIONAL" Nullable="true" />
+          <Property Type="String" Name="INTEREST_TYPE" Nullable="true" MaxLength="200" />
+          <Property Type="Double" Name="INT_PRE" Nullable="true" />
+          <Property Type="Double" Name="NPV_DELTA_ILS" Nullable="true" />
+          <Property Type="Int32" Name="Band" Nullable="true" />
+          <Property Type="String" Name="Kondor_N" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="CPName" Nullable="false" MaxLength="4" />
+          <Property Type="Boolean" Name="Sim_Liquidate_flag" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1457,26 +1622,6 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetResultView" FunctionName="MarketRModel.Store.GetResultView">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="MarketRModel.GetResultView_Result">
-                <ScalarProperty Name="Recordid" ColumnName="Recordid" />
-                <ScalarProperty Name="DEAL_ID" ColumnName="DEAL_ID" />
-                <ScalarProperty Name="DEAL_TYPE" ColumnName="DEAL_TYPE" />
-                <ScalarProperty Name="PROD_TYPE" ColumnName="PROD_TYPE" />
-                <ScalarProperty Name="PAY_RECIEVE" ColumnName="PAY_RECIEVE" />
-                <ScalarProperty Name="CCY" ColumnName="CCY" />
-                <ScalarProperty Name="MATURITY_DATE" ColumnName="MATURITY_DATE" />
-                <ScalarProperty Name="FIXING_DATE" ColumnName="FIXING_DATE" />
-                <ScalarProperty Name="NOTIONAL" ColumnName="NOTIONAL" />
-                <ScalarProperty Name="INTEREST_TYPE" ColumnName="INTEREST_TYPE" />
-                <ScalarProperty Name="INT_PRE" ColumnName="INT_PRE" />
-                <ScalarProperty Name="NPV_DELTA_ILS" ColumnName="NPV_DELTA_ILS" />
-                <ScalarProperty Name="Band" ColumnName="Band" />
-                <ScalarProperty Name="Sim_Liquidate_flag" ColumnName="Sim_Liquidate_flag" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="UpdateSimLiquidate" FunctionName="MarketRModel.Store.UpdateSimLiquidate" />
           <EntitySetMapping Name="ImportSettings">
             <EntityTypeMapping TypeName="MarketRModel.ImportSetting">
@@ -1593,6 +1738,80 @@ warning 6002: The table/view 'MarketR.dbo.tbl_comp3' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_compare" FunctionName="MarketRModel.Store.sp_compare" />
+          <EntitySetMapping Name="NewFileRecords2">
+            <EntityTypeMapping TypeName="MarketRModel.NewFileRecords2">
+              <MappingFragment StoreEntitySet="NewFileRecords2">
+                <ScalarProperty Name="Sim_Liquidate_flag" ColumnName="Sim_Liquidate_flag" />
+                <ScalarProperty Name="validity_date" ColumnName="validity_date" />
+                <ScalarProperty Name="CONTRACT_MAT_DATE" ColumnName="CONTRACT_MAT_DATE" />
+                <ScalarProperty Name="NETTING_COUNTER" ColumnName="NETTING_COUNTER" />
+                <ScalarProperty Name="Portfolio" ColumnName="Portfolio" />
+                <ScalarProperty Name="NETED_ID" ColumnName="NETED_ID" />
+                <ScalarProperty Name="NETED" ColumnName="NETED" />
+                <ScalarProperty Name="NPV_DELTA_ILS" ColumnName="NPV_DELTA_ILS" />
+                <ScalarProperty Name="INT_PRE" ColumnName="INT_PRE" />
+                <ScalarProperty Name="INT_CHAGE_TERM" ColumnName="INT_CHAGE_TERM" />
+                <ScalarProperty Name="INT_CHANGE_FREQ" ColumnName="INT_CHANGE_FREQ" />
+                <ScalarProperty Name="FIXING_DATE" ColumnName="FIXING_DATE" />
+                <ScalarProperty Name="INTEREST_TYPE" ColumnName="INTEREST_TYPE" />
+                <ScalarProperty Name="MATURITY_DATE" ColumnName="MATURITY_DATE" />
+                <ScalarProperty Name="NOTIONAL" ColumnName="NOTIONAL" />
+                <ScalarProperty Name="CCY" ColumnName="CCY" />
+                <ScalarProperty Name="PAY_RECIEVE" ColumnName="PAY_RECIEVE" />
+                <ScalarProperty Name="PROD_TYPE" ColumnName="PROD_TYPE" />
+                <ScalarProperty Name="DEAL_TYPE" ColumnName="DEAL_TYPE" />
+                <ScalarProperty Name="ON_OFF_BALANCE" ColumnName="ON_OFF_BALANCE" />
+                <ScalarProperty Name="DEAL_ID" ColumnName="DEAL_ID" />
+                <ScalarProperty Name="N" ColumnName="N" />
+                <ScalarProperty Name="FileID" ColumnName="FileID" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sim_View">
+            <EntityTypeMapping TypeName="MarketRModel.Sim_View">
+              <MappingFragment StoreEntitySet="Sim_View">
+                <ScalarProperty Name="Sim_Liquidate_flag" ColumnName="Sim_Liquidate_flag" />
+                <ScalarProperty Name="CPName" ColumnName="CPName" />
+                <ScalarProperty Name="Kondor_N" ColumnName="Kondor_N" />
+                <ScalarProperty Name="Band" ColumnName="Band" />
+                <ScalarProperty Name="NPV_DELTA_ILS" ColumnName="NPV_DELTA_ILS" />
+                <ScalarProperty Name="INT_PRE" ColumnName="INT_PRE" />
+                <ScalarProperty Name="INTEREST_TYPE" ColumnName="INTEREST_TYPE" />
+                <ScalarProperty Name="NOTIONAL" ColumnName="NOTIONAL" />
+                <ScalarProperty Name="FIXING_DATE" ColumnName="FIXING_DATE" />
+                <ScalarProperty Name="MATURITY_DATE" ColumnName="MATURITY_DATE" />
+                <ScalarProperty Name="CCY" ColumnName="CCY" />
+                <ScalarProperty Name="PAY_RECIEVE" ColumnName="PAY_RECIEVE" />
+                <ScalarProperty Name="PROD_TYPE" ColumnName="PROD_TYPE" />
+                <ScalarProperty Name="DEAL_TYPE" ColumnName="DEAL_TYPE" />
+                <ScalarProperty Name="DEAL_ID" ColumnName="DEAL_ID" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetResultView" FunctionName="MarketRModel.Store.GetResultView">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MarketRModel.GetResultView_Result">
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="DEAL_ID" ColumnName="DEAL_ID" />
+                <ScalarProperty Name="DEAL_TYPE" ColumnName="DEAL_TYPE" />
+                <ScalarProperty Name="PROD_TYPE" ColumnName="PROD_TYPE" />
+                <ScalarProperty Name="PAY_RECIEVE" ColumnName="PAY_RECIEVE" />
+                <ScalarProperty Name="CCY" ColumnName="CCY" />
+                <ScalarProperty Name="MATURITY_DATE" ColumnName="MATURITY_DATE" />
+                <ScalarProperty Name="FIXING_DATE" ColumnName="FIXING_DATE" />
+                <ScalarProperty Name="NOTIONAL" ColumnName="NOTIONAL" />
+                <ScalarProperty Name="INTEREST_TYPE" ColumnName="INTEREST_TYPE" />
+                <ScalarProperty Name="INT_PRE" ColumnName="INT_PRE" />
+                <ScalarProperty Name="NPV_DELTA_ILS" ColumnName="NPV_DELTA_ILS" />
+                <ScalarProperty Name="Band" ColumnName="Band" />
+                <ScalarProperty Name="Kondor_N" ColumnName="Kondor_N" />
+                <ScalarProperty Name="CPName" ColumnName="CPName" />
+                <ScalarProperty Name="Sim_Liquidate_flag" ColumnName="Sim_Liquidate_flag" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

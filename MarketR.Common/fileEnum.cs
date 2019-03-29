@@ -11,4 +11,9 @@ namespace MarketR.Common
         Csv = 1,
         Excel = 2
     }
+    public enum fileVersion
+    {
+        Version1 = 1,
+        Version2 = 2
+    }
 }

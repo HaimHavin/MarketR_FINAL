@@ -28,29 +28,34 @@
                                     <th>INT PRE</th>
                                     <th>NPV DELTA ILS</th>
                                     <th>BAND</th>
+                                    <th>Kondor N</th>
+                                    <th>CPName</th>
                                     <th>LIQUIDATE</th>
                                 </tr>
                             </thead>
                             <tbody id="tbodyReport3">
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>@item.DEAL_ID</td>
-                                        <td>@item.MATURITY_DATE</td>
-                                        <td>@item.DEAL_TYPE</td>
-                                        <td>@item.PROD_TYPE</td>
-                                        <td>@item.CCY</td>
-                                        <td>@item.INTEREST_TYPE</td>
-                                        <td>@item.INT_PRE</td>
-                                        <td>@item.NPV_DELTA_ILS</td>
-                                        <td>@item.Band</td>
-                                        <td>
-                                            <label class="checkbox">
-                                                <input type="checkbox" data-recordid="@item.Recordid" name="checkbox" onchange="TrackChanges(this);" class="simulateCheckBox" @(item.Sim_Liquidate_flag.HasValue && item.Sim_Liquidate_flag.Value ? "checked" : "")>
-                                                <i></i>
-                                            </label>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>@item.DEAL_ID</td>
+                                    <td>@item.MATURITY_DATE</td>
+                                    <td>@item.DEAL_TYPE</td>
+                                    <td>@item.PROD_TYPE</td>
+                                    <td>@item.CCY</td>
+                                    <td>@item.INTEREST_TYPE</td>
+                                    <td>@item.INT_PRE</td>
+                                    <td>@item.NPV_DELTA_ILS</td>
+                                    <td>@item.Band</td>
+                                    <td>@item.Kondor_N</td>
+                                    <td>@item.CPName</td>
+
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" data-recordid="@item.RecordID" name="checkbox" onchange="TrackChanges(this);" class="simulateCheckBox" @(item.Sim_Liquidate_flag.HasValue && item.Sim_Liquidate_flag.Value ? "checked" : "")>
+                                            <i></i>
+                                        </label>
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>

@@ -57,14 +57,14 @@ namespace MarketR.Controllers
         {
             try
             {
-                Handler handler = new Handler(fileId, fileType.Excel);
+                new Handler(fileId, fileType.Excel, fileVersion.Version1);
                 report.PerformCalculation(startDate, currencyFormat, fileId);
                 var report1 = report.GetReport1(startDate, currencyFormat);
                 var report2 = report.GetReport2(startDate, currencyFormat);
                 return Json(new { Success = true, report1, report2 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
-            {                
+            {
                 return Json(new { Success = false, Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "") }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -129,12 +129,13 @@ namespace MarketR.Controllers
         }
 
         [HttpPost]
-        public JsonResult CalculateCompare(string startDate, string currencyFormat, int fileId, string version)
+        public JsonResult CalculateCompare(string startDate, string currencyFormat, int Version1Id, int Version2Id)
         {
             try
             {
-                Handler handler = new Handler(fileId, fileType.Excel);
-                report.PerformCompareCalculation(startDate, currencyFormat, fileId);
+                new Handler(Version1Id, fileType.Excel, fileVersion.Version1);
+                new Handler(Version2Id, fileType.Excel, fileVersion.Version2);
+                report.PerformCompareCalculation(startDate, currencyFormat, Version1Id);
                 var version1 = report.GetVersion1();
                 var version2 = report.GetVersion2();
                 var version3 = report.GetVersion3();

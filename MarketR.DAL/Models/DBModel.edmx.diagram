@@ -29,6 +29,9 @@
         <EntityTypeShape EntityType="MarketRModel.ImportSetting" Width="1.5" PointX="0.75" PointY="12.75" />
         <EntityTypeShape EntityType="MarketRModel.KONDOR_DATA" Width="1.5" PointX="13.375" PointY="13.75" />
         <EntityTypeShape EntityType="MarketRModel.KondorFileHistory" Width="1.5" PointX="14.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MarketRModel.NewFileRecords2" Width="1.5" PointX="8.125" PointY="14.875" />
+        <AssociationConnector Association="MarketRModel.FK_NewFileRecords2_FileHistory" />
+        <EntityTypeShape EntityType="MarketRModel.Sim_View" Width="1.5" PointX="10.375" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

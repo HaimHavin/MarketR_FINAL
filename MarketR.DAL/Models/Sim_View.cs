@@ -10,8 +10,9 @@
 namespace MarketR.DAL.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class GetResultView_Result
+    public partial class Sim_View
     {
         public int RecordID { get; set; }
         public string DEAL_ID { get; set; }
