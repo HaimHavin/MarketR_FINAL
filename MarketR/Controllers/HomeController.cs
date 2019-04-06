@@ -135,7 +135,7 @@ namespace MarketR.Controllers
             {
                 new Handler(Version1Id, fileType.Excel, fileVersion.Version1);
                 new Handler(Version2Id, fileType.Excel, fileVersion.Version2);
-                report.PerformCompareCalculation(startDate, currencyFormat, Version1Id);
+                report.PerformCompareCalculation(currencyFormat, Version1Id, Version2Id);
                 var version1 = report.GetVersion1();
                 var version2 = report.GetVersion2();
                 var version3 = report.GetVersion3();

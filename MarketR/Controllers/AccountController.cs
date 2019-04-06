@@ -50,6 +50,7 @@ namespace MarketR.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            
             // We do not want to use any existing identity information
             EnsureLoggedOut();
             // Store the originating URL so we can attach it to a form field
@@ -80,7 +81,7 @@ namespace MarketR.Controllers
                             Session["UserId"] = userDetail.Id;
                             Session["UserData"] = Encrypt(viewModel.Username + ", pass =" + viewModel.Password);
                             eventLog.SaveEventLog("Login", "SucessFul");
-                            return RedirectToAction("upload", "Marketr", new { user = Session["UserData"] });
+                            return RedirectToAction("index", "home");
                         }
 
                         if (!string.IsNullOrEmpty(roles[0]) && roles[0].ToLower() != "system_reciever")
@@ -118,7 +119,7 @@ namespace MarketR.Controllers
                                     Session["UserId"] = userDetail.Id;
                                     Session["UserData"] = Encrypt(viewModel.Username + ", pass =" + viewModel.Password);
                                     eventLog.SaveEventLog("Login", "SucessFul");
-                                    return RedirectToAction("upload", "Marketr", new { user = Session["UserData"] });
+                                    return RedirectToAction("index", "home");
                                 }
 
                             }
@@ -130,7 +131,7 @@ namespace MarketR.Controllers
                     await AllSignInAsync(viewModel.Username, viewModel.RememberMe);
                     Session["UserRole"] = "mo";
                     Session["UserData"] = Encrypt(viewModel.Username + ", pass =" + viewModel.Password);
-                    return RedirectToAction("upload", "Marketr", new { user = Session["UserData"] });
+                    return RedirectToAction("index", "home");
                 }
             }
             catch (Exception ex)

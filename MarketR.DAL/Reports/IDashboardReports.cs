@@ -15,7 +15,7 @@ namespace MarketR.Common.Reports
         IEnumerable<Report2Dto> GetVersion2();
         IEnumerable<Report2Dto> GetVersion3();
         void PerformCalculation(string startDate, string currencyFormat,int fileId);
-        void PerformCompareCalculation(string startDate, string currencyFormat, int fileId);
+        void PerformCompareCalculation( string currencyFormat, int fileId, int fileId2);
         IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band,string FilterText);
         void UpdateSimLiquidate(SimulateModel model);
     }

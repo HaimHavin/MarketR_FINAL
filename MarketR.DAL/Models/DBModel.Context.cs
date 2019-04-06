@@ -89,21 +89,21 @@ namespace MarketR.DAL.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Simulate", dateParameter, currencyParameter, fileIdParameter);
         }
     
-        public virtual int sp_compare(Nullable<System.DateTime> date, string currency, Nullable<int> fileId)
+        public virtual int sp_compare(string currency, Nullable<int> fileId, Nullable<int> fileId2)
         {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
+            
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
     
             var fileIdParameter = fileId.HasValue ?
-                new ObjectParameter("FileId", fileId) :
-                new ObjectParameter("FileId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", dateParameter, currencyParameter, fileIdParameter);
+                new ObjectParameter("VER1", fileId) :
+                new ObjectParameter("VER1", typeof(int));
+
+            var fileIdParameter2 = fileId2.HasValue ?
+                        new ObjectParameter("VER2", fileId) :
+                        new ObjectParameter("VER2", typeof(int));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", currencyParameter, fileIdParameter, fileIdParameter2);
         }
     
         public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)

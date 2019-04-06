@@ -14,7 +14,7 @@ namespace MarketR.Common.Reports
         IMarketRRepo marketRRepo = new MarketRRepo(new MarketREntities());
         MarketREntities dbEntity = new MarketREntities();
         public IEnumerable<Report1Dto> GetReport1(string startDate, string currencyFormat)
-        {
+         {
             //IEnumerable<Report1Dto> report1;
             var report = marketRRepo.GetAll<TBL_Simulation_DATE_CCY>();
             var reportData = AutoMapper.Mapper.Map<IEnumerable<TBL_Simulation_DATE_CCY>, IEnumerable<Report1Dto>>(report);
@@ -62,9 +62,9 @@ namespace MarketR.Common.Reports
             }
         }
 
-        public void PerformCompareCalculation(string startDate, string currencyFormat, int fileId)
+        public void PerformCompareCalculation(string currencyFormat, int version1, int version2)
         {
-            dbEntity.sp_compare(Convert.ToDateTime(startDate), currencyFormat, fileId);
+            dbEntity.sp_compare(currencyFormat, version1, version2);
         }
         public IEnumerable<Report2Dto> GetVersion1()
         {

@@ -70,6 +70,9 @@
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
                         <header>
                             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <div class="jarviswidget-ctrls">
+                                <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportVersion1" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
+                            </div>
                         </header>
                         <div>
                             <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
@@ -113,6 +116,9 @@
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
                         <header>
                             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <div class="jarviswidget-ctrls">
+                                <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportVersion2" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
+                            </div>
                         </header>
                         <div>
                             <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
@@ -156,6 +162,9 @@
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
                         <header>
                             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <div class="jarviswidget-ctrls">
+                                <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportVersion3" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
+                            </div>
                         </header>
                         <div>
                             <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
@@ -250,6 +259,7 @@
 </div>
 
 @section pagespecific{
+<script src="~/Scripts/Export.js"></script>
     <script>
         $(document).ready(function () {
             GetFileVersions();
@@ -286,7 +296,7 @@
                 success: function (data) {
                     $(".FileVersion").empty();
                     $.each(data, function (k, v) {
-                        var option = "<option value=" + v.Value + ">" + v.Text + "</option>";
+                        var option = "<option value=" + v.Value + ">" + v.Text.replace(/\-/g, '/') + "</option>";
                         $('.FileVersion').append(option);
                     });
                     $("#dvProgressBar").hide();
@@ -315,16 +325,16 @@
                     $('#tbodyVersion2').html("");
                     $('#tbodyVersion3').html("");
                     if (data.Success) {
-                        $.each(data.version1, function (k, v) {
-                            var report1 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                        $.each(data.version1, function (k, v) {commaSeparateNumber
+                            var report1 = "<tr><td>" + commaSeparateNumber(v.Total) + "</td> <td>" + commaSeparateNumber(v.Other) + "</td> <td>" + commaSeparateNumber(v.JPY) + "</td> <td>" + commaSeparateNumber(v.CHF) + "</td> <td>" + commaSeparateNumber(v.GBP) + "</td> <td>" + v.EUR + "</td> <td>" + commaSeparateNumber(v.USD) + "</td> <td>" + commaSeparateNumber(v.ILS) + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
                             $('#tbodyVersion1').append(report1);
                         });
                         $.each(data.version2, function (k, v) {
-                            var report2 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                            var report2 = "<tr><td>" + commaSeparateNumber(v.Total) + "</td> <td>" + commaSeparateNumber(v.Other) + "</td> <td>" + commaSeparateNumber(v.JPY) + "</td> <td>" + commaSeparateNumber(v.CHF) + "</td> <td>" + commaSeparateNumber(v.GBP) + "</td> <td>" + commaSeparateNumber(v.EUR) + "</td> <td>" + commaSeparateNumber(v.USD) + "</td> <td>" + commaSeparateNumber(v.ILS) + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
                             $('#tbodyVersion2').append(report2);
                         });
                         $.each(data.version3, function (k, v) {
-                            var report3 = "<tr><td>" + v.Total + "</td> <td>" + v.Other + "</td> <td>" + v.JPY + "</td> <td>" + v.CHF + "</td> <td>" + v.GBP + "</td> <td>" + v.EUR + "</td> <td>" + v.USD + "</td> <td>" + v.ILS + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                            var report3 = "<tr><td>" + commaSeparateNumber(v.Total) + "</td> <td>" + commaSeparateNumber(v.Other) + "</td> <td>" + commaSeparateNumber(v.JPY) + "</td> <td>" + commaSeparateNumber(v.CHF) + "</td> <td>" + commaSeparateNumber(v.GBP) + "</td> <td>" + commaSeparateNumber(v.EUR) + "</td> <td>" + commaSeparateNumber(v.USD) + "</td> <td>" + commaSeparateNumber(v.ILS) + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
                             $('#tbodyVersion3').append(report3);
                         });
                         $(".report").show();
@@ -341,6 +351,24 @@
                     $("body").removeClass("disable");
                 }
             });
+        }
+        $("#btnExportVersion1").click(function () {
+            tableToExcel('tblVersion1', 'Version1');
+        });
+        $("#btnExportVersion2").click(function () {
+            tableToExcel('tblVersion2', 'Version2');
+        });
+        $("#btnExportVersion3").click(function () {
+            tableToExcel('tblVersion3', 'Version3');
+        });
+
+
+        function commaSeparateNumber(val) {
+            val = val.toString().replace(/[^\d\,]*/g, '');
+            while (/(\d+)(\d{3})/.test(val.toString())) {
+                val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            return val;
         }
     </script>
 }
