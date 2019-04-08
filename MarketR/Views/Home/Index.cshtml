@@ -224,8 +224,8 @@
             
             GetFileVersions();
            // GetReport();
-            $('#btnCalculate').click(function () {
-                GetReport();
+            $('#btnCalculate').click(function () {               
+                GetReport(true);
             });
 
             /* DO NOT REMOVE : GLOBAL FUNCTIONS!
@@ -370,11 +370,10 @@
         }
        
       
-        function GetReport() {
+        function GetReport(IsLoadFile) {
             $("#dvProgressBar").show();
             $("body").addClass("disable");
-            debugger;
-            var parm = { startDate: $('#txtSearch').val(), currencyFormat: $('#ddlCurrency :selected').val(), fileId: $('#ddlFileVersion :selected').val()};
+            var parm = { startDate: $('#txtSearch').val(), currencyFormat: $('#ddlCurrency :selected').val(), fileId: $('#ddlFileVersion :selected').val(), IsLoadFile: IsLoadFile };
             $.ajax({
                 type: "Post",
                 url: "CalculateCurrency",
@@ -386,7 +385,7 @@
                     $('#tbodyReport2').html("");                   
                     if (data.Success) {
                         $.each(data.report1, function (k, v) {
-                            var report1 = "<tr><td>" + commaSeparateNumber(v.Col15) + "</td> <td>" + commaSeparateNumber(v.col14) + "</td> <td>" + commaSeparateNumber(v.Col13) + "</td> <td>" + v.Col12 + "</td> <td>" + commaSeparateNumber(v.Col11) + "</td> <td>" + commaSeparateNumber(v.Col10) + "</td> <td>" + commaSeparateNumber(v.Col9) + "</td> <td>" + commaSeparateNumber(v.Col8) + "</td> <td>" + v.Col7 + "</td> <td><a href='javascript:void(0);' onclick='GetResultView(0," + v.Col2 + ");'  class='shortValue1' id='shortValue'>" + commaSeparateNumber(v.Col6) +
+                            var report1 = "<tr><td>" + commaSeparateNumber(v.Col15) + "</td> <td>" + commaSeparateNumber(v.col14) + "</td> <td>" + commaSeparateNumber(v.Col13) + "</td> <td>" + commaSeparateNumber(v.Col12) + "</td> <td>" + commaSeparateNumber(v.Col11) + "</td> <td>" + commaSeparateNumber(v.Col10) + "</td> <td>" + commaSeparateNumber(v.Col9) + "</td> <td>" + commaSeparateNumber(v.Col8) + "</td> <td>" + v.Col7 + "</td> <td><a href='javascript:void(0);' onclick='GetResultView(0," + v.Col2 + ");'  class='shortValue1' id='shortValue'>" + commaSeparateNumber(v.Col6) +
                                 "</a></td> <td><a href='javascript:void(0);' onclick='GetResultView(1," + v.Col2 + ");' class='longValue1' id='longValue'>" + commaSeparateNumber(v.Col5) + "</a></td> <td>" + v.Col4 + "</td> <td>" + v.Col3 + "</td> <td><span id=band>" + v.Col2 + "</span></td> <td>" + v.Col1 + "</td> </tr>";
                             $('#tbodyReport1').append(report1);
                         });
@@ -477,7 +476,7 @@
                 success: function (response) {
                     $("#remoteModal").modal("hide");
                     $("#dvProgressBar").hide();
-                    GetReport();
+                    GetReport(false);
                 },
                 error: function (err) {
                     $("#dvProgressBar").hide();
@@ -495,12 +494,15 @@
         function ExportReport3() {
             tableToExcel('tblReport3', 'Report3');
         }
-
+        
+        
         function commaSeparateNumber(val) {
-            val = val.toString().replace(/[^\d\,]*/g, '');
-            while (/(\d+)(\d{3})/.test(val.toString())) {
-                val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }            
+            if (val != null && val != 0) {
+                val = val.toString().replace(/[^\d\,]*/g, '');
+                while (/(\d+)(\d{3})/.test(val.toString())) {
+                    val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            }
             return val;
         }
     </script>

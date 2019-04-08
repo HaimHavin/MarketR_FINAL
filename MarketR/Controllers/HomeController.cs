@@ -53,11 +53,12 @@ namespace MarketR.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult CalculateCurrency(string startDate, string currencyFormat, int fileId)
+        public JsonResult CalculateCurrency(string startDate, string currencyFormat, int fileId, bool IsLoadFile)
         {
             try
             {
-                new Handler(fileId, fileType.Excel, fileVersion.Version1);
+                if (IsLoadFile)
+                    new Handler(fileId, fileType.Excel, fileVersion.Version1);
                 report.PerformCalculation(startDate, currencyFormat, fileId);
                 var report1 = report.GetReport1(startDate, currencyFormat);
                 var report2 = report.GetReport2(startDate, currencyFormat);

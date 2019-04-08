@@ -326,7 +326,7 @@
                     $('#tbodyVersion3').html("");
                     if (data.Success) {
                         $.each(data.version1, function (k, v) {commaSeparateNumber
-                            var report1 = "<tr><td>" + commaSeparateNumber(v.Total) + "</td> <td>" + commaSeparateNumber(v.Other) + "</td> <td>" + commaSeparateNumber(v.JPY) + "</td> <td>" + commaSeparateNumber(v.CHF) + "</td> <td>" + commaSeparateNumber(v.GBP) + "</td> <td>" + v.EUR + "</td> <td>" + commaSeparateNumber(v.USD) + "</td> <td>" + commaSeparateNumber(v.ILS) + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
+                            var report1 = "<tr><td>" + commaSeparateNumber(v.Total) + "</td> <td>" + commaSeparateNumber(v.Other) + "</td> <td>" + commaSeparateNumber(v.JPY) + "</td> <td>" + commaSeparateNumber(v.CHF) + "</td> <td>" + commaSeparateNumber(v.GBP) + "</td> <td>" + commaSeparateNumber(v.EUR) + "</td> <td>" + commaSeparateNumber(v.USD) + "</td> <td>" + commaSeparateNumber(v.ILS) + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
                             $('#tbodyVersion1').append(report1);
                         });
                         $.each(data.version2, function (k, v) {
