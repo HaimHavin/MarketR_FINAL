@@ -364,9 +364,11 @@
 
 
         function commaSeparateNumber(val) {
-            val = val.toString().replace(/[^\d\,]*/g, '');
-            while (/(\d+)(\d{3})/.test(val.toString())) {
-                val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if (val != null && val != 0) {
+                val = val.toString().split('.')[0];
+                while (/(\d+)(\d{3})/.test(val.toString())) {
+                    val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             }
             return val;
         }
