@@ -101,7 +101,7 @@ namespace MarketR.DAL.Models
                 new ObjectParameter("VER1", typeof(int));
 
             var fileIdParameter2 = fileId2.HasValue ?
-                        new ObjectParameter("VER2", fileId) :
+                        new ObjectParameter("VER2", fileId2) :
                         new ObjectParameter("VER2", typeof(int));
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", currencyParameter, fileIdParameter, fileIdParameter2);
         }
