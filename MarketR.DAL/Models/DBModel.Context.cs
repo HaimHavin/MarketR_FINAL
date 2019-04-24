@@ -106,7 +106,7 @@ namespace MarketR.DAL.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", currencyParameter, fileIdParameter, fileIdParameter2);
         }
     
-        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)
+        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText, string MaturityDate)
         {
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
@@ -123,8 +123,12 @@ namespace MarketR.DAL.Models
             var filterTextParameter = filterText != null ?
                 new ObjectParameter("FilterText", filterText) :
                 new ObjectParameter("FilterText", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter);
+
+            var maturityTextParameter = MaturityDate != null ?
+                new ObjectParameter("MaturityDate", MaturityDate) :
+                new ObjectParameter("MaturityDate", typeof(string));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter, maturityTextParameter);
         }
     }
 }

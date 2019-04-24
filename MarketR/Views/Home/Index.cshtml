@@ -1,8 +1,9 @@
 ﻿<!-- MAIN CONTENT -->
 <style>
     .report {
-        display:none;
+        display: none;
     }
+
     .disable {
         opacity: 0.5;
         pointer-events: none;
@@ -21,185 +22,187 @@
     <!-- widget grid -->
     @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "Admin")
     {
-    <section id="widget-grid" class="">
+        <section id="widget-grid" class="">
 
-        <div class="row">
-            <div class="col-md-2">
-                <input id="txtSearch" type="text" name="txtSearch" class="form-control" value="">
-            </div>
-            <div class="col-md-3">
-                <select class="form-control" id="ddlCurrency">
-                    <option value="ILS">ILS</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-
-                    <option value="GBP">GBP</option>
-                    <option value="CHF">CHF</option>
-                    <option value="JPY">JPY</option>
-
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-control" id="ddlFileVersion"></select>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-primary" id="btnCalculate">Calculate</button>
-            </div>
-        </div>
-        <div id="dvProgressBar" style="display:none;position:relative;top:50%;margin-left:45%;padding:2px;">
-            <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
-        </div>
-        <div class="row m-t-20 report">
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
-                    <header>
-                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <div class="jarviswidget-ctrls">                           
-                            <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportReport1" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
-                        </div>
-                    </header>
-                    <div>
-                        <div class="jarviswidget-editbox">
-                        </div>
-
-                        <div class="widget-body">
-                            <div class="table-responsive">
-                                <table id="tblReport1" class="table table-bordered table-borderd-top text-align report">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-align" colspan="2">פוזיציות משוקללות בין איזורים</th>
-                                            <th class="text-align" colspan="2">פוזיציות משוקללות בתוך איזורי זמן</th>
-                                            <th class="text-align" colspan="2">פוזיציות משוקללות בתוך תקופת זמן</th>
-                                            <th class="text-align" colspan="2">פוזיציות משוקללות</th>
-                                            <th class="text-align">מקדמי סיכון</th>
-                                            <th class="text-align" colspan="2">פוזיציות</th>
-                                            <th class="text-align" colspan="2">תקופת זמן</th>
-                                            <th class="text-align">רצועת</th>
-                                            <th class="text-align">איזור</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-align">מנוגדות</th>
-                                            <th class="text-align">מנוגדות</th>
-                                            <th class="text-align">פתוחות</th>
-                                            <th class="text-align">מנוגדות</th>
-
-                                            <th class="text-align">פתוחות</th>
-                                            <th class="text-align">מנוגדות</th>
-                                            <th class="text-align">חסר Short</th>
-                                            <th class="text-align">יתר Long</th>
-                                            <th class="text-align"> </th>
-                                            <th class="text-align">חסר Short</th>
-                                            <th class="text-align">יתר Long</th>
-                                            <th class="text-align">תלוש ריבית<3%</th>
-                                            <th class="text-align">תלוש ריבית=>3%</th>
-                                            <th class="text-align">זמן</th>
-                                            <th class="text-align">  </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyReport1"></tbody>
-                                </table>
-
-                                <div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <input id="txtSearch" type="text" name="txtSearch" class="form-control" value="">
                 </div>
-            </article>
-        </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="ddlCurrency">
+                        <option value="ILS">ILS</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
 
-        <div class="row m-t-20 report">
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
-                    <header>
-                        <span class="widget-icon"> <i class="fa fa-table"></i></span>
-                        <div class="jarviswidget-ctrls">
-                            <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportReport2" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
-                        </div>
-                    </header>
-                    <div>
-                        <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
-                            <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
-                        </div>
-                        
+                        <option value="GBP">GBP</option>
+                        <option value="CHF">CHF</option>
+                        <option value="JPY">JPY</option>
 
-                        <div class="widget-body">
-                            <div class="table-responsive">
-                                <table id="tblReport2" class="table table-bordered table-borderd-top text-align">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-align">Total</th>
-                                            <th class="text-align">Other</th>
-                                            <th class="text-align">JPY</th>
-                                            <th class="text-align">CHF</th>
-                                            <th class="text-align">GBP</th>
-                                            <th class="text-align">EUR</th>
-                                            <th class="text-align">USD</th>
-                                            <th class="text-align">ILS</th>
-                                            <th class="text-align">Text3</th>
-                                            <th class="text-align">Text2</th>
-                                            <th class="text-align">Text1</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyReport2"></tbody>
-                                </table>
-
-
-                            </div>
-                        </div>
-                    </div>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
-            </article>
-        </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="ddlFileVersion"></select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" id="btnCalculate">Calculate</button>
+                </div>
+            </div>
+            <div id="dvProgressBar" style="display:none;position:relative;top:50%;margin-left:45%;padding:2px;">
+                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+            </div>
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <div class="jarviswidget-ctrls">
+                                <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportReport1" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
+                            </div>
+                        </header>
+                        <div>
+                            <div class="jarviswidget-editbox">
+                            </div>
 
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblReport1" class="table table-bordered table-borderd-top text-align report">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align" colspan="2">פוזיציות משוקללות בין איזורים</th>
+                                                <th class="text-align" colspan="2">פוזיציות משוקללות בתוך איזורי זמן</th>
+                                                <th class="text-align" colspan="2">פוזיציות משוקללות בתוך תקופת זמן</th>
+                                                <th class="text-align" colspan="2">פוזיציות משוקללות</th>
+                                                <th class="text-align">מקדמי סיכון</th>
+                                                <th class="text-align" colspan="2">פוזיציות</th>
+                                                <th class="text-align" colspan="2">תקופת זמן</th>
+                                                <th class="text-align">רצועת</th>
+                                                <th class="text-align">איזור</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-align">מנוגדות</th>
+                                                <th class="text-align">מנוגדות</th>
+                                                <th class="text-align">פתוחות</th>
+                                                <th class="text-align">מנוגדות</th>
 
-        <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false">
-            <div class="modal-dialog modal-lg" style="width:80%">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                            ×
-                        </button>
-                        <div class="modal-title" id="myModalLabel">
-                            <div class="row">
-                                <div class="col-md-3"><label style="font-size:18px;">Simulation</label></div>
-                                <div class="col-md-3">
-                                    <label id="dvband"></label>
-                                    <label id="dvccy"></label>
-                                </div>
-                                <div class="col-md-5">
-                                    <input type="hidden" id="hdnNPV" />
-                                    <input type="hidden" id="hdnband" />
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="txtFilterbox" placeholder="Filter by Deal ID / CP Name" />
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-primary" type="button" onclick="FilterResultData();">
-                                                <i class="glyphicon glyphicon-search"></i> Filter
-                                            </button>
-                                        </div>
+                                                <th class="text-align">פתוחות</th>
+                                                <th class="text-align">מנוגדות</th>
+                                                <th class="text-align">חסר Short</th>
+                                                <th class="text-align">יתר Long</th>
+                                                <th class="text-align"> </th>
+                                                <th class="text-align">חסר Short</th>
+                                                <th class="text-align">יתר Long</th>
+                                                <th class="text-align">תלוש ריבית<3%</th>
+                                                <th class="text-align">תלוש ריבית=>3%</th>
+                                                <th class="text-align">זמן</th>
+                                                <th class="text-align">  </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyReport1"></tbody>
+                                    </table>
+
+                                    <div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-body" id="dvSimView">
+                </article>
+            </div>
 
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-table"></i></span>
+                            <div class="jarviswidget-ctrls">
+                                <a href="javascript:void(0);" class="button-icon jarviswidget-download-btn" id="btnExportReport2" rel="tooltip" title="Export" data-placement="bottom"><i class="fa fa-download "></i></a>
+                            </div>
+                        </header>
+                        <div>
+                            <div id="dvProgressBar" style="display:none;position:absolute;top:30%;left:50%;padding:2px;">
+                                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+                            </div>
+
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblReport2" class="table table-bordered table-borderd-top text-align">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align">Total</th>
+                                                <th class="text-align">Other</th>
+                                                <th class="text-align">JPY</th>
+                                                <th class="text-align">CHF</th>
+                                                <th class="text-align">GBP</th>
+                                                <th class="text-align">EUR</th>
+                                                <th class="text-align">USD</th>
+                                                <th class="text-align">ILS</th>
+                                                <th class="text-align">Text3</th>
+                                                <th class="text-align">Text2</th>
+                                                <th class="text-align">Text1</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyReport2"></tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            Cancel
-                        </button>
-                        <button type="button" class="btn btn-primary" id="btnSimulate">
-                            Simulate
-                        </button>
+                </article>
+            </div>
+
+
+            <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false">
+                <div class="modal-dialog modal-lg" style="width:90%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+                            <div class="modal-title" id="myModalLabel">
+                                <div class="row">
+                                    <div class="col-md-2"><label style="font-size:18px;">Simulation</label></div>
+                                    <div class="col-md-2">
+                                        <label id="dvband"></label>
+                                        <label id="dvccy"></label>
+                                    </div>
+                                    <div class="col-md-7 pull-right">
+                                        <input type="hidden" id="hdnNPV" />
+                                        <input type="hidden" id="hdnband" />
+                                        <div class="col-sm-3"><input id="txtMaturityDate" type="text" name="txtMaturityDate" class="form-control" value=""></div>
+                                        <div class="col-sm-3"><input id="txtFixingDate" type="text" name="txtFixingDate" class="form-control" value=""></div>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="txtFilterbox" placeholder="Filter by Deal ID / CP Name" />
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary" type="button" onclick="FilterResultData();">
+                                                    <i class="glyphicon glyphicon-search"></i> Filter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body" id="dvSimView">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btnSimulate">
+                                Simulate
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-       
-    </section>
+
+        </section>
     }
     else
     {
@@ -221,10 +224,10 @@
         $(document).ready(function () {
             $("#txtSearch").datepicker();
             $("#txtSearch").datepicker("setDate", new Date());
-            
+
             GetFileVersions();
-           // GetReport();
-            $('#btnCalculate').click(function () {               
+            // GetReport();
+            $('#btnCalculate').click(function () {
                 GetReport(true);
             });
 
@@ -347,13 +350,13 @@
 
             // END LINE CHART
         });
-       
+
         function GetFileVersions() {
             $("#dvProgressBar").show();
             $.ajax({
                 type: "Post",
                 url: "GetFileVersions",
-                async:false,
+                async: false,
                 contentType: "application/json",
                 success: function (data) {
                     $("#ddlFileVersion").empty();
@@ -368,8 +371,8 @@
                 }
             });
         }
-       
-      
+
+
         function GetReport(IsLoadFile) {
             $("#dvProgressBar").show();
             $("body").addClass("disable");
@@ -382,7 +385,7 @@
                 success: function (data) {
                     $("#dvProgressBar").hide();
                     $('#tbodyReport1').html("");
-                    $('#tbodyReport2').html("");                   
+                    $('#tbodyReport2').html("");
                     if (data.Success) {
                         $.each(data.report1, function (k, v) {
                             var report1 = "<tr><td>" + commaSeparateNumber(v.Col15) + "</td> <td>" + commaSeparateNumber(v.col14) + "</td> <td>" + commaSeparateNumber(v.Col13) + "</td> <td>" + commaSeparateNumber(v.Col12) + "</td> <td>" + commaSeparateNumber(v.Col11) + "</td> <td>" + commaSeparateNumber(v.Col10) + "</td> <td>" + commaSeparateNumber(v.Col9) + "</td> <td>" + commaSeparateNumber(v.Col8) + "</td> <td>" + v.Col7 + "</td> <td><a href='javascript:void(0);' onclick='GetResultView(0," + v.Col2 + ");'  class='shortValue1' id='shortValue'>" + commaSeparateNumber(v.Col6) +
@@ -393,7 +396,7 @@
                             var report2 = "<tr><td>" + commaSeparateNumber(v.Total) + "</td> <td>" + commaSeparateNumber(v.Other) + "</td> <td>" + commaSeparateNumber(v.JPY) + "</td> <td>" + commaSeparateNumber(v.CHF) + "</td> <td>" + commaSeparateNumber(v.GBP) + "</td> <td>" + commaSeparateNumber(v.EUR) + "</td> <td>" + commaSeparateNumber(v.USD) + "</td> <td>" + commaSeparateNumber(v.ILS) + "</td> <td>" + v.Text3 + "</td> <td>" + v.Text2 + "</td> <td>" + v.Text1 + "</td> </tr>";
                             $('#tbodyReport2').append(report2);
                         });
-                        $(".report").show(); 
+                        $(".report").show();
                         $("body").removeClass("disable");
                     }
                     else {
@@ -413,7 +416,7 @@
         $("#btnSimulate").click(function () {
             GetSimulate();
         });
-        function GetResultView(NPV, band, FilterText) {
+        function GetResultView(NPV, band, FilterText, maturityDate) {
             $("#dvProgressBar").show();
             $("#dvSimView").empty();
             $("#dvccy").text("Currency : " + $('#ddlCurrency :selected').text());
@@ -424,7 +427,8 @@
                 NPV: NPV,
                 currency: $('#ddlCurrency :selected').val(),
                 band: band,
-                FilterText: FilterText
+                FilterText: FilterText,
+                MaturityDate:maturityDate
             };
 
             $.ajax({
@@ -446,20 +450,28 @@
             });
         }
         function FilterResultData() {
+            debugger;
+            var maturityDate = $("#txtMaturityDate").val();
             var band = $("#hdnband").val();
             var NPV = parseInt($("#hdnNPV").val());
+
             var FilterText = $("#txtFilterbox").val();
-            GetResultView(NPV, band, FilterText);
+            if ($.isNumeric($("#txtFilterbox").val())) {
+
+            }
+            GetResultView(NPV, band, FilterText, maturityDate);
         }
         function TrackChanges(item) {
             $(item).addClass("changed");
         }
         function GetSimulate() {
+            debugger;
             $("#dvProgressBar").show();
             var changedItems = $(".changed");
             var items = {};
             var SimViewChanges = [];
             $.each(changedItems, function (index, item) {
+                debugger;
                 var SimView = {};
                 SimView.RecordId = $(this).attr("data-recordid");
                 SimView.Status = $(this).prop("checked");
@@ -490,22 +502,32 @@
         });
         $("#btnExportReport2").click(function () {
             tableToExcel('tblReport2', 'Report2');
-        }); 
+        });
         function ExportReport3() {
             tableToExcel('tblReport3', 'Report3');
         }
-        
-        
+
+
         function commaSeparateNumber(val) {
-            debugger;
             if (val != null && val != 0) {
-               // val = val.toString().replace(/[^\d\,]*/g, '');
-                val= val.toString().split('.')[0];
+                // val = val.toString().replace(/[^\d\,]*/g, '');
+                val = val.toString().split('.')[0];
                 while (/(\d+)(\d{3})/.test(val.toString())) {
                     val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
             }
             return val;
+        }
+        function checkAll(item) {
+            debugger;
+            $(':checkbox.simulateCheckBox').prop('checked', item.checked);
+            if ($(':checkbox.simulateCheckBox').prop('checked')) {
+                $(':checkbox.simulateCheckBox').addClass('changed');
+            } else { $(':checkbox.simulateCheckBox').removeClass('changed'); }
+        }
+
+        function filterMaturity() {
+
         }
     </script>
 

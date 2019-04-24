@@ -24,6 +24,7 @@
                             <tr>
                                 <th>DEAL NUMBER</th>
                                 <th>MATURITY DATE</th>
+                                <th>FIXING DATE</th>
                                 <th>DEAL TYPE</th>
                                 <th>PROD TYPE</th>
                                 <th>CCY</th>
@@ -33,7 +34,15 @@
                                 <th>BAND</th>
                                 <th>Kondor N</th>
                                 <th>CPName</th>
-                                <th>LIQUIDATE</th>
+                                <th>
+                                    LIQUIDATE                                  
+                                    <label class="checkbox">
+                                        <input type="checkbox"  name="checkbox" onclick="checkAll(this);" >
+                                        <i></i>
+                                        <br />
+                                    </label>
+                                </th>
+                                
                             </tr>
                         </thead>
                         <tbody id="tbodyReport3">
@@ -42,6 +51,7 @@
                                 <tr>
                                     <td>@item.DEAL_ID</td>
                                     <td>@item.MATURITY_DATE</td>
+                                    <td>@item.FIXING_DATE</td>
                                     <td>@item.DEAL_TYPE</td>
                                     <td>@item.PROD_TYPE</td>
                                     <td>@item.CCY</td>
@@ -70,3 +80,11 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("#txtMaturityDate").datepicker();
+        //$("#txtMaturityDate").datepicker("setDate", new Date());
+        $("#txtFixingDate").datepicker();
+        //$("#txtFixingDate").datepicker("setDate", new Date());
+    });
+</script>

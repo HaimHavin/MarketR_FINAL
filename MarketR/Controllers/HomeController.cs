@@ -70,15 +70,15 @@ namespace MarketR.Controllers
             }
         }
         [HttpPost]
-        public ActionResult GetResultView(bool? NPV, string currency, int? band, string FilterText)
-        {
-            var result = report.GetFilterResultView(NPV, currency, band, FilterText);
+        public ActionResult GetResultView(bool? NPV, string currency, int? band, string FilterText, string MaturityDate)
+        {           
+            var result = report.GetFilterResultView(NPV, currency, band, FilterText, MaturityDate);
             return PartialView("_SimView", result);
         }
         [HttpPost]
         public JsonResult Simulate(SimulateModel model)
         {
-            if (model != null && model.SimViewChanges.Count > 0)
+            if (model != null && model.SimViewChanges != null)
                 report.UpdateSimLiquidate(model);
             return Json("", JsonRequestBehavior.AllowGet);
         }
@@ -114,7 +114,7 @@ namespace MarketR.Controllers
                     if (item.ids.Count() > 0)
                     {
                         var selectListItem = new DAL.Repository.SelectList();
-                        selectListItem.Text = item.Text;
+                        selectListItem.Text = DateTime.Parse(item.Text).ToString("MM/dd/yyyy");
                         selectListItem.Value = item.ids.Select(n => n.Value).Max();
                         selectList.Add(selectListItem);
                     }

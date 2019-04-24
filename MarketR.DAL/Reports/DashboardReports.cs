@@ -34,11 +34,11 @@ namespace MarketR.Common.Reports
             dbEntity.sp_Simulate(Convert.ToDateTime(startDate), currencyFormat, fileId);
         }
 
-        public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band, string FilterText)
+        public IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band, string FilterText, string MaturityDate)
         {
             try
             {
-                var result = dbEntity.GetResultView(currency, band, NPV, (string.IsNullOrWhiteSpace(FilterText) ? null : FilterText));
+                var result = dbEntity.GetResultView(currency, band, NPV, (string.IsNullOrWhiteSpace(FilterText) ? null : FilterText), MaturityDate);
                 return result;
             }
             catch (Exception ex)
