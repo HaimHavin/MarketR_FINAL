@@ -14,19 +14,21 @@ namespace MarketR.DAL.Models
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    
+    using MarketR.Common.Models.Condor;
+    using System.Collections.Generic;
+
     public partial class MarketREntities : DbContext
     {
         public MarketREntities()
             : base("name=MarketREntities")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Deal_View> Deal_View { get; set; }
@@ -49,86 +51,136 @@ namespace MarketR.DAL.Models
         public virtual DbSet<tbl_comp3> tbl_comp3 { get; set; }
         public virtual DbSet<NewFileRecords2> NewFileRecords2 { get; set; }
         public virtual DbSet<Sim_View> Sim_View { get; set; }
-    
+
         public virtual ObjectResult<spFILE_UPLOAD_Result1> spFILE_UPLOAD(string fileName)
         {
             var fileNameParameter = fileName != null ?
                 new ObjectParameter("FileName", fileName) :
                 new ObjectParameter("FileName", typeof(string));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spFILE_UPLOAD_Result1>("spFILE_UPLOAD", fileNameParameter);
         }
-    
+
         public virtual int UpdateSimLiquidate(Nullable<int> recordId, Nullable<bool> liquidate)
         {
             var recordIdParameter = recordId.HasValue ?
                 new ObjectParameter("RecordId", recordId) :
                 new ObjectParameter("RecordId", typeof(int));
-    
+
             var liquidateParameter = liquidate.HasValue ?
                 new ObjectParameter("Liquidate", liquidate) :
                 new ObjectParameter("Liquidate", typeof(bool));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateSimLiquidate", recordIdParameter, liquidateParameter);
         }
-    
+
         public virtual int sp_Simulate(Nullable<System.DateTime> date, string currency, Nullable<int> fileId)
         {
             var dateParameter = date.HasValue ?
                 new ObjectParameter("Date", date) :
                 new ObjectParameter("Date", typeof(System.DateTime));
-    
+
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-    
+
             var fileIdParameter = fileId.HasValue ?
                 new ObjectParameter("FileId", fileId) :
                 new ObjectParameter("FileId", typeof(int));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Simulate", dateParameter, currencyParameter, fileIdParameter);
         }
-    
-        public virtual int sp_compare(string currency, Nullable<int> fileId, Nullable<int> fileId2)
+
+        public virtual int sp_compare(string currency, Nullable<int> vER1, Nullable<int> vER2)
         {
-            
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-    
-            var fileIdParameter = fileId.HasValue ?
-                new ObjectParameter("VER1", fileId) :
+
+            var vER1Parameter = vER1.HasValue ?
+                new ObjectParameter("VER1", vER1) :
                 new ObjectParameter("VER1", typeof(int));
 
-            var fileIdParameter2 = fileId2.HasValue ?
-                        new ObjectParameter("VER2", fileId2) :
-                        new ObjectParameter("VER2", typeof(int));
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", currencyParameter, fileIdParameter, fileIdParameter2);
+            var vER2Parameter = vER2.HasValue ?
+                new ObjectParameter("VER2", vER2) :
+                new ObjectParameter("VER2", typeof(int));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", currencyParameter, vER1Parameter, vER2Parameter);
         }
-    
-        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText, string MaturityDate)
+
+        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText, string maturityDate)
         {
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-    
+
             var bandParameter = band.HasValue ?
                 new ObjectParameter("Band", band) :
                 new ObjectParameter("Band", typeof(int));
-    
+
             var nPVParameter = nPV.HasValue ?
                 new ObjectParameter("NPV", nPV) :
                 new ObjectParameter("NPV", typeof(bool));
-    
+
             var filterTextParameter = filterText != null ?
                 new ObjectParameter("FilterText", filterText) :
                 new ObjectParameter("FilterText", typeof(string));
 
-            var maturityTextParameter = MaturityDate != null ?
-                new ObjectParameter("MaturityDate", MaturityDate) :
+            var maturityDateParameter = maturityDate != null ?
+                new ObjectParameter("MaturityDate", maturityDate) :
                 new ObjectParameter("MaturityDate", typeof(string));
 
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter, maturityTextParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter, maturityDateParameter);
+        }
+
+        public virtual int run_deal_simulation(DealSimulateModel model)
+        {
+            List<ObjectParameter> dealTypeParam = new List<ObjectParameter>();
+            List<ObjectParameter> ccyTypeParam = new List<ObjectParameter>();
+            List<ObjectParameter> npvTypeParam = new List<ObjectParameter>();
+            List<ObjectParameter> legTypeParam = new List<ObjectParameter>();
+            List<ObjectParameter> interestTypeParam = new List<ObjectParameter>();
+            List<ObjectParameter> maturityTypeParam = new List<ObjectParameter>();
+            List<ObjectParameter> refTypeParam = new List<ObjectParameter>();
+
+            List<ObjectParameter> finalParam = new List<ObjectParameter>();
+
+            var startDateParameter = model.StartDate != null ?
+                new ObjectParameter("StartDate", model.StartDate) :
+                new ObjectParameter("StartDate", typeof(DateTime));
+
+            var currencyParameter = model.Currency != null ?
+                new ObjectParameter("Currency", model.Currency) :
+                new ObjectParameter("Currency", typeof(string));
+
+            var fileidParameter = model.FileVersion.HasValue ?
+                new ObjectParameter("FileId", model.FileVersion) :
+                new ObjectParameter("FileId", typeof(int));
+
+
+            for (int i = 0; i < 10; i++)
+            {
+                dealTypeParam.Add(model.DealSimulate[i].DealType != null ? new ObjectParameter("Deal_Type" + i.ToString(), model.DealSimulate[i].DealType) : new ObjectParameter("Deal_Type" + i.ToString(),typeof(string)));
+                ccyTypeParam.Add(model.DealSimulate[i].CCY != null ? new ObjectParameter("CCY" + i.ToString(), model.DealSimulate[i].CCY): new ObjectParameter("CCY" + i.ToString(), typeof(string)));
+                legTypeParam.Add(model.DealSimulate[i].Leg.HasValue ? new ObjectParameter("Leg" + i.ToString(), model.DealSimulate[i].Leg): new ObjectParameter("Leg" + i.ToString(), typeof(int)));
+                npvTypeParam.Add(model.DealSimulate[i].NPV != null ? new ObjectParameter("NPV" + i.ToString(), model.DealSimulate[i].NPV): new ObjectParameter("NPV" + i.ToString(), typeof(string)));
+                interestTypeParam.Add(model.DealSimulate[i].Interest.HasValue ? new ObjectParameter("Interest" + i.ToString(), model.DealSimulate[i].Interest): new ObjectParameter("Interest" + i.ToString(), typeof(bool)));
+                maturityTypeParam.Add(model.DealSimulate[i].MaturityDate.HasValue ? new ObjectParameter("MaturityDate" + i.ToString(), model.DealSimulate[i].MaturityDate) : new ObjectParameter("MaturityDate" + i.ToString(),typeof(DateTime)));
+                refTypeParam.Add(model.DealSimulate[i].Ref != null ? new ObjectParameter("Ref" + i.ToString(), model.DealSimulate[i].Ref): new ObjectParameter("Ref" + i.ToString(), typeof(string)));
+            }
+            finalParam.Add(startDateParameter);
+            finalParam.Add(currencyParameter);
+            finalParam.Add(fileidParameter);
+
+            finalParam.AddRange(dealTypeParam);
+            finalParam.AddRange(ccyTypeParam);
+            finalParam.AddRange(legTypeParam);
+            finalParam.AddRange(npvTypeParam);
+            finalParam.AddRange(interestTypeParam);
+            finalParam.AddRange(maturityTypeParam);
+            finalParam.AddRange(refTypeParam);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("run_deal_simulation", finalParam.ToArray());
+           
         }
     }
 }

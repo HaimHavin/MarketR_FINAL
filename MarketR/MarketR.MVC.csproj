@@ -1251,6 +1251,7 @@
     <Content Include="Views\Home\_SimView.cshtml" />
     <Content Include="Views\Home\Analytics.cshtml" />
     <Content Include="Views\Home\Compare.cshtml" />
+    <Content Include="Views\Home\DealSimulator.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

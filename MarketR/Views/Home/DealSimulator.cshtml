@@ -1,0 +1,194 @@
+﻿
+
+<style type="text/css">
+    .m-t-20 {
+        margin-top: 20px;
+    }
+
+    .text-align {
+        text-align: center;
+    }
+</style>
+<div id="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Deal Simulator <span> </span></h1>
+        </div>
+        <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+
+        </div>
+    </div>
+
+    <!-- widget grid -->
+    @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "Admin")
+    {
+        <section id="widget-grid" class="">
+
+            <div class="row">
+                <div class="col-md-2">
+                    <input id="txtSearch" type="text" name="txtSearch" class="form-control" value="">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="ddlCurrency">
+                        <option value="ILS">ILS</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+
+                        <option value="GBP">GBP</option>
+                        <option value="CHF">CHF</option>
+                        <option value="JPY">JPY</option>
+
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="ddlFileVersion"></select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" id="btnRunSimulation" onclick="RunSimulation();">Run simulation</button>
+                </div>
+            </div>
+            <div id="dvProgressBar" style="display:none;position:relative;top:50%;margin-left:45%;padding:2px;">
+                <img src='~/Content/img/Reload-1s-200px (1).gif' /><br><h2>Loading..</h2>
+            </div>
+            <div class="row m-t-20 report">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+                        <header></header>
+                        <div>
+                            <div class="jarviswidget-editbox">
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="tblRunSimulation" class="table table-bordered table-borderd-top text-align ">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-align" colspan="2"></th>
+                                                <th class="text-align" colspan="2" style="width:130px;">Deal type</th>
+                                                <th class="text-align" colspan="2">CCY</th>
+                                                <th class="text-align" colspan="2">Leg (-1=pay,1=receive)</th>
+                                                <th class="text-align">NPV</th>
+                                                <th class="text-align" colspan="2" style="width:115px;">Interest > 3%</th>
+                                                <th class="text-align" colspan="2">Maturity (fixing)</th>
+                                                <th class="text-align">Ref</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody id="tbodyRunSimulation">
+                                            @for (int i = 1; i <= 10; i++)
+                                            {
+                                                <tr>
+                                                    <td class="text-align" colspan="2">@i.ToString()</td>
+                                                    <td class="text-align" colspan="2"><select class="form-control"><option value="IRS">IRS</option><option value="CIRS">CIRS</option><option value="Option">Option</option></select></td>
+                                                    <td class="text-align" colspan="2"><input type="text" class="form-control" id="txtCCY" /></td>
+                                                    <td class="text-align" colspan="2"><select class="form-control"><option value="1">1</option><option value="-1">-1</option></select></td>
+                                                    <td><input type="text" class="form-control" id="txtNPV" /></td>
+                                                    <td class="text-align" colspan="2"><select class="form-control"><option value="True">True</option><option value="False">False</option></select></td>
+                                                    <td class="text-align" colspan="2"><input type="text" class="form-control MaturityDatePicker" /></td>
+                                                    <td><input type="text" class="form-control" id="txtRef" /></td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section>
+            <div class="row">
+                <h1 style="text-align:center;"><strong>You are not authorizes to view this page.</strong></h1>
+            </div>
+        </section>
+    }
+</div>
+@section pagespecific {
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#txtSearch").datepicker();
+            $("#txtSearch").datepicker("setDate", new Date());
+
+            $(".MaturityDatePicker").datepicker();            
+
+            GetFileVersions();
+        });
+        
+
+        function GetFileVersions() {
+            $("#dvProgressBar").show();
+            $.ajax({
+                type: "Post",
+                url: "GetFileVersions",
+                async: false,
+                contentType: "application/json",
+                success: function (data) {
+                    $("#ddlFileVersion").empty();
+                    $.each(data, function (k, v) {
+                        var option = "<option value=" + v.Value + ">" + v.Text.replace(/\-/g, '/'); + "</option>";
+                        $('#ddlFileVersion').append(option);
+                    });
+                    $("#dvProgressBar").hide();
+                },
+                error: function (err) {
+                    $("#dvProgressBar").hide();
+                }
+            });
+        }
+
+        function RunSimulation() {
+            $("#dvProgressBar").show();
+            var response = WrapSimulationData();            
+            $.ajax({
+                type: "Post",
+                url: "RunSimulation",               
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(response),
+                success: function (data) {
+                    $("#dvProgressBar").hide();
+                },
+                error: function (err) {
+                    $("#dvProgressBar").hide();
+                }
+            });
+        }
+
+
+        function WrapSimulationData() {
+            $("#tbodyRunSimulation")[0].children;           
+            var DealSimulationData = {};
+            var DealSimulate = [];
+            var items = {};
+            $.each($("#tbodyRunSimulation")[0].children, function (index, item) {
+                var DealItems = {};
+                DealItems.DealType = item.cells[1].children[0].selectedOptions[0].value;
+                DealItems.CCY = item.cells[2].children[0].value;
+                DealItems.Leg = item.cells[3].children[0].selectedOptions[0].value;
+                DealItems.NPV = item.cells[4].children[0].value;
+                DealItems.Interest = item.cells[5].children[0].selectedOptions[0].value;
+                DealItems.MaturityDate = item.cells[6].children[0].value;
+                DealItems.Ref = item.cells[7].children[0].value;
+                DealSimulate.push(DealItems);
+            });
+            items.DealSimulate = DealSimulate;
+            items.StartDate = $("#txtSearch").val();
+            items.Currency = $("#ddlCurrency").val();
+            items.FileVersion = $("#ddlFileVersion").val();
+            return items;
+        }
+    </script>
+        
+}
+

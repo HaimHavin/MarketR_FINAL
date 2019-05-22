@@ -31,6 +31,9 @@
                             </li>
                         </ul>*@
                 </li>
+                <li class="@Html.RouteIf("DealSimulator", "active")">
+                    <a href="@Url.Action("DealSimulator","home")" title="DealSimulator"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">DealSimulator</span></a>
+                </li>
                 <li class="@Html.RouteIf("compare", "active")"> 
                     <a href="@Url.Action("compare", "home")" title="Compare"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Compare</span></a>
                 </li>

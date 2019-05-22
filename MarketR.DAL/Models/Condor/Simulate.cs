@@ -30,4 +30,22 @@ namespace MarketR.Common.Models.Condor
         public int RecordId { get; set; }
         public bool Status { get; set; }
     }
+
+    public class DealSimulateModel
+    {
+        public DateTime StartDate { get; set; }
+        public string Currency { get; set; }
+        public int? FileVersion { get; set;}
+        public List<DealSimulateItems> DealSimulate { get; set; }
+    }
+    public class DealSimulateItems
+    {
+        public string DealType { get; set; }
+        public string CCY { get; set; }
+        public int? Leg { get; set; }
+        public string NPV { get; set; }
+        public bool? Interest  { get; set; }
+        public DateTime? MaturityDate { get; set; }
+        public string Ref { get; set; }
+    }
 }

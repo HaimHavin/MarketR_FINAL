@@ -18,5 +18,6 @@ namespace MarketR.Common.Reports
         void PerformCompareCalculation( string currencyFormat, int fileId, int fileId2);
         IEnumerable<GetResultView_Result> GetFilterResultView(bool? NPV, string currency, int? band,string FilterText, string MaturityDate);
         void UpdateSimLiquidate(SimulateModel model);
+        void DealSimulation(DealSimulateModel model);
     }
 }

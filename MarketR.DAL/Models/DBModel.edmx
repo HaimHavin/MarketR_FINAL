@@ -147,38 +147,6 @@
           <Property Name="NotificationEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="LastRun" Type="datetime" />
         </EntityType>
-        <EntityType Name="KONDOR_DATA">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DealType" Type="nvarchar" MaxLength="500" />
-          <Property Name="KondorId" Type="nvarchar" MaxLength="500" />
-          <Property Name="KTPId" Type="nvarchar" MaxLength="500" />
-          <Property Name="BalanceDeal" Type="nvarchar" MaxLength="500" />
-          <Property Name="TypeOfInstrument" Type="nvarchar" MaxLength="500" />
-          <Property Name="SubTypeOfInstrument" Type="nvarchar" MaxLength="500" />
-          <Property Name="LegType" Type="nvarchar" MaxLength="500" />
-          <Property Name="Asset" Type="nvarchar" MaxLength="500" />
-          <Property Name="Currency" Type="nvarchar" MaxLength="500" />
-          <Property Name="Amount" Type="float" />
-          <Property Name="MaturityDate" Type="datetime" />
-          <Property Name="RateType" Type="nvarchar" MaxLength="500" />
-          <Property Name="FixingDate" Type="datetime" />
-          <Property Name="FixingFrequencyNumber" Type="nvarchar" MaxLength="500" />
-          <Property Name="FixingFrequencyPeriod" Type="nvarchar" MaxLength="500" />
-          <Property Name="Rate" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="NPVDeltaILS" Type="float" />
-          <Property Name="Portfolio" Type="nvarchar" MaxLength="500" />
-          <Property Name="GammaILS" Type="nvarchar" MaxLength="500" />
-          <Property Name="VegaILS" Type="nvarchar" MaxLength="500" />
-          <Property Name="Cpty" Type="nvarchar" MaxLength="500" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="500" />
-          <Property Name="TradeDate" Type="datetime" />
-          <Property Name="CalcA" Type="nvarchar" MaxLength="500" />
-          <Property Name="CalcB" Type="nvarchar" MaxLength="500" />
-          <Property Name="CalcC" Type="nvarchar" MaxLength="500" />
-        </EntityType>
         <EntityType Name="KondorFileHistory">
           <Key>
             <PropertyRef Name="FileID" />
@@ -402,7 +370,7 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
             <PropertyRef Name="Kondor_N" />
             <PropertyRef Name="CPName" />
           </Key>
-          <Property Name="RecordID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecordID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="DEAL_ID" Type="nvarchar" MaxLength="200" />
           <Property Name="DEAL_TYPE" Type="nvarchar" MaxLength="200" />
           <Property Name="PROD_TYPE" Type="nvarchar" MaxLength="200" />
@@ -415,8 +383,8 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
           <Property Name="INT_PRE" Type="float" />
           <Property Name="NPV_DELTA_ILS" Type="float" />
           <Property Name="Band" Type="int" />
-          <Property Name="Kondor_N" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="CPName" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="Kondor_N" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CPName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Sim_Liquidate_flag" Type="bit" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
@@ -540,11 +508,87 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
           <Parameter Name="Band" Type="int" Mode="In" />
           <Parameter Name="NPV" Type="bit" Mode="In" />
           <Parameter Name="FilterText" Type="nvarchar" Mode="In" />
+          <Parameter Name="MaturityDate" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="sp_compare" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Date" Type="date" Mode="In" />
+        <Function Name="run_deal_simulation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StartDate" Type="date" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="FileId" Type="int" Mode="In" />
+          <Parameter Name="Deal_Type0" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type1" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type2" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type3" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type4" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type5" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type6" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type7" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type8" Type="varchar" Mode="In" />
+          <Parameter Name="Deal_Type9" Type="varchar" Mode="In" />
+          <Parameter Name="CCY0" Type="varchar" Mode="In" />
+          <Parameter Name="CCY1" Type="varchar" Mode="In" />
+          <Parameter Name="CCY2" Type="varchar" Mode="In" />
+          <Parameter Name="CCY3" Type="varchar" Mode="In" />
+          <Parameter Name="CCY4" Type="varchar" Mode="In" />
+          <Parameter Name="CCY5" Type="varchar" Mode="In" />
+          <Parameter Name="CCY6" Type="varchar" Mode="In" />
+          <Parameter Name="CCY7" Type="varchar" Mode="In" />
+          <Parameter Name="CCY8" Type="varchar" Mode="In" />
+          <Parameter Name="CCY9" Type="varchar" Mode="In" />
+          <Parameter Name="Leg0" Type="int" Mode="In" />
+          <Parameter Name="Leg1" Type="int" Mode="In" />
+          <Parameter Name="Leg2" Type="int" Mode="In" />
+          <Parameter Name="Leg3" Type="int" Mode="In" />
+          <Parameter Name="Leg4" Type="int" Mode="In" />
+          <Parameter Name="Leg5" Type="int" Mode="In" />
+          <Parameter Name="Leg6" Type="int" Mode="In" />
+          <Parameter Name="Leg7" Type="int" Mode="In" />
+          <Parameter Name="Leg8" Type="int" Mode="In" />
+          <Parameter Name="Leg9" Type="int" Mode="In" />
+          <Parameter Name="NPV0" Type="varchar" Mode="In" />
+          <Parameter Name="NPV1" Type="varchar" Mode="In" />
+          <Parameter Name="NPV2" Type="varchar" Mode="In" />
+          <Parameter Name="NPV3" Type="varchar" Mode="In" />
+          <Parameter Name="NPV4" Type="varchar" Mode="In" />
+          <Parameter Name="NPV5" Type="varchar" Mode="In" />
+          <Parameter Name="NPV6" Type="varchar" Mode="In" />
+          <Parameter Name="NPV7" Type="varchar" Mode="In" />
+          <Parameter Name="NPV8" Type="varchar" Mode="In" />
+          <Parameter Name="NPV9" Type="varchar" Mode="In" />
+          <Parameter Name="Interest0" Type="bit" Mode="In" />
+          <Parameter Name="Interest1" Type="bit" Mode="In" />
+          <Parameter Name="Interest2" Type="bit" Mode="In" />
+          <Parameter Name="Interest3" Type="bit" Mode="In" />
+          <Parameter Name="Interest4" Type="bit" Mode="In" />
+          <Parameter Name="Interest5" Type="bit" Mode="In" />
+          <Parameter Name="Interest6" Type="bit" Mode="In" />
+          <Parameter Name="Interest7" Type="bit" Mode="In" />
+          <Parameter Name="Interest8" Type="bit" Mode="In" />
+          <Parameter Name="Interest9" Type="bit" Mode="In" />
+          <Parameter Name="MaturityDate0" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate1" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate2" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate3" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate4" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate5" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate6" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate7" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate8" Type="varchar" Mode="In" />
+          <Parameter Name="MaturityDate9" Type="varchar" Mode="In" />
+          <Parameter Name="Ref0" Type="varchar" Mode="In" />
+          <Parameter Name="Ref1" Type="varchar" Mode="In" />
+          <Parameter Name="Ref2" Type="varchar" Mode="In" />
+          <Parameter Name="Ref3" Type="varchar" Mode="In" />
+          <Parameter Name="Ref4" Type="varchar" Mode="In" />
+          <Parameter Name="Ref5" Type="varchar" Mode="In" />
+          <Parameter Name="Ref6" Type="varchar" Mode="In" />
+          <Parameter Name="Ref7" Type="varchar" Mode="In" />
+          <Parameter Name="Ref8" Type="varchar" Mode="In" />
+          <Parameter Name="Ref9" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_compare" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Currency" Type="varchar" Mode="In" />
+          <Parameter Name="VER1" Type="int" Mode="In" />
+          <Parameter Name="VER2" Type="int" Mode="In" />
         </Function>
         <Function Name="sp_Simulate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="date" Mode="In" />
@@ -569,7 +613,6 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
           <EntitySet Name="FileRecords" EntityType="Self.FileRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FolderPermission" EntityType="Self.FolderPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportSettings" EntityType="Self.ImportSettings" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="KONDOR_DATA" EntityType="Self.KONDOR_DATA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KondorFileHistory" EntityType="Self.KondorFileHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecords" EntityType="Self.NewFileRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewFileRecords2" EntityType="Self.NewFileRecords2" Schema="dbo" store:Type="Tables" />
@@ -749,9 +792,9 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
           <EntitySet Name="tbl_comp2" EntityType="MarketRModel.tbl_comp2" />
           <EntitySet Name="tbl_comp3" EntityType="MarketRModel.tbl_comp3" />
           <FunctionImport Name="sp_compare">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Currency" Mode="In" Type="String" />
-            <Parameter Name="FileId" Mode="In" Type="Int32" />
+            <Parameter Name="VER1" Mode="In" Type="Int32" />
+            <Parameter Name="VER2" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="NewFileRecords2" EntityType="MarketRModel.NewFileRecords2" />
           <AssociationSet Name="FK_NewFileRecords2_FileHistory" Association="MarketRModel.FK_NewFileRecords2_FileHistory">
@@ -764,6 +807,82 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
             <Parameter Name="Band" Mode="In" Type="Int32" />
             <Parameter Name="NPV" Mode="In" Type="Boolean" />
             <Parameter Name="FilterText" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="run_deal_simulation" ReturnType="Collection(String)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="FileId" Mode="In" Type="Int32" />
+            <Parameter Name="Deal_Type0" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type1" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type2" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type3" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type4" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type5" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type6" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type7" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type8" Mode="In" Type="String" />
+            <Parameter Name="Deal_Type9" Mode="In" Type="String" />
+            <Parameter Name="CCY0" Mode="In" Type="String" />
+            <Parameter Name="CCY1" Mode="In" Type="String" />
+            <Parameter Name="CCY2" Mode="In" Type="String" />
+            <Parameter Name="CCY3" Mode="In" Type="String" />
+            <Parameter Name="CCY4" Mode="In" Type="String" />
+            <Parameter Name="CCY5" Mode="In" Type="String" />
+            <Parameter Name="CCY6" Mode="In" Type="String" />
+            <Parameter Name="CCY7" Mode="In" Type="String" />
+            <Parameter Name="CCY8" Mode="In" Type="String" />
+            <Parameter Name="CCY9" Mode="In" Type="String" />
+            <Parameter Name="Leg0" Mode="In" Type="Int32" />
+            <Parameter Name="Leg1" Mode="In" Type="Int32" />
+            <Parameter Name="Leg2" Mode="In" Type="Int32" />
+            <Parameter Name="Leg3" Mode="In" Type="Int32" />
+            <Parameter Name="Leg4" Mode="In" Type="Int32" />
+            <Parameter Name="Leg5" Mode="In" Type="Int32" />
+            <Parameter Name="Leg6" Mode="In" Type="Int32" />
+            <Parameter Name="Leg7" Mode="In" Type="Int32" />
+            <Parameter Name="Leg8" Mode="In" Type="Int32" />
+            <Parameter Name="Leg9" Mode="In" Type="Int32" />
+            <Parameter Name="NPV0" Mode="In" Type="String" />
+            <Parameter Name="NPV1" Mode="In" Type="String" />
+            <Parameter Name="NPV2" Mode="In" Type="String" />
+            <Parameter Name="NPV3" Mode="In" Type="String" />
+            <Parameter Name="NPV4" Mode="In" Type="String" />
+            <Parameter Name="NPV5" Mode="In" Type="String" />
+            <Parameter Name="NPV6" Mode="In" Type="String" />
+            <Parameter Name="NPV7" Mode="In" Type="String" />
+            <Parameter Name="NPV8" Mode="In" Type="String" />
+            <Parameter Name="NPV9" Mode="In" Type="String" />
+            <Parameter Name="Interest0" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest1" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest2" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest3" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest4" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest5" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest6" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest7" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest8" Mode="In" Type="Boolean" />
+            <Parameter Name="Interest9" Mode="In" Type="Boolean" />
+            <Parameter Name="MaturityDate0" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate1" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate2" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate3" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate4" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate5" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate6" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate7" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate8" Mode="In" Type="String" />
+            <Parameter Name="MaturityDate9" Mode="In" Type="String" />
+            <Parameter Name="Ref0" Mode="In" Type="String" />
+            <Parameter Name="Ref1" Mode="In" Type="String" />
+            <Parameter Name="Ref2" Mode="In" Type="String" />
+            <Parameter Name="Ref3" Mode="In" Type="String" />
+            <Parameter Name="Ref4" Mode="In" Type="String" />
+            <Parameter Name="Ref5" Mode="In" Type="String" />
+            <Parameter Name="Ref6" Mode="In" Type="String" />
+            <Parameter Name="Ref7" Mode="In" Type="String" />
+            <Parameter Name="Ref8" Mode="In" Type="String" />
+            <Parameter Name="Ref9" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spFILE_UPLOAD_Result">
@@ -1307,8 +1426,8 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
           <Property Name="INT_PRE" Type="Double" />
           <Property Name="NPV_DELTA_ILS" Type="Double" />
           <Property Name="Band" Type="Int32" />
-          <Property Name="Kondor_N" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="CPName" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="Kondor_N" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CPName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Sim_Liquidate_flag" Type="Boolean" />
         </EntityType>
         <ComplexType Name="GetResultView_Result">
@@ -1638,39 +1757,6 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="KONDOR_DATA">
-            <EntityTypeMapping TypeName="MarketRModel.KONDOR_DATA">
-              <MappingFragment StoreEntitySet="KONDOR_DATA">
-                <ScalarProperty Name="CalcC" ColumnName="CalcC" />
-                <ScalarProperty Name="CalcB" ColumnName="CalcB" />
-                <ScalarProperty Name="CalcA" ColumnName="CalcA" />
-                <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Cpty" ColumnName="Cpty" />
-                <ScalarProperty Name="VegaILS" ColumnName="VegaILS" />
-                <ScalarProperty Name="GammaILS" ColumnName="GammaILS" />
-                <ScalarProperty Name="Portfolio" ColumnName="Portfolio" />
-                <ScalarProperty Name="NPVDeltaILS" ColumnName="NPVDeltaILS" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="FixingFrequencyPeriod" ColumnName="FixingFrequencyPeriod" />
-                <ScalarProperty Name="FixingFrequencyNumber" ColumnName="FixingFrequencyNumber" />
-                <ScalarProperty Name="FixingDate" ColumnName="FixingDate" />
-                <ScalarProperty Name="RateType" ColumnName="RateType" />
-                <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Asset" ColumnName="Asset" />
-                <ScalarProperty Name="LegType" ColumnName="LegType" />
-                <ScalarProperty Name="SubTypeOfInstrument" ColumnName="SubTypeOfInstrument" />
-                <ScalarProperty Name="TypeOfInstrument" ColumnName="TypeOfInstrument" />
-                <ScalarProperty Name="BalanceDeal" ColumnName="BalanceDeal" />
-                <ScalarProperty Name="KTPId" ColumnName="KTPId" />
-                <ScalarProperty Name="KondorId" ColumnName="KondorId" />
-                <ScalarProperty Name="DealType" ColumnName="DealType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="KondorFileHistories">
             <EntityTypeMapping TypeName="MarketRModel.KondorFileHistory">
               <MappingFragment StoreEntitySet="KondorFileHistory">
@@ -1812,6 +1898,7 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="run_deal_simulation" FunctionName="MarketRModel.Store.run_deal_simulation" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

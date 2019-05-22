@@ -147,5 +147,16 @@ namespace MarketR.Controllers
                 return Json(new { Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult DealSimulator()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult RunSimulation(DealSimulateModel model)
+        {
+            report.DealSimulation(model);
+            return Json(new { Success = true },JsonRequestBehavior.AllowGet);
+        }
     }
 }

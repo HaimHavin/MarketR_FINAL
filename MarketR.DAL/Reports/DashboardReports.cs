@@ -87,6 +87,11 @@ namespace MarketR.Common.Reports
             return reportData;
         }
 
+        public void DealSimulation(DealSimulateModel model)
+        {
+             dbEntity.run_deal_simulation(model);           
+        }
+
 
         //public  IEnumerable<CondorDto> GetSimulate()
         //{
