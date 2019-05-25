@@ -91,6 +91,8 @@ namespace MarketR.Common.Reports
 
         public void DealSimulation(DealSimulateModel model)
         {
+
+            // dbEntity.run_deal_simulation(model);
             List<ObjectParameter> dealTypeParam = new List<ObjectParameter>();
             List<ObjectParameter> ccyTypeParam = new List<ObjectParameter>();
             List<ObjectParameter> npvTypeParam = new List<ObjectParameter>();
@@ -135,9 +137,10 @@ namespace MarketR.Common.Reports
             finalParam.AddRange(interestTypeParam);
             finalParam.AddRange(maturityTypeParam);
             finalParam.AddRange(refTypeParam);
-            ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("run_deal_simulation", finalParam.ToArray());
+            var context =new MarketREntities();
+             ((IObjectContextAdapter)context).ObjectContext.ExecuteFunction("run_deal_simulation", finalParam.ToArray());
 
-            // dbEntity.run_deal_simulation(model.StartDate,model.Currency,model.FileVersion,);           
+
         }
 
 

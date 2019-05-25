@@ -839,6 +839,7 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
             <Parameter Name="NPV" Mode="In" Type="Boolean" />
             <Parameter Name="FilterText" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="KONDOR_DATA" EntityType="MarketRModel.KONDOR_DATA" />
           <FunctionImport Name="run_deal_simulation" ReturnType="Collection(String)">
             <Parameter Name="StartDate" Mode="In" Type="DateTime" />
             <Parameter Name="Currency" Mode="In" Type="String" />
@@ -914,7 +915,6 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
             <Parameter Name="Ref8" Mode="In" Type="String" />
             <Parameter Name="Ref9" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="KONDOR_DATA" EntityType="MarketRModel.KONDOR_DATA" />
         </EntityContainer>
         <ComplexType Name="spFILE_UPLOAD_Result">
           <Property Type="String" Name="Deal_ID" Nullable="true" MaxLength="50" />
@@ -1962,6 +1962,7 @@ warning 6002: The table/view 'MarketR.dbo.Sim_View' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="run_deal_simulation" FunctionName="MarketRModel.Store.run_deal_simulation" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
