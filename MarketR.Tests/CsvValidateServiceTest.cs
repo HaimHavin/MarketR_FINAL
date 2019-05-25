@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using MarketR.Service.CsvValidator;
 using NUnit.Framework;
+using MarketR.Common.Service.CsvValidator;
 
 namespace MarketR.Tests
 {

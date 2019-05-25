@@ -14,21 +14,19 @@ namespace MarketR.DAL.Models
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    using MarketR.Common.Models.Condor;
-    using System.Collections.Generic;
-
+    
     public partial class MarketREntities : DbContext
     {
         public MarketREntities()
             : base("name=MarketREntities")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
+    
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Deal_View> Deal_View { get; set; }
@@ -44,143 +42,386 @@ namespace MarketR.DAL.Models
         public virtual DbSet<tbl_results_date_simulation> tbl_results_date_simulation { get; set; }
         public virtual DbSet<TBL_Simulation_DATE_CCY> TBL_Simulation_DATE_CCY { get; set; }
         public virtual DbSet<ImportSetting> ImportSettings { get; set; }
-        public virtual DbSet<KONDOR_DATA> KONDOR_DATA { get; set; }
         public virtual DbSet<KondorFileHistory> KondorFileHistories { get; set; }
         public virtual DbSet<tbl_comp1> tbl_comp1 { get; set; }
         public virtual DbSet<tbl_comp2> tbl_comp2 { get; set; }
         public virtual DbSet<tbl_comp3> tbl_comp3 { get; set; }
         public virtual DbSet<NewFileRecords2> NewFileRecords2 { get; set; }
         public virtual DbSet<Sim_View> Sim_View { get; set; }
-
+        public virtual DbSet<KONDOR_DATA> KONDOR_DATA { get; set; }
+    
         public virtual ObjectResult<spFILE_UPLOAD_Result1> spFILE_UPLOAD(string fileName)
         {
             var fileNameParameter = fileName != null ?
                 new ObjectParameter("FileName", fileName) :
                 new ObjectParameter("FileName", typeof(string));
-
+    
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spFILE_UPLOAD_Result1>("spFILE_UPLOAD", fileNameParameter);
         }
-
+    
         public virtual int UpdateSimLiquidate(Nullable<int> recordId, Nullable<bool> liquidate)
         {
             var recordIdParameter = recordId.HasValue ?
                 new ObjectParameter("RecordId", recordId) :
                 new ObjectParameter("RecordId", typeof(int));
-
+    
             var liquidateParameter = liquidate.HasValue ?
                 new ObjectParameter("Liquidate", liquidate) :
                 new ObjectParameter("Liquidate", typeof(bool));
-
+    
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateSimLiquidate", recordIdParameter, liquidateParameter);
         }
-
+    
         public virtual int sp_Simulate(Nullable<System.DateTime> date, string currency, Nullable<int> fileId)
         {
             var dateParameter = date.HasValue ?
                 new ObjectParameter("Date", date) :
                 new ObjectParameter("Date", typeof(System.DateTime));
-
+    
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-
+    
             var fileIdParameter = fileId.HasValue ?
                 new ObjectParameter("FileId", fileId) :
                 new ObjectParameter("FileId", typeof(int));
-
+    
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Simulate", dateParameter, currencyParameter, fileIdParameter);
         }
-
+    
         public virtual int sp_compare(string currency, Nullable<int> vER1, Nullable<int> vER2)
         {
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-
+    
             var vER1Parameter = vER1.HasValue ?
                 new ObjectParameter("VER1", vER1) :
                 new ObjectParameter("VER1", typeof(int));
-
+    
             var vER2Parameter = vER2.HasValue ?
                 new ObjectParameter("VER2", vER2) :
                 new ObjectParameter("VER2", typeof(int));
-
+    
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_compare", currencyParameter, vER1Parameter, vER2Parameter);
         }
-
-        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText, string maturityDate)
+    
+        public virtual ObjectResult<GetResultView_Result> GetResultView(string currency, Nullable<int> band, Nullable<bool> nPV, string filterText)
         {
             var currencyParameter = currency != null ?
                 new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-
+    
             var bandParameter = band.HasValue ?
                 new ObjectParameter("Band", band) :
                 new ObjectParameter("Band", typeof(int));
-
+    
             var nPVParameter = nPV.HasValue ?
                 new ObjectParameter("NPV", nPV) :
                 new ObjectParameter("NPV", typeof(bool));
-
+    
             var filterTextParameter = filterText != null ?
                 new ObjectParameter("FilterText", filterText) :
                 new ObjectParameter("FilterText", typeof(string));
-
-            var maturityDateParameter = maturityDate != null ?
-                new ObjectParameter("MaturityDate", maturityDate) :
-                new ObjectParameter("MaturityDate", typeof(string));
-
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter, maturityDateParameter);
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetResultView_Result>("GetResultView", currencyParameter, bandParameter, nPVParameter, filterTextParameter);
         }
-
-        public virtual int run_deal_simulation(DealSimulateModel model)
+    
+        public virtual ObjectResult<string> run_deal_simulation(Nullable<System.DateTime> startDate, string currency, Nullable<int> fileId, string deal_Type0, string deal_Type1, string deal_Type2, string deal_Type3, string deal_Type4, string deal_Type5, string deal_Type6, string deal_Type7, string deal_Type8, string deal_Type9, string cCY0, string cCY1, string cCY2, string cCY3, string cCY4, string cCY5, string cCY6, string cCY7, string cCY8, string cCY9, Nullable<int> leg0, Nullable<int> leg1, Nullable<int> leg2, Nullable<int> leg3, Nullable<int> leg4, Nullable<int> leg5, Nullable<int> leg6, Nullable<int> leg7, Nullable<int> leg8, Nullable<int> leg9, string nPV0, string nPV1, string nPV2, string nPV3, string nPV4, string nPV5, string nPV6, string nPV7, string nPV8, string nPV9, Nullable<bool> interest0, Nullable<bool> interest1, Nullable<bool> interest2, Nullable<bool> interest3, Nullable<bool> interest4, Nullable<bool> interest5, Nullable<bool> interest6, Nullable<bool> interest7, Nullable<bool> interest8, Nullable<bool> interest9, string maturityDate0, string maturityDate1, string maturityDate2, string maturityDate3, string maturityDate4, string maturityDate5, string maturityDate6, string maturityDate7, string maturityDate8, string maturityDate9, string ref0, string ref1, string ref2, string ref3, string ref4, string ref5, string ref6, string ref7, string ref8, string ref9)
         {
-            List<ObjectParameter> dealTypeParam = new List<ObjectParameter>();
-            List<ObjectParameter> ccyTypeParam = new List<ObjectParameter>();
-            List<ObjectParameter> npvTypeParam = new List<ObjectParameter>();
-            List<ObjectParameter> legTypeParam = new List<ObjectParameter>();
-            List<ObjectParameter> interestTypeParam = new List<ObjectParameter>();
-            List<ObjectParameter> maturityTypeParam = new List<ObjectParameter>();
-            List<ObjectParameter> refTypeParam = new List<ObjectParameter>();
-
-            List<ObjectParameter> finalParam = new List<ObjectParameter>();
-
-            var startDateParameter = model.StartDate != null ?
-                new ObjectParameter("StartDate", model.StartDate) :
-                new ObjectParameter("StartDate", typeof(DateTime));
-
-            var currencyParameter = model.Currency != null ?
-                new ObjectParameter("Currency", model.Currency) :
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
                 new ObjectParameter("Currency", typeof(string));
-
-            var fileidParameter = model.FileVersion.HasValue ?
-                new ObjectParameter("FileId", model.FileVersion) :
+    
+            var fileIdParameter = fileId.HasValue ?
+                new ObjectParameter("FileId", fileId) :
                 new ObjectParameter("FileId", typeof(int));
-
-
-            for (int i = 0; i < 10; i++)
-            {
-                dealTypeParam.Add(model.DealSimulate[i].DealType != null ? new ObjectParameter("Deal_Type" + i.ToString(), model.DealSimulate[i].DealType) : new ObjectParameter("Deal_Type" + i.ToString(),typeof(string)));
-                ccyTypeParam.Add(model.DealSimulate[i].CCY != null ? new ObjectParameter("CCY" + i.ToString(), model.DealSimulate[i].CCY): new ObjectParameter("CCY" + i.ToString(), typeof(string)));
-                legTypeParam.Add(model.DealSimulate[i].Leg.HasValue ? new ObjectParameter("Leg" + i.ToString(), model.DealSimulate[i].Leg): new ObjectParameter("Leg" + i.ToString(), typeof(int)));
-                npvTypeParam.Add(model.DealSimulate[i].NPV != null ? new ObjectParameter("NPV" + i.ToString(), model.DealSimulate[i].NPV): new ObjectParameter("NPV" + i.ToString(), typeof(string)));
-                interestTypeParam.Add(model.DealSimulate[i].Interest.HasValue ? new ObjectParameter("Interest" + i.ToString(), model.DealSimulate[i].Interest): new ObjectParameter("Interest" + i.ToString(), typeof(bool)));
-                maturityTypeParam.Add(model.DealSimulate[i].MaturityDate.HasValue ? new ObjectParameter("MaturityDate" + i.ToString(), model.DealSimulate[i].MaturityDate) : new ObjectParameter("MaturityDate" + i.ToString(),typeof(DateTime)));
-                refTypeParam.Add(model.DealSimulate[i].Ref != null ? new ObjectParameter("Ref" + i.ToString(), model.DealSimulate[i].Ref): new ObjectParameter("Ref" + i.ToString(), typeof(string)));
-            }
-            finalParam.Add(startDateParameter);
-            finalParam.Add(currencyParameter);
-            finalParam.Add(fileidParameter);
-
-            finalParam.AddRange(dealTypeParam);
-            finalParam.AddRange(ccyTypeParam);
-            finalParam.AddRange(legTypeParam);
-            finalParam.AddRange(npvTypeParam);
-            finalParam.AddRange(interestTypeParam);
-            finalParam.AddRange(maturityTypeParam);
-            finalParam.AddRange(refTypeParam);
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("run_deal_simulation", finalParam.ToArray());
-           
+    
+            var deal_Type0Parameter = deal_Type0 != null ?
+                new ObjectParameter("Deal_Type0", deal_Type0) :
+                new ObjectParameter("Deal_Type0", typeof(string));
+    
+            var deal_Type1Parameter = deal_Type1 != null ?
+                new ObjectParameter("Deal_Type1", deal_Type1) :
+                new ObjectParameter("Deal_Type1", typeof(string));
+    
+            var deal_Type2Parameter = deal_Type2 != null ?
+                new ObjectParameter("Deal_Type2", deal_Type2) :
+                new ObjectParameter("Deal_Type2", typeof(string));
+    
+            var deal_Type3Parameter = deal_Type3 != null ?
+                new ObjectParameter("Deal_Type3", deal_Type3) :
+                new ObjectParameter("Deal_Type3", typeof(string));
+    
+            var deal_Type4Parameter = deal_Type4 != null ?
+                new ObjectParameter("Deal_Type4", deal_Type4) :
+                new ObjectParameter("Deal_Type4", typeof(string));
+    
+            var deal_Type5Parameter = deal_Type5 != null ?
+                new ObjectParameter("Deal_Type5", deal_Type5) :
+                new ObjectParameter("Deal_Type5", typeof(string));
+    
+            var deal_Type6Parameter = deal_Type6 != null ?
+                new ObjectParameter("Deal_Type6", deal_Type6) :
+                new ObjectParameter("Deal_Type6", typeof(string));
+    
+            var deal_Type7Parameter = deal_Type7 != null ?
+                new ObjectParameter("Deal_Type7", deal_Type7) :
+                new ObjectParameter("Deal_Type7", typeof(string));
+    
+            var deal_Type8Parameter = deal_Type8 != null ?
+                new ObjectParameter("Deal_Type8", deal_Type8) :
+                new ObjectParameter("Deal_Type8", typeof(string));
+    
+            var deal_Type9Parameter = deal_Type9 != null ?
+                new ObjectParameter("Deal_Type9", deal_Type9) :
+                new ObjectParameter("Deal_Type9", typeof(string));
+    
+            var cCY0Parameter = cCY0 != null ?
+                new ObjectParameter("CCY0", cCY0) :
+                new ObjectParameter("CCY0", typeof(string));
+    
+            var cCY1Parameter = cCY1 != null ?
+                new ObjectParameter("CCY1", cCY1) :
+                new ObjectParameter("CCY1", typeof(string));
+    
+            var cCY2Parameter = cCY2 != null ?
+                new ObjectParameter("CCY2", cCY2) :
+                new ObjectParameter("CCY2", typeof(string));
+    
+            var cCY3Parameter = cCY3 != null ?
+                new ObjectParameter("CCY3", cCY3) :
+                new ObjectParameter("CCY3", typeof(string));
+    
+            var cCY4Parameter = cCY4 != null ?
+                new ObjectParameter("CCY4", cCY4) :
+                new ObjectParameter("CCY4", typeof(string));
+    
+            var cCY5Parameter = cCY5 != null ?
+                new ObjectParameter("CCY5", cCY5) :
+                new ObjectParameter("CCY5", typeof(string));
+    
+            var cCY6Parameter = cCY6 != null ?
+                new ObjectParameter("CCY6", cCY6) :
+                new ObjectParameter("CCY6", typeof(string));
+    
+            var cCY7Parameter = cCY7 != null ?
+                new ObjectParameter("CCY7", cCY7) :
+                new ObjectParameter("CCY7", typeof(string));
+    
+            var cCY8Parameter = cCY8 != null ?
+                new ObjectParameter("CCY8", cCY8) :
+                new ObjectParameter("CCY8", typeof(string));
+    
+            var cCY9Parameter = cCY9 != null ?
+                new ObjectParameter("CCY9", cCY9) :
+                new ObjectParameter("CCY9", typeof(string));
+    
+            var leg0Parameter = leg0.HasValue ?
+                new ObjectParameter("Leg0", leg0) :
+                new ObjectParameter("Leg0", typeof(int));
+    
+            var leg1Parameter = leg1.HasValue ?
+                new ObjectParameter("Leg1", leg1) :
+                new ObjectParameter("Leg1", typeof(int));
+    
+            var leg2Parameter = leg2.HasValue ?
+                new ObjectParameter("Leg2", leg2) :
+                new ObjectParameter("Leg2", typeof(int));
+    
+            var leg3Parameter = leg3.HasValue ?
+                new ObjectParameter("Leg3", leg3) :
+                new ObjectParameter("Leg3", typeof(int));
+    
+            var leg4Parameter = leg4.HasValue ?
+                new ObjectParameter("Leg4", leg4) :
+                new ObjectParameter("Leg4", typeof(int));
+    
+            var leg5Parameter = leg5.HasValue ?
+                new ObjectParameter("Leg5", leg5) :
+                new ObjectParameter("Leg5", typeof(int));
+    
+            var leg6Parameter = leg6.HasValue ?
+                new ObjectParameter("Leg6", leg6) :
+                new ObjectParameter("Leg6", typeof(int));
+    
+            var leg7Parameter = leg7.HasValue ?
+                new ObjectParameter("Leg7", leg7) :
+                new ObjectParameter("Leg7", typeof(int));
+    
+            var leg8Parameter = leg8.HasValue ?
+                new ObjectParameter("Leg8", leg8) :
+                new ObjectParameter("Leg8", typeof(int));
+    
+            var leg9Parameter = leg9.HasValue ?
+                new ObjectParameter("Leg9", leg9) :
+                new ObjectParameter("Leg9", typeof(int));
+    
+            var nPV0Parameter = nPV0 != null ?
+                new ObjectParameter("NPV0", nPV0) :
+                new ObjectParameter("NPV0", typeof(string));
+    
+            var nPV1Parameter = nPV1 != null ?
+                new ObjectParameter("NPV1", nPV1) :
+                new ObjectParameter("NPV1", typeof(string));
+    
+            var nPV2Parameter = nPV2 != null ?
+                new ObjectParameter("NPV2", nPV2) :
+                new ObjectParameter("NPV2", typeof(string));
+    
+            var nPV3Parameter = nPV3 != null ?
+                new ObjectParameter("NPV3", nPV3) :
+                new ObjectParameter("NPV3", typeof(string));
+    
+            var nPV4Parameter = nPV4 != null ?
+                new ObjectParameter("NPV4", nPV4) :
+                new ObjectParameter("NPV4", typeof(string));
+    
+            var nPV5Parameter = nPV5 != null ?
+                new ObjectParameter("NPV5", nPV5) :
+                new ObjectParameter("NPV5", typeof(string));
+    
+            var nPV6Parameter = nPV6 != null ?
+                new ObjectParameter("NPV6", nPV6) :
+                new ObjectParameter("NPV6", typeof(string));
+    
+            var nPV7Parameter = nPV7 != null ?
+                new ObjectParameter("NPV7", nPV7) :
+                new ObjectParameter("NPV7", typeof(string));
+    
+            var nPV8Parameter = nPV8 != null ?
+                new ObjectParameter("NPV8", nPV8) :
+                new ObjectParameter("NPV8", typeof(string));
+    
+            var nPV9Parameter = nPV9 != null ?
+                new ObjectParameter("NPV9", nPV9) :
+                new ObjectParameter("NPV9", typeof(string));
+    
+            var interest0Parameter = interest0.HasValue ?
+                new ObjectParameter("Interest0", interest0) :
+                new ObjectParameter("Interest0", typeof(bool));
+    
+            var interest1Parameter = interest1.HasValue ?
+                new ObjectParameter("Interest1", interest1) :
+                new ObjectParameter("Interest1", typeof(bool));
+    
+            var interest2Parameter = interest2.HasValue ?
+                new ObjectParameter("Interest2", interest2) :
+                new ObjectParameter("Interest2", typeof(bool));
+    
+            var interest3Parameter = interest3.HasValue ?
+                new ObjectParameter("Interest3", interest3) :
+                new ObjectParameter("Interest3", typeof(bool));
+    
+            var interest4Parameter = interest4.HasValue ?
+                new ObjectParameter("Interest4", interest4) :
+                new ObjectParameter("Interest4", typeof(bool));
+    
+            var interest5Parameter = interest5.HasValue ?
+                new ObjectParameter("Interest5", interest5) :
+                new ObjectParameter("Interest5", typeof(bool));
+    
+            var interest6Parameter = interest6.HasValue ?
+                new ObjectParameter("Interest6", interest6) :
+                new ObjectParameter("Interest6", typeof(bool));
+    
+            var interest7Parameter = interest7.HasValue ?
+                new ObjectParameter("Interest7", interest7) :
+                new ObjectParameter("Interest7", typeof(bool));
+    
+            var interest8Parameter = interest8.HasValue ?
+                new ObjectParameter("Interest8", interest8) :
+                new ObjectParameter("Interest8", typeof(bool));
+    
+            var interest9Parameter = interest9.HasValue ?
+                new ObjectParameter("Interest9", interest9) :
+                new ObjectParameter("Interest9", typeof(bool));
+    
+            var maturityDate0Parameter = maturityDate0 != null ?
+                new ObjectParameter("MaturityDate0", maturityDate0) :
+                new ObjectParameter("MaturityDate0", typeof(string));
+    
+            var maturityDate1Parameter = maturityDate1 != null ?
+                new ObjectParameter("MaturityDate1", maturityDate1) :
+                new ObjectParameter("MaturityDate1", typeof(string));
+    
+            var maturityDate2Parameter = maturityDate2 != null ?
+                new ObjectParameter("MaturityDate2", maturityDate2) :
+                new ObjectParameter("MaturityDate2", typeof(string));
+    
+            var maturityDate3Parameter = maturityDate3 != null ?
+                new ObjectParameter("MaturityDate3", maturityDate3) :
+                new ObjectParameter("MaturityDate3", typeof(string));
+    
+            var maturityDate4Parameter = maturityDate4 != null ?
+                new ObjectParameter("MaturityDate4", maturityDate4) :
+                new ObjectParameter("MaturityDate4", typeof(string));
+    
+            var maturityDate5Parameter = maturityDate5 != null ?
+                new ObjectParameter("MaturityDate5", maturityDate5) :
+                new ObjectParameter("MaturityDate5", typeof(string));
+    
+            var maturityDate6Parameter = maturityDate6 != null ?
+                new ObjectParameter("MaturityDate6", maturityDate6) :
+                new ObjectParameter("MaturityDate6", typeof(string));
+    
+            var maturityDate7Parameter = maturityDate7 != null ?
+                new ObjectParameter("MaturityDate7", maturityDate7) :
+                new ObjectParameter("MaturityDate7", typeof(string));
+    
+            var maturityDate8Parameter = maturityDate8 != null ?
+                new ObjectParameter("MaturityDate8", maturityDate8) :
+                new ObjectParameter("MaturityDate8", typeof(string));
+    
+            var maturityDate9Parameter = maturityDate9 != null ?
+                new ObjectParameter("MaturityDate9", maturityDate9) :
+                new ObjectParameter("MaturityDate9", typeof(string));
+    
+            var ref0Parameter = ref0 != null ?
+                new ObjectParameter("Ref0", ref0) :
+                new ObjectParameter("Ref0", typeof(string));
+    
+            var ref1Parameter = ref1 != null ?
+                new ObjectParameter("Ref1", ref1) :
+                new ObjectParameter("Ref1", typeof(string));
+    
+            var ref2Parameter = ref2 != null ?
+                new ObjectParameter("Ref2", ref2) :
+                new ObjectParameter("Ref2", typeof(string));
+    
+            var ref3Parameter = ref3 != null ?
+                new ObjectParameter("Ref3", ref3) :
+                new ObjectParameter("Ref3", typeof(string));
+    
+            var ref4Parameter = ref4 != null ?
+                new ObjectParameter("Ref4", ref4) :
+                new ObjectParameter("Ref4", typeof(string));
+    
+            var ref5Parameter = ref5 != null ?
+                new ObjectParameter("Ref5", ref5) :
+                new ObjectParameter("Ref5", typeof(string));
+    
+            var ref6Parameter = ref6 != null ?
+                new ObjectParameter("Ref6", ref6) :
+                new ObjectParameter("Ref6", typeof(string));
+    
+            var ref7Parameter = ref7 != null ?
+                new ObjectParameter("Ref7", ref7) :
+                new ObjectParameter("Ref7", typeof(string));
+    
+            var ref8Parameter = ref8 != null ?
+                new ObjectParameter("Ref8", ref8) :
+                new ObjectParameter("Ref8", typeof(string));
+    
+            var ref9Parameter = ref9 != null ?
+                new ObjectParameter("Ref9", ref9) :
+                new ObjectParameter("Ref9", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("run_deal_simulation", startDateParameter, currencyParameter, fileIdParameter, deal_Type0Parameter, deal_Type1Parameter, deal_Type2Parameter, deal_Type3Parameter, deal_Type4Parameter, deal_Type5Parameter, deal_Type6Parameter, deal_Type7Parameter, deal_Type8Parameter, deal_Type9Parameter, cCY0Parameter, cCY1Parameter, cCY2Parameter, cCY3Parameter, cCY4Parameter, cCY5Parameter, cCY6Parameter, cCY7Parameter, cCY8Parameter, cCY9Parameter, leg0Parameter, leg1Parameter, leg2Parameter, leg3Parameter, leg4Parameter, leg5Parameter, leg6Parameter, leg7Parameter, leg8Parameter, leg9Parameter, nPV0Parameter, nPV1Parameter, nPV2Parameter, nPV3Parameter, nPV4Parameter, nPV5Parameter, nPV6Parameter, nPV7Parameter, nPV8Parameter, nPV9Parameter, interest0Parameter, interest1Parameter, interest2Parameter, interest3Parameter, interest4Parameter, interest5Parameter, interest6Parameter, interest7Parameter, interest8Parameter, interest9Parameter, maturityDate0Parameter, maturityDate1Parameter, maturityDate2Parameter, maturityDate3Parameter, maturityDate4Parameter, maturityDate5Parameter, maturityDate6Parameter, maturityDate7Parameter, maturityDate8Parameter, maturityDate9Parameter, ref0Parameter, ref1Parameter, ref2Parameter, ref3Parameter, ref4Parameter, ref5Parameter, ref6Parameter, ref7Parameter, ref8Parameter, ref9Parameter);
         }
     }
 }

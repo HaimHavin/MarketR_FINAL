@@ -97,6 +97,10 @@
     <None Include="TestData\InvalidData.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MarketR.Common\MarketR.Common.csproj">
+      <Project>{75DC3360-C82F-4892-ABF5-3DCCCD3666C2}</Project>
+      <Name>MarketR.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarketR.DAL\MarketR.DAL.csproj">
       <Project>{c4140b89-f6b6-4369-99fc-bf72cd502d2e}</Project>
       <Name>MarketR.DAL</Name>
